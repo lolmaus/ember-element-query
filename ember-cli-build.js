@@ -14,5 +14,11 @@ module.exports = function(defaults) {
     behave. You most likely want to be modifying `./index.js` or app's build file
   */
 
+  if (app.tests) {
+    app.import('bower_components/url.js/src/url.min.js', {
+      type: 'test'
+    });
+  }
+
   return app.toTree();
 };

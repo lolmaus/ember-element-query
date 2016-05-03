@@ -1,9 +1,8 @@
 {
   "name": "ember-element-query",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0-alpha.1",
+  "description": "Element queries for Ember",
   "directories": {
-    "doc": "doc",
     "test": "tests"
   },
   "scripts": {
@@ -11,11 +10,12 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "repository": "",
+  "homepage": "https://github.com/lolmaus/ember-element-queries",
+  "repository": "lolmaus/ember-element-queries",
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Andrey Mikhaylov (lolmaus) <lolmaus@gmail.com> (https://twitter.com/lolmaus_en/)",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
@@ -27,7 +27,7 @@
     "ember-cli-htmlbars-inline-precompile": "^0.3.1",
     "ember-cli-inject-live-reload": "^1.4.0",
     "ember-cli-jshint": "^1.0.0",
-    "ember-cli-qunit": "^1.4.0",
+    "ember-cli-mocha": "0.10.2",
     "ember-cli-release": "0.2.8",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^1.2.0",
@@ -37,10 +37,31 @@
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "ember-welcome-page": "^1.0.1",
-    "loader.js": "^4.0.1"
+    "express": "^4.13.4",
+    "glob": "^4.5.3",
+    "loader.js": "^4.0.1",
+    "morgan": "^1.7.0",
+    "recursive-readdir": "^2.0.0"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "element-query",
+    "element-queries",
+    "e-q",
+    "responsive-web-design",
+    "responsive",
+    "rwd",
+    "element query",
+    "element queries",
+    "eq",
+    "responsive web design",
+    "ember",
+    "sass",
+    "scss",
+    "slice",
+    "slices",
+    "breakpoint-slicer",
+    "breakpoint slicer"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.6"

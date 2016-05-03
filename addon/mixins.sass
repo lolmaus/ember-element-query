@@ -1,0 +1,83 @@
+
+//
+  These mixins are shortcuts to apply element query data selectors
+  to current selector.
+  
+  @class EQSassMixins
+
+
+
+//
+  Applies styles to element under current selector when element's width is
+  within given slice.
+  
+  @method eq-at
+  @mixin
+  @param $slice   {String} Slice name
+  @param @content {Block}
+  
+  @returns
+    {}
+    &[data-eq-current="#{$slice}"] { @content; }
+
+=eq-at($slice)
+  &[data-eq-current="#{$slice}"]
+    @content
+
+
+
+//
+  Applies styles to element under current selector when element's width is
+  within given slice or larger.
+  
+  @method eq-from
+  @mixin
+  @param $slice   {String} Slice name
+  @param @content {Block}
+  
+  @returns
+    {}
+    &[data-eq-from~="#{$slice}"] { @content; }
+    
+=eq-from($slice)
+  &[data-eq-from~="#{$slice}"]
+    @content
+
+
+
+//
+  Applies styles to element under current selector when element's width is
+  within given slice or smaller.
+  
+  @method eq-to
+  @mixin
+  @param $slice   {String} Slice name
+  @param @content {Block}
+  
+  @returns
+    {}
+    &[data-eq-to~="#{$slice}"] { @content; }
+
+=eq-to($slice)
+  &[data-eq-to~="#{$slice}"]
+    @content
+
+
+
+//
+  Applies styles to element under current selector when element's width is
+  between given slices (inclusive).
+  
+  @method eq-between
+  @mixin
+  @param $from {String} Starting slice name
+  @param $to   {String} Ending   slice name
+  @param @content {Block}
+  
+  @returns
+    {}
+    &[data-eq-between~="#{$from}-#{$to}"] { @content; }
+
+=eq-between($from, $to)
+  &[data-eq-between~="#{$from}-#{$to}"]
+    @content
