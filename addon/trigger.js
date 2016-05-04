@@ -4,7 +4,7 @@
  *
  * This is a placeholder for classless utils.
  *
- * @class EQUtils
+ * @class EEQ.Utils
  * */
 
 export const event = new Event('eq-update');
@@ -16,7 +16,7 @@ export const event = new Event('eq-update');
  * @method trigger
  * @example
  * import eqTrigger from 'ember-element-query/trigger';
- * 
+ *
  * on('foo', () => {
  *   trigger();
  * });

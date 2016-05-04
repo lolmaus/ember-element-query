@@ -18,9 +18,10 @@ import eqTrigger from 'ember-element-query/trigger';
  *
  * The `e-q` component includes this mixin.
  *
- * @class EQMixin
+ * @class EEQ.Mixin
  * @module ember-element-query
  * @extends Ember.Mixin
+ * @mixin
  * @example
  * import EQMixin from 'ember-element-query/mixin';
  * */
@@ -248,9 +249,9 @@ export default Mixin.create({
    * Array of arrays of all possible breakpoint pairs that represent slice
    * ranges that include current slice.
    *
-   * For example, if current breakpoint is `400`, `eqBPsBetween` will include
-   * `[200, 400]` and `[0, 1000]` (not only), but will not include `[0, 200`] or
-   * `[600, 1000]`.
+   * For example, if current element width is 456px, current breakpoint will be
+   * `400`, then `eqBPsBetween` will include `[200, 400]`, `[0, 1000]` and many
+   * other combinations, but will not include `[0, 200]` or `[600, 1000]`.
    *
    * @property eqBPsBetween
    * @type Array
@@ -277,12 +278,11 @@ export default Mixin.create({
           eqBreakpointsAsc
             .slice(eqBPCurrentIndex)
             .forEach(bp2 => {
-              if(bp1 === bp2) {
-                return;
-              }
               result.push([bp1, bp2]);
             });
         });
+
+      console.log({result})
 
       return result;
     }
@@ -528,7 +528,7 @@ export default Mixin.create({
    * */
   _eqSetupTransitions: on('didInsertElement', function () {
     const eqTransitionEventName = this.get('eqTransitionEventName');
-    const eqTransitionSelectors = this.get('eqTransitionEventName');
+    const eqTransitionSelectors = this.get('eqTransitionSelectors');
 
     if (
       !eqTransitionEventName

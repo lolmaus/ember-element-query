@@ -4,27 +4,25 @@ const {
   Component
 } = Ember;
 
-import layout  from './component-template';
-import EQMixin from './mixin';
+import EEQMixin from 'ember-element-query/mixin';
+import layout   from 'ember-element-query/templates/components/e-q';
 
 
 /**
  *
- * A plain Ember.Compoonent that includes the element query mixin.
- * 
- * Is exposed in host app as `{{e-q}}`.
+ * A plain Ember.Component that includes EEQ.Mixin.
  *
- * @class EQComponent
+ * It iss exposed in host app as `{{#e-q}}`.
+ *
+ * @class EEQ.Component
  * @extends Ember.Component
  * @module ember-element-query
- * @uses Mixin
+ * @uses EEQ.Mixin
  * @example
- * import EQComponent from 'ember-element-query/component';
+ * import EEQComponent from 'ember-element-query/component';
  *
  * */
 
-export default Component.extend(EQMixin, {
-
-  // ----- Overridden properties -----
+export default Component.extend(EEQMixin, {
   layout
 });

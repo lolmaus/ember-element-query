@@ -168,6 +168,7 @@ describe('EqMixin', function() {
       [200, 400],
       [200, 600],
       [200, 800],
+      [400, 400],
       [400, 600],
       [400, 800],
     ]);
@@ -264,6 +265,7 @@ describe('EqMixin', function() {
        'xs-s',
        'xs-m',
        'xs-l',
+        's-s',
         's-m',
         's-l',
     ]);
@@ -331,7 +333,7 @@ describe('EqMixin', function() {
     const eqSlicesBetweenAttr = subject.get('eqSlicesBetweenAttr');
 
     expect(eqSlicesBetweenAttr).equal(
-      'xxs-s xxs-m xxs-l xs-s xs-m xs-l s-m s-l'
+      'xxs-s xxs-m xxs-l xs-s xs-m xs-l s-s s-m s-l'
     );
   });
 
