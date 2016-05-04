@@ -12,7 +12,10 @@ conditionally based on element's own width rather than viewport width.
 This lets you implement your HTML elements as independent components capable
 of RWD transformations while staying decoupled from their parent context.
 
-Documentation
--------------
+
+Documentation and demo
+----------------------
 
 http://lolmaus.github.io/yuidork/#/lolmaus/ember-element-query/gen-1/modules/ember-element-query
+
+Yuidork, the documentation website, heavily relies on `ember-element-query` for its advanced RWD.
