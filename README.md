@@ -1,7 +1,7 @@
 ember-element-query
 ===================
 
-[![Travis](https://img.shields.io/travis/lolmaus/ember-element-query.svg?maxAge=2592000)](https://travis-ci.org/lolmaus/ember-element-query)
+[![Travis](https://api.travis-ci.org/lolmaus/ember-element-query.svg?branch=gen-1)](https://travis-ci.org/lolmaus/ember-element-query)
 [![npm](https://img.shields.io/npm/v/ember-element-query.svg?maxAge=2592000)](https://www.npmjs.com/package/ember-element-query)
 [![Ember Observer Score](https://emberobserver.com/badges/ember-element-query.svg)](https://emberobserver.com/addons/ember-element-query)
 ![1.13+](https://embadge.io/v1/badge.svg?start=1.13.0)
