@@ -282,8 +282,6 @@ export default Mixin.create({
             });
         });
 
-      console.log({result})
-
       return result;
     }
   ),

@@ -6,6 +6,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
+[1.0.1]
+-------
+
+### Fixed
+- Removed stray `console.log`.
+
+
+
 [1.0.0]
 -------
 
