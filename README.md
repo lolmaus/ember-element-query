@@ -13,9 +13,23 @@ This lets you implement your HTML elements as independent components capable
 of RWD transformations while staying decoupled from their parent context.
 
 
-Documentation and demo
+Documentation and Demo
 ----------------------
 
 http://lolmaus.github.io/yuidork/#/lolmaus/ember-element-query/gen-1/modules/ember-element-query
 
 Yuidork, the documentation website, heavily relies on `ember-element-query` for its advanced RWD.
+
+
+PhantomJS Not Supported
+-----------------------
+
+`ember-element-query` is not compatible with PhantomJS. Use Chrome for testing.
+
+
+License
+-------
+
+This software is free to use under the MIT license. See the [LICENSE](https://github.com/lolmaus/yuidork/blob/gen-1/LICENSE.md) file for license text and copyright information.
+
+Includes fragments of code borrowed from [runspired/flexi](https://github.com/runspired/flexi).
