@@ -21,25 +21,27 @@
  *
  * ![Imgur](http://i.imgur.com/Qs4A3RD.png)
  *
- * Now, you put the items into a modular grid. The grid is both fluid and
- * responsive. The grid should have
+ * It's trivial to achieve with media queries, right? The implementation could
+ * look like this:
+ *
+ * ```sass
+ * .postPreview
+ *
+ *   @media only screen and (max-width: 399px)
+ *     // vertical layout
+ *
+ *   @media only screen and (min-width: 400px)
+ *     // horizontal layout
+ * ```
+ *
+ * But you now need to put the items into a modular grid. The grid is both fluid
+ * and responsive. The grid should have
  * three columns when it's smaller than 650px, four columns at < 900px and five
  * at < 1250px:
  *
  * ![Imgur](http://i.imgur.com/YMKJCXc.png)
  *
- * And there's also a sidebar that take 274px and the user can collapse/expand.
- * When it expands, it eats some width, which may cause the grid to change
- * the number of columns.
- *
- * ![Imgur](http://i.imgur.com/SK5BSSz.png)
- *
- * Now try to define RWD styles to the post preview component using media
- * queries. It gets really tough because **in order to decide whether to use
- * vertical or horizontal layout for certain viewport width, you have to know
- * which layout every parent component has**.
- *
- * Ultimately, your media query would look like this (Sass):
+ * This is where your code gets messy. You'll end up with something like this:
  *
  * ```scss
  * .postPreview {
@@ -65,8 +67,22 @@
  * }
  * ```
  *
+ * Now there's also a sidebar that take 274px and the user can collapse/expand.
+ * When it expands, it eats some width, which may cause the grid to change
+ * the number of columns.
+ *
+ * ![Imgur](http://i.imgur.com/SK5BSSz.png)
+ *
+ * Imagine defining RWD styles to the post preview component using media
+ * queries. It gets really tough because **in order to decide whether to use
+ * vertical or horizontal layout for certain viewport width, you have to know
+ * which layout every parent component has**.
+ *
  * Maintaining this table is a nightmare, especially when you need to make
  * changes.
+ *
+ * But that's not all there is to it! You now need to reuse this component in
+ * two or more distinct applications. :trollface:
  *
  *
  * Enter Element Query
