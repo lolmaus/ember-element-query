@@ -30,6 +30,6 @@ PhantomJS Not Supported
 License
 -------
 
-This software is free to use under the MIT license. See the [LICENSE](https://github.com/lolmaus/yuidork/blob/gen-1/LICENSE.md) file for license text and copyright information.
+This software is free to use under the MIT license. See the [LICENSE](https://github.com/lolmaus/ember-element-query/blob/gen-1/LICENSE.md) file for license text and copyright information.
 
 Includes fragments of code borrowed from [runspired/flexi](https://github.com/runspired/flexi).

@@ -10,8 +10,8 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "homepage": "https://github.com/lolmaus/ember-element-queries",
-  "repository": "lolmaus/ember-element-queries",
+  "homepage": "https://github.com/lolmaus/ember-element-query",
+  "repository": "lolmaus/ember-element-query",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -60,7 +60,11 @@
     "slice",
     "slices",
     "breakpoint-slicer",
-    "breakpoint slicer"
+    "breakpoint slicer",
+    "media query",
+    "media-query",
+    "media queries",
+    "media-queries"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.6",
