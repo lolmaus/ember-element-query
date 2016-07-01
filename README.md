@@ -30,7 +30,7 @@ PhantomJS Not Supported
 IE11 Not Supported (Yet)
 ------------------------
 
-IE11 support is currently missing, it is planned to be implemented, see #2.
+IE11 support is currently missing, it is planned to be implemented, see [#2](https://github.com/lolmaus/ember-element-query/issues/2).
 
 
 
