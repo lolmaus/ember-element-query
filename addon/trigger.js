@@ -7,7 +7,7 @@
  * @class EEQ.Utils
  * */
 
-export const event = new Event('eq-update');
+export const event = (typeof Event !== 'undefined') ? new Event('eq-update') : null;
 
 /**
  *
@@ -22,5 +22,7 @@ export const event = new Event('eq-update');
  * });
  * */
 export default function trigger() {
-  return window.dispatchEvent(event);
+  if (window && event) {
+    return window.dispatchEvent(event);
+  }
 }
