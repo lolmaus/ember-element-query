@@ -1,6 +1,6 @@
 /* eslint-env node */
-'use strict';
+'use strict'
 
 module.exports = {
-  name: 'ember-element-query-2'
-};
+  name : 'ember-element-query-2'
+}
