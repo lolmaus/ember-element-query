@@ -1,0 +1,12 @@
+<p class="name">
+  {{effectiveName}}
+</p>
+
+<div class="children">
+
+  {{#y-ember-forwarding name='y1'}}
+    {{y-ember-forwarding name='y2'}}
+  {{/y-ember-forwarding}}
+
+  {{yield}}
+</div>

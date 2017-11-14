@@ -1,11 +1,11 @@
-# ember-element-query-2
+# ember-element-query
 
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-element-query-2`
+* `cd ember-element-query`
 * `yarn install`
 
 ## Running

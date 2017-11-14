@@ -1,0 +1,29 @@
+@import '../../../../addon/mixins';
+
+
+.children {
+  padding-left: 2rem;
+}
+
+
+
+.demo-component {
+  border: 1px solid black;
+  padding: 5px;
+
+  .children {
+    flex-grow: 1;
+  }
+
+  @include eq-from('m') {
+    display: flex;
+
+    .name {
+      width: 100px;
+      margin-right: 20px;
+    }
+  }
+}
+
+
+

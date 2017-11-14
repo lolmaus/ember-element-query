@@ -1,0 +1,13 @@
+{{link-to 'bar' 'bar'}}
+
+{{#x-ember-forwarding name="x1"}}
+  {{x-ember-forwarding name="x2"}}
+  {{y-ember-forwarding name="y1"}}
+{{/x-ember-forwarding}}
+
+
+{{#x-ember-forwarding name="x3"}}
+  {{y-ember-forwarding name="y2"}}
+{{/x-ember-forwarding}}
+
+{{y-ember-forwarding name="y3"}}
