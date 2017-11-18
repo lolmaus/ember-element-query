@@ -13,15 +13,21 @@
   {{#if (eq currentPage 0)}}
 
     {{markdown-to-html (trim-markdown "
+      I'm gonna tell you a story about media queries.
+
+      ## The narration is broken into numbered sections
+
+      I'm showing some style code samples in each section. Those code samples aren't explicit, only relevants parts are shown. You'll have to imagine the rest.
+
+      And I'm not repeating style code listings in every section. Styles described in one section also apply to subsequent sections, until overridden.
+
+      For example, section #3 applies a media query with `min-width: 500px`. And section #5 applies `min-width: 1000px`. This means that `min-width: 500px` is also assumed to be applied to section #4.
+
       ## View this on desktop!
 
       This demo is supposed to be viewed on a very large screen and in a desktop browser. Try zooming out!
 
-      The narration is broken into numbered sections. Styles applied in a section also apply to subsequent sections, until overridden.
-
-      For example, section #3 applies a media query with `min-width: 500px`. And section #5 applies `min-width: 1000px`. This means that `min-width: 500px` is also assumed to be applied to section #4.
-
-      Use the navigation to proceed.
+      Next: [1. We start with a simple component](#/?page=1)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -37,6 +43,10 @@
     <div class="route-index-demo _1">
       {{x-block eqEnabled=false class="_static"}}
     </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      Next: [2. It doesn't look good when wide](#/?page=2)
+    ") extensions='hljs' class="pr-copy pr-p"}}
 
 
 
@@ -56,6 +66,10 @@
       {{x-block eqEnabled=false class="_static"}}
     </div>{{! demo }}
 
+    {{markdown-to-html (trim-markdown "
+      Next: [3. Let's try to tame it with media queries](#/?page=3)
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
 
 
   {{else if (eq currentPage 3)}}
@@ -65,7 +79,11 @@
     {{markdown-to-html (trim-markdown "
       ## 3. Let's try to tame it with media queries
 
-      We're gonna apply a simple media query to make it responsive:
+      I want this component to respond by switching from a horizontal to a vertical layout when its width reaches the breakpoint of 500px
+
+      Let's try a simple media query:
+
+
 
       ```css
       @media (max-width: 564px) {
@@ -103,9 +121,11 @@
     {{markdown-to-html (trim-markdown "
       I've added a vertial line exactly at 500px, to see whether the component should respond.
 
-      This will be our **primary requirement**: whenever the component is 500px or larger, it use horizonal layout. When smaller than 500px, use a vertical layout**.
+      This will be our **primary requirement: whenever the component is 500px or larger, it use horizonal layout. When smaller than 500px, use a vertical layout**.
 
-      We'll call this 500px value a *breakpoint*.
+      So far, so good!
+
+      Next: [4. Now let's try to put our element into a two-column grid](#/?page=4)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -115,9 +135,9 @@
 
 
     {{markdown-to-html (trim-markdown "
-      ## 4. But now we need to put our element into a two-column grid.
+      ## 4. Now let's try to put our element into a two-column grid.
 
-      We try to do it in a straightforward way:
+      We'll try to do it in a straightforward way:
 
       ```css
       .grid {
@@ -151,6 +171,8 @@
       Notice something? Now our components respond incorrectly!
 
       When page width is over 500px, every block switches to horizontal layout. But as components are in a two-column grid, each component's width is only about 300px when it responds.
+
+      Next: [5. It's easy to fix, right?](#/?page=5)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -186,6 +208,10 @@
       </div>{{! grid }}
     </div>{{! demo }}
 
+    {{markdown-to-html (trim-markdown "
+      Next: [6. But now we're told to make our grid responsive too](#/?page=6)
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
 
 
   {{else if (eq currentPage 6)}}
@@ -193,7 +219,7 @@
 
 
     {{markdown-to-html (trim-markdown "
-      ## 6. But now we need to make our grid responsive too
+      ## 6. But now we're told to make our grid responsive too
 
       By \"responsive grid\" I mean that the amount of columns in a grid should by dynamic, depending on page width.
 
@@ -235,6 +261,8 @@
       You can see that when component's width passes the breakpoint, the component doesn't respond!
 
       Well, that's because we had told our components to respond at 1000px, but now we need them to be smarter.
+
+      Next: [7. We'll need multiple media query ranges to fix this](#/?page=7)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -301,6 +329,8 @@
       You've probably noticed that components in the last row don't respond correctly, but let's ignore that for now.
 
       Can this get even worse?
+
+      Next: [8. Now let's try adding a collapsible sidebar!](#/?page=8)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -348,7 +378,7 @@
     </div>{{! demo }}
 
     {{markdown-to-html (trim-markdown "
-      Let's try fixing it.
+      Next: [9. Fixing the media queries for the sidebar](#/?page=9)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -446,6 +476,8 @@
 
     {{markdown-to-html (trim-markdown "
       Let's sum it up.
+
+      Next: [10. It kinda works, but the result is unsatisfactory](#/?page=10)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -468,9 +500,11 @@
       * The math for calculating them precisely is *way* too complicated. Setting breakpoints approximately results in a very messy experience.
       * We can't account for the scrollbar without a JS hack like Modernizr.
       * **If we make our component reusable, we can't make it responsive** because responsive styles depend on the external context.
-    ") extensions='hljs' class="pr-copy pr-p"}}
 
-    <img src="/morpheus.jpg" alt="What if I told you there's a simple solution to all these problems?">
+      ![What if I told you there's a simple solution to all these problems?](/morpheus.jpg)
+
+      Next: [11. Enter element query](#/?page=11)
+    ") extensions='hljs' class="pr-copy pr-p"}}
 
 
 
@@ -481,9 +515,9 @@
     {{markdown-to-html (trim-markdown "
       ## 11. Enter element query
 
-      The techinque to solve all those problems is called *element query*.
+      The techinque to solve all those problems is called *element query*. The idea is very simple: instead of applying styles conditionally based on window width, you apply styles conditionally based on component's own width!
 
-      The Ember addon that provides it is [ember-element-query](https://github.com/lolmaus/ember-element-query).
+      The Ember addon that provides the technique is [ember-element-query](https://github.com/lolmaus/ember-element-query).
 
       Let's try the responsive grid with a collapsible sidebar again, but this time we're gonna crank it up with `ember-element-query`.
 
@@ -562,7 +596,28 @@
     </div>{{! demo }}
 
     {{markdown-to-html (trim-markdown "
+      BTW, the above styles look even better with Sass:
+
+      ```sass
+      @import node_modules/ember-element/query/addon/styles/mixins
+
+      .xBlock
+        +eq-to('horizontal')
+          > .xBlock-image-wrapper
+            margin-bottom: 1rem
+
+        +eq-from('vertical')
+          display : flex
+
+          > .xBlock-image-wrapper
+            width        : 30%
+            flex-shrink  : 0
+            margin-right : 1rem
+      ```
+
       Let's try nested components as well!
+
+      Next: [12. Nested components with ember-element-query](#/?page=12)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
 
@@ -627,6 +682,10 @@
       Implementing this example with media queries is unreasonably daunting. Just thinking about it gives me a headache.
 
       But with `ember-element-query` we didn't need to configure *anything*. We just reused a EQ-enabled component.
+
+      Thank you for your attention!
+
+      Andrey Mikhaylov aka [lolmaus](https://github.com/lolmaus/)
     ") extensions='hljs' class="pr-copy pr-p"}}
 
   {{/if}}

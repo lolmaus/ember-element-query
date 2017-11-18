@@ -28,8 +28,6 @@ export function initialize () {
           ? left.replace(regex, 'class="$1 hljs"')
           : left.replace(/>$/,  ' class="hljs">')
 
-      console.log({left, newLeft})
-
       return newLeft + hljs.highlightAuto(match).value + right
     }
 

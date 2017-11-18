@@ -1,4 +1,4 @@
-{{#unless (eq currentPage 1)}}
+{{#unless (lte currentPage 0)}}
   {{link-to '←Back' (query-params page=(dec currentPage))}}
 {{/unless}}
 
@@ -11,6 +11,6 @@
   }}
 {{/each}}
 
-{{#unless (eq currentPage pages.lastObject)}}
+{{#unless (gte currentPage pages.lastObject)}}
   {{link-to 'Next→' (query-params page=(inc currentPage))}}
 {{/unless}}
