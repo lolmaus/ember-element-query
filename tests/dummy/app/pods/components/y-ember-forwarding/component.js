@@ -1,7 +1,7 @@
 import Component from '@ember/component'
 import { computed } from '@ember/object'
-import layout from '../templates/components/x-ember-forwarding'
-import ElementQueryMixin from 'ember-element-query/element-query-mixin'
+import layout from './template'
+import ElementQueryMixin from 'ember-element-query/mixins/element-query'
 
 
 

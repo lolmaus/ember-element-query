@@ -1,0 +1,58 @@
+@at-root
+
+  @import node_modules/sass-toolkit/stylesheets/toolkit
+  @import addon/styles/mixins
+
+
+
+  ////------------------------------------------
+  .xBlock
+    //------------------------------------------
+
+    // ----- Layout -----
+    padding : 0.5rem
+
+    // ----- Looks -----
+    border        : 1px solid grey
+    border-radius : 2px
+    background    : #eee
+
+    // ----- Content layout -----
+    &._static .xBlock-image-wrapper
+        margin-bottom: 1rem
+
+    +eq-to('horizontal')
+      > .xBlock-image-wrapper
+        margin-bottom: 1rem
+
+    +eq-from('vertical')
+      display : flex
+
+      > .xBlock-image-wrapper
+        width        : 30%
+        flex-shrink  : 0
+        margin-right : 1rem
+
+
+
+
+
+  ////------------------------------------------
+  .xBlock-image-wrapper-intrinsic-ratio
+    //------------------------------------------
+
+    // ----- Layout -----
+    @include intrinsic-ratio(640 / 480)
+
+    // ----- Looks -----
+    background: grey
+
+
+
+
+  ////------------------------------------------
+  .xBlock-content
+    //------------------------------------------
+
+    // ----- Typography -----
+    @extend .pr-copy

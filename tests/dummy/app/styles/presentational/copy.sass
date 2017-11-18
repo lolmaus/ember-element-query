@@ -1,0 +1,53 @@
+@at-root
+  @import ../helpers/typography
+
+  =element($tags...)
+    @each $tag in $tags
+      .pr-#{$tag}, .pr-copy #{$tag}
+        @content
+
+
+
+
+  //------------------------------------------
+  // Block elements
+  //------------------------------------------
+
+  @for $i from 1 through 6
+    +element(h#{$i})
+      +heading($i)
+
+
+
+  +element(p, pre, ul, ol)
+    +paragraph
+
+
+
+  +element(pre)
+    font-size:     0.9em
+    overflow:      auto
+    white-space:   pre
+    border-radius: 0.3em
+
+    > code
+      padding: 1rem !important
+
+
+
+  +element(ul, ol)
+    margin-left : 2em
+    list-style  : disc
+
+
+
+  //------------------------------------------
+  // Inline elements
+  //------------------------------------------
+
+  +element(em, i)
+    font-style : italic
+
+
+
+

@@ -1,0 +1,637 @@
+<div class="route-index">
+
+  {{markdown-to-html (trim-markdown "
+    # A tale about media queries and responsive components
+  ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{story-pagination pages=pages currentPage=currentPage}}
+
+
+
+  {{#if (eq currentPage 0)}}
+
+    {{markdown-to-html (trim-markdown "
+      ## View this on desktop!
+
+      This demo is supposed to be viewed on a very large screen and in a desktop browser. Try zooming out!
+
+      The narration is broken into numbered sections. Styles applied in a section also apply to subsequent sections, until overridden.
+
+      For example, section #3 applies a media query with `min-width: 500px`. And section #5 applies `min-width: 1000px`. This means that `min-width: 500px` is also assumed to be applied to section #4.
+
+      Use the navigation to proceed.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 1)}}
+
+    {{markdown-to-html (trim-markdown "
+      ## 1. We start with a simple component
+
+      It's a block with an image and some text. Useful for previewing articles, displaying news, etc. It could look like this:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _1">
+      {{x-block eqEnabled=false class="_static"}}
+    </div>{{! demo }}
+
+
+
+  {{else if (eq currentPage 2)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 2. It doesn't look good when wide
+
+      The width of our component in the previous example has been limited by 200px.
+
+      When the width isn't restricted, the image becomes too large:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo">
+      {{x-block eqEnabled=false class="_static"}}
+    </div>{{! demo }}
+
+
+
+  {{else if (eq currentPage 3)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 3. Let's try to tame it with media queries
+
+      We're gonna apply a simple media query to make it responsive:
+
+      ```css
+      @media (max-width: 564px) {
+        .xBlock .xBlock-image-wrapper {
+          margin-bottom : 1rem;
+        }
+      }
+
+      @media (min-width: 565px) {
+        .xBlock {
+          display : flex;
+        }
+
+        .xBlock .xBlock-image-wrapper {
+          width        : 30%;
+          flex-shrink  : 0;
+          margin-right : 1rem;
+        }
+      }
+      ```
+
+      Note: I used 565px instead of 500px because I also had to account for padding of containers.
+
+      I also included extra 15px for the scrollbar. **Depending on your scrollbar size, the result will be a little bit off**.
+
+      Try fiddling with window width to see how it responds:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _3">
+      <div class = "route-index-grid _ruler">
+        {{x-block eqEnabled=false}}
+      </div>{{! grid }}
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      I've added a vertial line exactly at 500px, to see whether the component should respond.
+
+      This will be our **primary requirement**: whenever the component is 500px or larger, it use horizonal layout. When smaller than 500px, use a vertical layout**.
+
+      We'll call this 500px value a *breakpoint*.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 4)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 4. But now we need to put our element into a two-column grid.
+
+      We try to do it in a straightforward way:
+
+      ```css
+      .grid {
+        display   : flex;
+        flex-wrap : wrap;
+      }
+
+      .grid .xBlock {
+        width         : 49%;
+        margin-bottom : 2%;
+      }
+
+      .grid .xBlock:nth-child(2n+1) {
+        margin-right : 2%;
+      }
+      ```
+
+      Try fiddling with page width.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _4">
+      <div class = "route-index-grid _ruler">
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+      </div>{{! grid }}
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      Notice something? Now our components respond incorrectly!
+
+      When page width is over 500px, every block switches to horizontal layout. But as components are in a two-column grid, each component's width is only about 300px when it responds.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 5)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 5. It's easy to fix, right?
+
+      All we need to do is to update our media query to use double width, 1000 instead of 500:
+
+      ```css
+      @media (max-width: 1064px) {
+      ```
+
+      ```css
+      @media (min-width: 1065px) {
+      ```
+
+      Again, I used more than 1000 to account for padding and scrollbar.
+
+      Now everything is back to normal:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _5">
+      <div class = "route-index-grid _ruler">
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+      </div>{{! grid }}
+    </div>{{! demo }}
+
+
+
+  {{else if (eq currentPage 6)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 6. But now we need to make our grid responsive too
+
+      By \"responsive grid\" I mean that the amount of columns in a grid should by dynamic, depending on page width.
+
+      We can easily do it with `flex-basis`:
+
+      ```css
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right  : -2%;
+        margin-bottom : -2%;
+      }
+
+      .grid .xBlock {
+        flex-basis    : 450px;
+        flex-grow     : 1;
+        margin-bottom : 2%;
+        margin-right  : 2%;
+      }
+      ```
+
+      `flex-basis: 450px` means: put as many 450px-wide components per row as the container can fit. For example, when the container is 1000px wide, two components will fit, and there will be 100px left.
+
+      Then `flex-grow: 1` makes components stretch to occupy all remaining width.
+
+      This means that depending on container width, each element's width will be either below or above 500px -- a breakpoint that we've agreed upon in #3.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _6">
+      <div class = "route-index-grid _ruler">
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+      </div>{{! grid }}
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      You can see that when component's width passes the breakpoint, the component doesn't respond!
+
+      Well, that's because we had told our components to respond at 1000px, but now we need them to be smarter.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 7)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 7. We'll need multiple media query ranges to fix this
+
+      Let's revise what we've got so far:
+
+      * `flex-basis` tries to fit as much 450px-wide components per grid row as possible.
+      * `flex-grow` then makes components fluid, making them occupy the remaining width in every row.
+
+      This means that ss the user adjusts the width of the page from narrowest to widest, the width of every component varies from around 400px to 600px and back multiple times.
+
+      According to our primary requirement from section #3, we need to make them respond at 500px.
+
+      But media queries only allow us to apply styles based on *window* width, not *element* width. This means that we'll need more elaborate media queries with ranges:
+
+      ```css
+      @media
+        (max-width:  549px),
+        (min-width:  970px) and (max-width: 1069px),
+        (min-width: 1459px) and (max-width: 1616px),
+        (min-width: 1969px) and (max-width: 2181px)
+      {
+        /* Horizontal layout */
+      }
+      ```
+
+      ```css
+      @media
+        (min-width:  550px) and (max-width: 969px),
+        (min-width: 1070px) and (max-width: 1458px),
+        (min-width: 1617px) and (max-width: 1968px),
+        (min-width: 2182px)
+      {
+        /* Vertical layout */
+      }
+      ```
+
+      This gets quite unwieldy already.
+
+      But even worse, it's very imprecise. I failed to figure out the math to generate exact breakpoints, so I just measured approximate values with a screen ruler.
+
+      The component responds incorrectly near the breakpoints, but mostly it works fine:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _7">
+      <div class = "route-index-grid _ruler">
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+        {{x-block eqEnabled=false}}
+      </div>{{! grid }}
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      OK, so it mostly works fine.
+
+      You've probably noticed that components in the last row don't respond correctly, but let's ignore that for now.
+
+      Can this get even worse?
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 8)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 8. Now let's try adding a collapsible sidebar!
+
+      :trollface:
+
+      When the sidebar is expanded, our media queries will no longer be correct:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _8">
+
+      <p class="pr-p">
+        <a
+          href
+          {{action (toggle 'isSidebarExpanded' this)}}
+        >
+          {{if isSidebarExpanded 'Collapse' 'Expand'}} the sidebar
+        </a>
+      </p>
+
+      <div
+        class="
+          route-index-sidebar-wrapper
+          {{if isSidebarExpanded '-expanded' '-collapsed'}}
+        ">
+
+        <div class = "route-index-sidebar">
+          The sidebar
+        </div>
+
+        <div class = "route-index-grid _ruler">
+          {{x-block eqEnabled=false}}
+          {{x-block eqEnabled=false}}
+          {{x-block eqEnabled=false}}
+          {{x-block eqEnabled=false}}
+        </div>{{! grid }}
+      </div>
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      Let's try fixing it.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 9)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 9. Fixing the media queries for the sidebar
+
+      We'll need two sets of media queries, for collapsed and expanded states:
+
+      ```css
+      @media
+        (max-width:  549px),
+        (min-width:  970px) and (max-width: 1069px),
+        (min-width: 1459px) and (max-width: 1616px),
+        (min-width: 1969px) and (max-width: 2181px)
+      {
+        .sidebar-is-collapsed {
+          /* Horizontal layout */
+        }
+      }
+      ```
+
+      ```css
+      @media
+        (min-width:  550px) and (max-width: 969px),
+        (min-width: 1070px) and (max-width: 1458px),
+        (min-width: 1617px) and (max-width: 1968px),
+        (min-width: 2182px)
+      {
+        .sidebar-is-collapsed {
+          /* Vertical layout */
+        }
+      }
+      ```
+
+      ```css
+      @media
+      (max-width:  749px),
+      (min-width: 1170px) and (max-width: 1269px),
+      (min-width: 1459px) and (max-width: 1816px),
+      (min-width: 2169px) and (max-width: 2181px)
+        .sidebar-is-expanded {
+          /* Horizontal layout */
+        }
+      }
+      ```
+
+      ```css
+      @media
+        (min-width:  750px) and (max-width: 1169px),
+        (min-width: 1270px) and (max-width: 1658px),
+        (min-width: 1817px) and (max-width: 2168px),
+        (min-width: 2382px)
+      {
+        .sidebar-is-expanded {
+          /* Vertical layout */
+        }
+      }
+      ```
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <div class="route-index-demo _9">
+
+      <p class="pr-p">
+        <a
+          href
+          {{action (toggle 'isSidebarExpanded' this)}}
+        >
+          {{if isSidebarExpanded 'Collapse' 'Expand'}} the sidebar
+        </a>
+      </p>
+
+      <div
+        class="
+          route-index-sidebar-wrapper
+          {{if isSidebarExpanded '-expanded' '-collapsed'}}
+        ">
+
+        <div class = "route-index-sidebar">
+          The sidebar
+        </div>
+
+        <div class = "route-index-grid _ruler">
+          {{x-block eqEnabled=false}}
+          {{x-block eqEnabled=false}}
+          {{x-block eqEnabled=false}}
+          {{x-block eqEnabled=false}}
+        </div>{{! grid }}
+      </div>
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      Let's sum it up.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 10)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 10. It kinda works, but the result is unsatisfactory
+
+
+      Let's sum up what we have acheived.
+
+      We've built a grid with a variable number of columns and a collapsible sidebar, where each item is itself responsive around 500px of its own width.
+
+      It works, but we've got *lots of problems:
+
+      * The amount of breakpoints we've had to introduce is absolutely ridiculous.
+      * The math for calculating them precisely is *way* too complicated. Setting breakpoints approximately results in a very messy experience.
+      * We can't account for the scrollbar without a JS hack like Modernizr.
+      * **If we make our component reusable, we can't make it responsive** because responsive styles depend on the external context.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+    <img src="/morpheus.jpg" alt="What if I told you there's a simple solution to all these problems?">
+
+
+
+  {{else if (eq currentPage 11)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 11. Enter element query
+
+      The techinque to solve all those problems is called *element query*.
+
+      The Ember addon that provides it is [ember-element-query](https://github.com/lolmaus/ember-element-query).
+
+      Let's try the responsive grid with a collapsible sidebar again, but this time we're gonna crank it up with `ember-element-query`.
+
+      All we need to do is:
+
+      1. Include the element query mixin into the component and define the breakpoints (slices):
+
+          ```js
+          import Component from '@ember/component';
+          import EQMixin from 'ember-element-query/mixins/element-query'
+
+          export default Component.extend(EQMixin, {
+            eqSlices : {
+              0    : 'horizontal',
+              500  : 'vertical',
+            },
+          });
+          ```
+
+      2. Apply styles to the component:
+
+          ```css
+          .xBlock[data-eq-to~=\"horizontal\"] {
+            margin-bottom: 1rem;
+          }
+
+          .xBlock[data-eq-from~=\"vertical\"] {
+            display: flex;
+          }
+
+          .xBlock[data-eq-from~=\"vertical\"] .xBlock-image-wrapper {
+            width: 30%;
+            flex-shrink: 0;
+            margin-right: 1rem;
+          }
+          ```
+
+      3. Tell the sidebar to trigger resize:
+
+          ```js
+          observer('isSidebarExpanded', () => $(window).trigger('resize')),
+          ```
+
+      And you've got perfectly responsive and reusable components:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+    <div class="route-index-demo _11">
+
+      <p class="pr-p">
+        <a
+          href
+          {{action (toggle 'isSidebarExpanded' this)}}
+        >
+          {{if isSidebarExpanded 'Collapse' 'Expand'}} the sidebar
+        </a>
+      </p>
+
+      <div
+        class="
+          route-index-sidebar-wrapper
+          {{if isSidebarExpanded '-expanded' '-collapsed'}}
+        ">
+
+        <div class = "route-index-sidebar">
+          The sidebar
+        </div>
+
+        <div class = "route-index-grid _ruler">
+          {{x-block}}
+          {{x-block}}
+          {{x-block}}
+          {{x-block}}
+        </div>{{! grid }}
+      </div>
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      Let's try nested components as well!
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 12)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 12. Nested components with ember-element-query
+
+      In the example below I used the EQ setup from the previous page, but instead of building a grid I nested components like this:
+
+      ```handlebars
+      {{#x-block}}
+        {{#x-block}}
+          {{#x-block}}
+            {{x-block}}
+          {{/x-block}}
+        {{/x-block}}
+      {{/x-block}}
+      ```
+
+      The `x-block` is designed to render lorem ipsum when it has no content block.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+    <div class="route-index-demo _12">
+
+      <p class="pr-p">
+        <a
+          href
+          {{action (toggle 'isSidebarExpanded' this)}}
+        >
+          {{if isSidebarExpanded 'Collapse' 'Expand'}} the sidebar
+        </a>
+      </p>
+
+      <div
+        class="
+          route-index-sidebar-wrapper
+          {{if isSidebarExpanded '-expanded' '-collapsed'}}
+        ">
+
+        <div class = "route-index-sidebar">
+          The sidebar
+        </div>
+
+        <div class = "route-index-grid">
+          {{#x-block}}
+            {{#x-block}}
+              {{#x-block}}
+                {{x-block}}
+              {{/x-block}}
+            {{/x-block}}
+          {{/x-block}}
+        </div>{{! grid }}
+      </div>
+    </div>{{! demo }}
+
+    {{markdown-to-html (trim-markdown "
+      Implementing this example with media queries is unreasonably daunting. Just thinking about it gives me a headache.
+
+      But with `ember-element-query` we didn't need to configure *anything*. We just reused a EQ-enabled component.
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+  {{/if}}
+
+  <br><br>
+
+  {{story-pagination pages=pages currentPage=currentPage}}
+</div>{{! route-index }}

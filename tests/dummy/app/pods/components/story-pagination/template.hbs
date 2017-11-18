@@ -1,0 +1,16 @@
+{{#unless (eq currentPage 1)}}
+  {{link-to '←Back' (query-params page=(dec currentPage))}}
+{{/unless}}
+
+{{#each pages as |i|}}
+  {{link-to i (query-params page=i)
+    class=(concat
+      'story-pagination-number'
+      (if (eq i currentPage) ' -current')
+    )
+  }}
+{{/each}}
+
+{{#unless (eq currentPage pages.lastObject)}}
+  {{link-to 'Next→' (query-params page=(inc currentPage))}}
+{{/unless}}

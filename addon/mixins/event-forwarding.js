@@ -2,7 +2,7 @@ import { A } from '@ember/array'
 import Mixin from '@ember/object/mixin'
 import {computed} from '@ember/object'
 import Evented/*, {on}*/ from '@ember/object/evented'
-import {debounce} from '@ember/runloop'
+import {debounce, scheduleOnce} from '@ember/runloop'
 
 import { ParentMixin, ChildMixin } from 'ember-composability-tools'
 
@@ -17,7 +17,8 @@ const JQUERY_EVENT_NAMESPACE = '__eq__'
 export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
   // ----- Static properties -----
-  eqDebounceDuration : 200,
+  eqEnabled          : true,
+  eqDebounceDuration : 50,
   eqParent           : null,
   eqChildren         : computed(() => A()),
 
@@ -74,7 +75,13 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
   _eqHandleResizeThrottled () {
     const duration = this.get('eqDebounceDuration')
-    debounce(this, this.eqHandleResize, duration)
+
+    if (duration) debounce(this, this._scheduleEqHandleResize, duration, true)
+    else this.eqHandleResize()
+  },
+
+  _scheduleEqHandleResize () {
+    scheduleOnce('afterRender', this, this.eqHandleResize)
   },
 
 
@@ -82,6 +89,8 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
   // ----- Hooks -----
   didInsertParent () {
     this._super(...arguments)
+
+    if (!this.get('eqEnabled')) return
 
     this._eqRegisterDataAttribute()
 
@@ -97,6 +106,8 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
   willDestroyParent () {
     this._super(...arguments)
+
+    if (!this.get('eqEnabled')) return
 
     const parent = this.get('eqParent')
 

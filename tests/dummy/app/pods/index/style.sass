@@ -1,0 +1,204 @@
+@at-root
+
+  $grid-gutter  : 0.02
+  $grid-basis   : 450px
+  $item-width   : 500px
+  $page-padding : 25px
+  $scrollbar    : 15px
+
+  $extra                  : 2*$page-padding + $scrollbar
+  $grid-gutter-percentage : 100% * $grid-gutter
+
+
+
+  ////------------------------------------------
+  .route-index-demo
+    //------------------------------------------
+
+    // ----- Layout -----
+    padding  : 0.5rem
+    overflow : hidden
+
+    // ----- Looks -----
+    border : 1px dashed black
+
+
+
+    // ----- Variations -----
+    &._resizable
+      resize    : horizontal
+      overflow  : scroll
+      min-width : 200px
+
+
+
+    &._1
+      width : 200px
+
+
+
+    &._3, &._4
+      @media (max-width: #{$item-width + $extra - 1})
+        .xBlock .xBlock-image-wrapper
+          margin-bottom : 1rem
+
+      @media (min-width: #{$item-width + $extra})
+        .xBlock
+          display : flex
+
+        .xBlock .xBlock-image-wrapper
+          width        : 30%
+          flex-shrink  : 0
+          margin-right : 1rem
+
+
+
+    &._4, &._5
+      .route-index-grid
+        display   : flex
+        flex-wrap : wrap
+        margin-bottom: - $grid-gutter-percentage
+
+        .xBlock
+          width         : 50% - $grid-gutter-percentage / 2
+          margin-bottom : $grid-gutter-percentage
+
+          &:nth-child(2n+1)
+            margin-right : $grid-gutter-percentage
+
+
+
+    &._5, &._6
+      @media (max-width: #{$item-width * 2 + $extra - 1})
+        .xBlock .xBlock-image-wrapper
+          margin-bottom : 1rem
+
+      @media (min-width: #{$item-width * 2 + $extra})
+        .xBlock
+          display : flex
+
+        .xBlock .xBlock-image-wrapper
+          width        : 200px
+          flex-shrink  : 0
+          margin-right : 1rem
+
+
+
+    &._6, &._7, &._8, &._9, &._11
+      .route-index-grid
+        display       : flex
+        flex-wrap     : wrap
+        margin-right  : - $grid-gutter-percentage
+        margin-bottom : - $grid-gutter-percentage
+
+        .xBlock
+          flex-basis    : $grid-basis
+          flex-grow     : 1
+          margin-bottom : $grid-gutter-percentage
+          margin-right  : $grid-gutter-percentage
+
+
+
+    &._7, &._8
+
+      @media (max-width: 549px),    (min-width: 970px) and (max-width: 1069px),    (min-width: 1459px) and (max-width: 1616px),    (min-width: 1969px) and (max-width: 2181px)
+        .xBlock .xBlock-image-wrapper
+          margin-bottom : 1rem
+
+      @media (min-width: 550px) and (max-width: 969px),    (min-width: 1070px) and (max-width: 1458px),    (min-width: 1617px) and (max-width: 1968px),    (min-width: 2182px)
+        .xBlock
+          display : flex
+
+        .xBlock .xBlock-image-wrapper
+          width        : 200px
+          flex-shrink  : 0
+          margin-right : 1rem
+
+
+
+    &._9
+
+      @media (max-width: 549px),    (min-width: 970px) and (max-width: 1069px),    (min-width: 1459px) and (max-width: 1616px),    (min-width: 1969px) and (max-width: 2181px)
+        .route-index-sidebar-wrapper.-collapsed
+          .xBlock .xBlock-image-wrapper
+            margin-bottom : 1rem
+
+      @media (min-width: 550px) and (max-width: 969px),    (min-width: 1070px) and (max-width: 1458px),    (min-width: 1617px) and (max-width: 1968px),    (min-width: 2182px)
+        .route-index-sidebar-wrapper.-collapsed
+          .xBlock
+            display : flex
+
+          .xBlock .xBlock-image-wrapper
+            width        : 200px
+            flex-shrink  : 0
+            margin-right : 1rem
+
+      @media (max-width: 749px),    (min-width: 1170px) and (max-width: 1269px),    (min-width: 1459px) and (max-width: 1816px),    (min-width: 2169px) and (max-width: 2181px)
+        .route-index-sidebar-wrapper.-expanded
+          .xBlock .xBlock-image-wrapper
+            margin-bottom : 1rem
+
+      @media (min-width: 750px) and (max-width: 1169px),    (min-width: 1270px) and (max-width: 1658px),    (min-width: 1817px) and (max-width: 2168px),    (min-width: 2382px)
+        .route-index-sidebar-wrapper.-expanded
+          .xBlock
+            display : flex
+
+          .xBlock .xBlock-image-wrapper
+            width        : 200px
+            flex-shrink  : 0
+            margin-right : 1rem
+
+
+
+  ////------------------------------------------
+  .route-index-grid
+    //------------------------------------------
+
+    // Variations
+    &._ruler
+      position: relative
+      &:before
+        content    : ''
+        position   : absolute
+        top        : -0.5rem
+        bottom     : -0.5rem
+        left       : $item-width
+        width      : 1px
+        background : red
+        z-index    : 1
+
+
+
+  ////------------------------------------------
+  .route-index-sidebar-wrapper
+    //------------------------------------------
+
+    // ----- Behavior -----
+    &.-collapsed
+      .route-index-sidebar
+        display: none
+
+    &.-expanded
+      display: flex
+
+      .route-index-sidebar
+        width        : 180px
+        margin-right : 20px
+        flex-shrink  : 0
+
+      .route-index-grid
+        flex-grow : 1
+
+
+
+
+  ////------------------------------------------
+  .route-index-sidebar
+    //------------------------------------------
+
+    // ----- Layout -----
+    padding: 10px
+
+    // ----- Looks -----
+    background : grey
+    color      : white

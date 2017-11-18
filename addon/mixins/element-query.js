@@ -7,7 +7,7 @@ import { on } from '@ember/object/evented'
 
 import computed from 'ember-macro-helpers/computed'
 
-import EventForwardingMixin from 'ember-element-query/event-forwarding-mixin'
+import EventForwardingMixin from './event-forwarding'
 
 
 export default Mixin.create(EventForwardingMixin, {
@@ -28,13 +28,7 @@ export default Mixin.create(EventForwardingMixin, {
 
 
 
-  // ----- Overridden properties -----
-  attributeBindings : [
-    'eqSliceCurrent:data-eq-current',
-    'eqSlicesFromAttr:data-eq-from',
-    'eqSlicesToAttr:data-eq-to',
-    'eqSlicesBetweenAttr:data-eq-between',
-  ],
+  // ----- Overridden properties -----,
 
 
 
@@ -298,13 +292,33 @@ export default Mixin.create(EventForwardingMixin, {
     this.eqUpdateSizes()
     this._super()
   },
+
+  didReceiveAttrs () {
+    this._super(...arguments)
+
+    if (!this.get('eqEnabled')) return
+
+    this.set('attributeBindings', [
+      'eqSliceCurrent:data-eq-current',
+      'eqSlicesFromAttr:data-eq-from',
+      'eqSlicesToAttr:data-eq-to',
+      'eqSlicesBetweenAttr:data-eq-between',
+    ])
+  },
+
   didInsertParent () {
     this._super(...arguments)
+
+    if (!this.get('eqEnabled')) return
+
     this._eqSetupTransitions()
   },
 
   willDestroyParent () {
     this._super(...arguments)
+
+    if (!this.get('eqEnabled')) return
+
     this._eqTeardownTransitions()
   },
 

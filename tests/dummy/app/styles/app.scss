@@ -1,29 +1,12 @@
-@import '../../../../addon/mixins';
+@import 'reset';
+@import 'presentational/copy';
 
+@import 'dummy/app/pods/components/story-pagination/style';
+@import 'dummy/app/pods/components/x-block/style';
 
-.children {
-  padding-left: 2rem;
-}
+@import 'dummy/app/pods/application/style';
+@import 'dummy/app/pods/index/style';
 
-
-
-.demo-component {
-  border: 1px solid black;
-  padding: 5px;
-
-  .children {
-    flex-grow: 1;
-  }
-
-  @include eq-from('m') {
-    display: flex;
-
-    .name {
-      width: 100px;
-      margin-right: 20px;
-    }
-  }
-}
 
 
 
