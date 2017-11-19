@@ -10,8 +10,8 @@ export default Component.extend(EQMixin, {
 
   // ----- Element Query -----
   eqSlices : {
-    0   : 'horizontal',
-    500 : 'vertical',
+    0   : 'vertical',
+    500 : 'horizontal',
   },
 
 

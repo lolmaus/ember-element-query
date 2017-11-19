@@ -28,7 +28,7 @@ export default Mixin.create(EventForwardingMixin, {
 
 
 
-  // ----- Overridden properties -----,
+  // ----- Overridden properties -----
 
 
 
@@ -190,6 +190,7 @@ export default Mixin.create(EventForwardingMixin, {
     'eqSlicesFrom',
     'eqSlicesTo',
     'eqWidth',
+    'eqHeight',
     function () {
       return this.getProperties(
         'eqBPCurrent',
@@ -203,7 +204,8 @@ export default Mixin.create(EventForwardingMixin, {
         'eqSlices',
         'eqSlicesFrom',
         'eqSlicesTo',
-        'eqWidth'
+        'eqWidth',
+        'eqHeight'
       )
     }
   ),

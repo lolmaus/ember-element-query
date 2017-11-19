@@ -35,6 +35,10 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
   // ----- Public methods -----
   eqHandleResize () {
+    this.eqTriggerResize()
+  },
+
+  eqTriggerResize () {
     this.trigger(RESIZE_EVENT_NAME)
   },
 

@@ -15,6 +15,10 @@
     {{markdown-to-html (trim-markdown "
       I'm gonna tell you a story about media queries.
 
+      ## TL/DR
+
+      Skip to [11. Enter element query](#/?page=11) to see it in action.
+
       ## The narration is broken into numbered sections
 
       I'm showing some style code samples in each section. Those code samples aren't explicit, only relevants parts are shown. You'll have to imagine the rest.
@@ -531,8 +535,8 @@
 
           export default Component.extend(EQMixin, {
             eqSlices : {
-              0    : 'horizontal',
-              500  : 'vertical',
+              0    : 'vertical',
+              500  : 'horizontal',
             },
           });
           ```
@@ -540,15 +544,15 @@
       2. Apply styles to the component:
 
           ```css
-          .xBlock[data-eq-to~=\"horizontal\"] {
+          .xBlock[data-eq-to~=\"vertical\"] {
             margin-bottom: 1rem;
           }
 
-          .xBlock[data-eq-from~=\"vertical\"] {
+          .xBlock[data-eq-from~=\"horizontal\"] {
             display: flex;
           }
 
-          .xBlock[data-eq-from~=\"vertical\"] .xBlock-image-wrapper {
+          .xBlock[data-eq-from~=\"horizontal\"] .xBlock-image-wrapper {
             width: 30%;
             flex-shrink: 0;
             margin-right: 1rem;
@@ -605,11 +609,11 @@
       @import node_modules/ember-element/query/addon/styles/mixins
 
       .xBlock
-        +eq-to('horizontal')
+        +eq-to('vertical')
           > .xBlock-image-wrapper
             margin-bottom: 1rem
 
-        +eq-from('vertical')
+        +eq-from('horizontal')
           display : flex
 
           > .xBlock-image-wrapper
