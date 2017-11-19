@@ -1,13 +1,19 @@
 import Controller from '@ember/controller'
 import computed from 'ember-macro-helpers/computed'
-import { observer } from '@ember/object'
-import { A } from '@ember/array'
+import {observer} from '@ember/object'
+import {A} from '@ember/array'
+import {inject as service} from '@ember/service'
 
 import _ from 'lodash'
 
 
 
 export default Controller.extend({
+
+  // ----- Services -----
+  eq : service('eq'),
+
+
 
   // ----- Overridden properties -----
   queryParams : ['page'],
@@ -31,7 +37,8 @@ export default Controller.extend({
   scrollToTop : observer('page', () => window.scrollTo(0, 0)),
 
   resizeOnSidebarToggle : observer('isSidebarExpanded', () => {
-    $(window).trigger('resize')
+    const service = this.get('eq')
+    service.triggerResize()
   }),
 
 })

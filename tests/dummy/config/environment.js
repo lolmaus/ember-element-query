@@ -3,12 +3,12 @@
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix : 'dummy',
+    modulePrefix    : 'dummy',
     podModulePrefix : 'dummy/pods',
     environment,
-    rootURL      : '/',
-    locationType : 'hash',
-    EmberENV     : {
+    rootURL         : '/',
+    locationType    : 'hash',
+    EmberENV        : {
       FEATURES : {
         // Here you can enable experimental features on an ember canary build
         // e.g. 'with-controller': true

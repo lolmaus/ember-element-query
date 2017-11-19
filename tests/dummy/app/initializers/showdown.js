@@ -1,4 +1,4 @@
-import showdown from 'showdown';
+import showdown from 'showdown'
 import hljs from 'npm:highlight.js'
 
 export function initialize () {

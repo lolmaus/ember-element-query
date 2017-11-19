@@ -1,6 +1,6 @@
-import { helper } from '@ember/component/helper';
+import {helper} from '@ember/component/helper'
 
-export function trimMarkdown([str]) {
+export function trimMarkdown ([str]) {
   const lines = str.split("\n")
 
   if (!lines[0].length) lines.shift()
@@ -13,4 +13,4 @@ export function trimMarkdown([str]) {
     .join("\n")
 }
 
-export default helper(trimMarkdown);
+export default helper(trimMarkdown)

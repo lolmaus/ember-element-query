@@ -3,7 +3,7 @@
 
 
 import Mixin from '@ember/object/mixin'
-import { on } from '@ember/object/evented'
+import {on} from '@ember/object/evented'
 
 import computed from 'ember-macro-helpers/computed'
 

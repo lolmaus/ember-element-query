@@ -558,7 +558,10 @@
       3. Tell the sidebar to trigger resize:
 
           ```js
-          observer('isSidebarExpanded', () => $(window).trigger('resize')),
+          resizeOnSidebarToggle : observer('isSidebarExpanded', () => {
+            const service = this.get('eq')
+            service.triggerResize()
+          }),
           ```
 
       And you've got perfectly responsive and reusable components:

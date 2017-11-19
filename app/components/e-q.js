@@ -1,1 +1,1 @@
-export { default } from 'ember-element-query/components/e-q';
+export {default} from 'ember-element-query/components/e-q'

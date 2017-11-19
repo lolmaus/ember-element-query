@@ -1,5 +1,5 @@
 import Component from '@ember/component'
-import { computed } from '@ember/object'
+import {computed} from '@ember/object'
 import layout from './template'
 import ElementQueryMixin from 'ember-element-query/mixins/element-query'
 

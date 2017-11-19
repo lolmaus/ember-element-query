@@ -1,9 +1,9 @@
-import Component from '@ember/component';
-import layout from './template';
+import Component from '@ember/component'
+import layout from './template'
 
 export default Component.extend({
-  currentPage: null,
-  pages: null,
+  currentPage : null,
+  pages       : null,
 
   layout
-});
+})

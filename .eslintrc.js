@@ -27,11 +27,13 @@ module.exports = {
     "no-sequences": "off",
     "no-template-curly-in-string": "off",
     "no-whitespace-before-property": "off",
+    "object-curly-spacing": ["error", "never"],
     "operator-linebreak": "off",
     "padded-blocks": "off",
     "quotes": "off",
     "spaced-comment": "off",
     "standard/object-curly-even-spacing": "off",
+    "standard/no-callback-literal": "off",
   },
 
   "globals": {
