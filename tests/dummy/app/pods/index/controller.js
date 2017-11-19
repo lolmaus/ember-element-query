@@ -41,10 +41,4 @@ export default Controller.extend({
     service.triggerResize()
   }),
 
-  actions: {
-    logg() {
-      console.log('logg')
-    }
-  }
-
 })
