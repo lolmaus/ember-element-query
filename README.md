@@ -317,6 +317,34 @@ Block form:
 {{/e-q}}
 ```
 
+All properties passed to the component become HTML attributes:
+
+```handlebars
+{{e-q data-foo="bar"}}
+
+becomes
+
+<div data-foo="bar"></div>
+```
+
+You can prevent a property from being bound by passing its name in the `ignoredAttrs` array:
+
+```
+This button will not receive the `disabled` attribute:
+
+{{#e-q
+  tagName      = "button"
+  disabled     = true
+  ignoredAttrs = (array 'disabled')
+  onclick      = (action 'save')
+}}
+  Save
+{{/e-q}}
+```
+
+This example also demonstrates how to attach an action to the component.
+
+
 
 
 ### Triggering an update
