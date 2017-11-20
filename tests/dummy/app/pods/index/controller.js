@@ -36,7 +36,7 @@ export default Controller.extend({
   // ----- Observers -----
   scrollToTop : observer('page', () => window.scrollTo(0, 0)),
 
-  resizeOnSidebarToggle : observer('isSidebarExpanded', () => {
+  resizeOnSidebarToggle : observer('isSidebarExpanded', function () {
     const service = this.get('eq')
     service.triggerResize()
   }),

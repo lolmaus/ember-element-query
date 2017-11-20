@@ -562,7 +562,7 @@
       3. Tell the sidebar to trigger resize:
 
           ```js
-          resizeOnSidebarToggle : observer('isSidebarExpanded', () => {
+          resizeOnSidebarToggle : observer('isSidebarExpanded', function () {
             const service = this.get('eq')
             service.triggerResize()
           }),
