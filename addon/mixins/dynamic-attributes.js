@@ -12,6 +12,8 @@ export default Mixin.create({
   didReceiveAttrs () {
     this._super(...arguments)
 
+    if (!this.attrs) return
+
     const attributeBindingsFromAttrs =
       Object
         .keys(this.attrs)

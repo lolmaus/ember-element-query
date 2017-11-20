@@ -1,5 +1,10 @@
 module.exports = {
   env: {
-    embertest: true
+    embertest : true,
+    mocha     : true
+  },
+
+  rules: {
+    "no-unused-expressions": "off"
   }
-};
+}
