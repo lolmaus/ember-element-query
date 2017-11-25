@@ -5,7 +5,7 @@
 [![npm package version](https://img.shields.io/npm/v/ember-element-query.svg)](https://www.npmjs.com/package/ember-element-query)
 [![license MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/lolmaus/ember-element-query/blob/gen-1/LICENSE.md)
 ![ember-versions 1.13+](https://img.shields.io/badge/ember--versions-1.13%2B-yellowgreen.svg)
-![node-versions 6+](https://img.shields.io/badge/node--versions-6%2B-yellowgreen.svg)
+![node-versions 8.6+](https://img.shields.io/badge/node--versions-8.6%2B-red.svg)
 ![ember-cli 2.16.2](https://img.shields.io/badge/uses%20ember--cli-2.16.2-blue.svg)
 
 This Ember addon lets you apply styles to elements conditionally based on their own width, instead of using media queries based on window width.
