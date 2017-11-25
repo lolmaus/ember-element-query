@@ -80,17 +80,17 @@ Unfortunately, CSS is not aware of element's current width, so pseudoselectors l
 `ember-element-query` lets you write CSS like this:
 
 ```css
-// When .my-menu is <= 499px, apply margin-bottom to .my-menu--item
+/* When .my-menu is <= 499px, apply margin-bottom to .my-menu--item */
 .my-menu[eq-data-to~=499px] .my-menu--item {
   margin-bottom: 10px;
 }
 
-// When .my-menu is >= 500px, apply flex to itself
+/* When .my-menu is >= 500px, apply flex to itself */
 .my-menu[eq-data-from~=500px] {
   display: flex;
 }
 
-// When .my-menu is >= 500px, apply margin-right to .my-menu--item
+/* When .my-menu is >= 500px, apply margin-right to .my-menu--item */
 .my-menu[eq-data-from~=500px] .my-menu--item {
   margin-right: 10px;
 }
