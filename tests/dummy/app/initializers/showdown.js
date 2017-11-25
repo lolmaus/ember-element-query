@@ -39,7 +39,7 @@ export function initialize () {
         const right = '</code></pre>'
         const flags = 'g'
         return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags)
-      }
+      },
     }
   })
 
@@ -47,5 +47,5 @@ export function initialize () {
 
 export default {
   name : 'showdown',
-  initialize
+  initialize,
 }

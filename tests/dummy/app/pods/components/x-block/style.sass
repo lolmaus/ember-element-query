@@ -21,17 +21,22 @@
     &._static .xBlock-image-wrapper
         margin-bottom: 1rem
 
-    +eq-to('vertical')
-      > .xBlock-image-wrapper
-        margin-bottom: 1rem
 
-    +eq-from('horizontal')
-      display : flex
+    // ----- RWD -----
+    $breakpoint: 500
 
-      > .xBlock-image-wrapper
-        width        : 30%
-        flex-shrink  : 0
-        margin-right : 1rem
+    &:not(:empty)
+      +eq-to($breakpoint)
+        > .xBlock-image-wrapper
+          margin-bottom: 1rem
+
+      +eq-from($breakpoint)
+        display : flex
+
+        > .xBlock-image-wrapper
+          width        : 30%
+          flex-shrink  : 0
+          margin-right : 1rem
 
 
 

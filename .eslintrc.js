@@ -14,7 +14,7 @@ module.exports = {
   "rules": {
     "arrow-parens": "off",
     "camelcase": "off",
-    "comma-dangle": "off",
+    "comma-dangle": ["error", "always-multiline"],
     "func-call-spacing": "off",
     "generator-star-spacing": "off",
     "key-spacing": ["error", { beforeColon: true, afterColon: true, align: "colon" }],

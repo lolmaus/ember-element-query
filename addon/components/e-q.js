@@ -6,5 +6,5 @@ import DynamicAttributesMixin from '../mixins/dynamic-attributes'
 
 
 export default Component.extend(ElementQueryMixin, DynamicAttributesMixin, {
-  layout
+  layout,
 })

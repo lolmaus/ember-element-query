@@ -8,7 +8,7 @@ import {ParentMixin, ChildMixin} from 'ember-composability-tools'
 
 import {
   DATA_KEY,
-  RESIZE_EVENT_NAME
+  RESIZE_EVENT_NAME,
 } from '../constants'
 
 import $ from 'jquery'

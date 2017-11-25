@@ -23,5 +23,5 @@ export default Mixin.create({
         )
 
     this.set('attributeBindings', this.attributeBindings.concat(attributeBindingsFromAttrs))
-  }
+  },
 })

@@ -5,5 +5,5 @@ export default Component.extend({
   currentPage : null,
   pages       : null,
 
-  layout
+  layout,
 })

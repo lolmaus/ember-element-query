@@ -2,29 +2,39 @@
 // https://github.com/runspired/flexi/blob/develop/addon/services/device/layout.js
 
 
-import Mixin from '@ember/object/mixin'
+
+import {A, isArray} from '@ember/array'
 import {on} from '@ember/object/evented'
+import Mixin from '@ember/object/mixin'
+import {inject as service} from '@ember/service'
+import {isBlank} from '@ember/utils'
 
 import computed from 'ember-macro-helpers/computed'
 
 import EventForwardingMixin from './event-forwarding'
 
 
+const YIELDABLE_PROPS = [
+  'eqBPsFrom',
+  'eqBPsTo',
+  'eqBPsFromActive',
+  'eqBPsToActive',
+  'eqWidth',
+  'eqHeight',
+]
+
+
+
 export default Mixin.create(EventForwardingMixin, {
 
   // ----- Arguments -----
-  eqSlices : {
-    0    : 'xxs',
-    200  : 'xs',
-    400  : 's',
-    600  : 'm',
-    800  : 'l',
-    1000 : 'xl',
-    1200 : 'xxl',
-    1400 : 'xxxl',
-  },
-
+  eqShouldUpdateHeight  : false,
   eqTransitionSelectors : null,
+
+
+
+  // ----- Services -----
+  eq : service(),
 
 
 
@@ -38,127 +48,63 @@ export default Mixin.create(EventForwardingMixin, {
 
 
 
-  // ----- Computed properties -----
-  eqBreakpointsAsc : computed('eqSlices', {
-    get (eqSlices) {
-      return Object
-        .keys(eqSlices)
-        .map(bp => parseInt(bp, 10))
-        .sort((a, b) => (a - b))
-    }
-  }),
+  // ----- Computed properties -----e
+  eqClassNames : computed('class', 'classNames.[]', (classString = "", classNames = []) => {
+    if (!isArray(classNames)) classNames = [classNames]
 
-  eqBreakpointsDesc : computed('eqBreakpointsAsc.[]', {
-    get (eqBreakpointsAsc) {
-      return eqBreakpointsAsc.slice().reverse()
-    }
-  }),
+    const result =
+      classString
+        .split(' ')
+        .concat(classNames)
+        .filter(substr => !isBlank(substr))
+        .map(substr => substr.trim())
 
-  eqBPCurrent : computed('eqBreakpointsDesc.[]', 'eqWidth', {
-    get (eqBreakpointsDesc, eqWidth) {
-      return eqWidth == null
-        ? null
-        : eqBreakpointsDesc.find(bp => bp <= eqWidth)
-    }
-  }),
+    return A(result).uniq()
+  }).readOnly(),
 
-  eqBPCurrentIndex : computed('eqBreakpointsAsc.[]', 'eqBPCurrent', {
-    get (eqBreakpointsAsc, eqBPCurrent) {
-      return eqBPCurrent == null
-        ? null
-        : eqBreakpointsAsc.indexOf(eqBPCurrent)
-    }
-  }),
+  eqBPsFrom : computed('eqClassNames.[]', 'eq.mapping', (classNames, mapping) => {
+    return classNames.reduce((result, className) => {
+      const classMapping = mapping[className]
 
-  eqBPsFrom : computed('eqBreakpointsAsc.[]', 'eqBPCurrentIndex', {
-    get (eqBreakpointsAsc, eqBPCurrentIndex) {
-      return eqBPCurrentIndex == null
-        ? null
-        : eqBreakpointsAsc.slice(0, eqBPCurrentIndex + 1)
-    }
-  }),
-
-  eqBPsTo : computed('eqBreakpointsAsc.[]', 'eqBPCurrentIndex', {
-    get (eqBreakpointsAsc, eqBPCurrentIndex) {
-      return eqBPCurrentIndex == null
-        ? null
-        : eqBreakpointsAsc.slice(eqBPCurrentIndex)
-    }
-  }),
-
-  eqBPsBetween : computed('eqBreakpointsAsc.[]', 'eqBPCurrentIndex', {
-    get (eqBreakpointsAsc, eqBPCurrentIndex) {
-      if (eqBPCurrentIndex == null) return null
-
-      const result = []
-
-      eqBreakpointsAsc
-        .slice(0, eqBPCurrentIndex + 1)
-        .forEach(bp1 => {
-          eqBreakpointsAsc
-            .slice(eqBPCurrentIndex)
-            .forEach(bp2 => {
-              result.push([ bp1, bp2 ])
-            })
-        })
+      if (classMapping && classMapping.from) result.addObjects(classMapping.from)
 
       return result
-    }
-  }),
+    }, A())
+  }).readOnly(),
 
-  eqSliceCurrent : computed('eqSlices', 'eqBPCurrent', {
-    get (eqSlices, eqBPCurrent) {
-      return this.eqSliceForBP(eqBPCurrent)
-    }
-  }),
+  eqBPsTo : computed('eqClassNames.[]', 'eq.mapping', (classNames, mapping) => {
+    return classNames.reduce((result, className) => {
+      const classMapping = mapping[className]
 
-  eqSlicesFrom : computed('eqSlices', 'eqBPsFrom.[]', {
-    get (eqSlices, eqBPsFrom) {
-      return eqBPsFrom == null
-        ? null
-        : this.eqSlicesForBPs(eqBPsFrom)
-    }
-  }),
+      if (classMapping && classMapping.to) result.addObjects(classMapping.to)
 
-  eqSlicesTo : computed('eqSlices', 'eqBPsTo.[]', {
-    get (eqSlices, eqBPsTo) {
-      return eqBPsTo == null
-        ? null
-        : this.eqSlicesForBPs(eqBPsTo)
-    }
-  }),
+      return result
+    }, A())
+  }).readOnly(),
 
-  eqSlicesBetween : computed('eqSlices', 'eqBPsBetween.[]', {
-    get (eqSlices, eqBPsBetween) {
-      if (eqBPsBetween == null)  return null
+  eqBPsFromActive : computed('eqWidth', 'eqBPsFrom.[]', (width, bpsFrom) => {
+    return bpsFrom
+      .filter(bp => bp <= width)
+      .sort()
+  }).readOnly(),
 
-      return eqBPsBetween
-        .map(([ bp1, bp2 ]) => {
-          const slice1 = this.eqSliceForBP(bp1)
-          const slice2 = this.eqSliceForBP(bp2)
+  eqBPsToActive : computed('eqWidth', 'eqBPsTo.[]', (width, bpsTo) => {
+    return bpsTo
+      .filter(bp => bp >= width)
+      .sort()
+  }).readOnly(),
 
-          return `${slice1}-${slice2}`
-        })
-    }
-  }),
+  eqBPsFromAttr : computed('eqBPsFromActive', bps => {
+    return bps
+      .map(bp => `${bp}px`)
+      .join(' ')
+  }).readOnly(),
 
-  eqSlicesFromAttr : computed('eqSlicesFrom', {
-    get (eqSlicesFrom) {
-      return (eqSlicesFrom || []).join(' ')
-    }
-  }),
-
-  eqSlicesToAttr : computed('eqSlicesTo', {
-    get (eqSlicesTo) {
-      return (eqSlicesTo || []).join(' ')
-    }
-  }),
-
-  eqSlicesBetweenAttr : computed('eqSlicesBetween', {
-    get (eqSlicesBetween) {
-      return (eqSlicesBetween || []).join(' ')
-    }
-  }),
+  eqBPsToAttr : computed('eqBPsToActive', bps => {
+    return bps
+      .map(bp => `${bp}px`)
+      .join(' ')
+  }).readOnly(),
 
   eqTransitionEventName : computed(() => {
     const el = document.createElement('fakeelement')
@@ -166,7 +112,7 @@ export default Mixin.create(EventForwardingMixin, {
       'transition'       : 'transitionend',
       'OTransition'      : 'oTransitionEnd',
       'MozTransition'    : 'transitionend',
-      'WebkitTransition' : 'webkitTransitionEnd'
+      'WebkitTransition' : 'webkitTransitionEnd',
     }
 
     const transitionKey =
@@ -177,38 +123,9 @@ export default Mixin.create(EventForwardingMixin, {
     return transitions[transitionKey]
   }),
 
-  eqYieldable : computed(
-    'eqBPCurrent',
-    'eqBPCurrentIndex',
-    'eqBPsBetween',
-    'eqBPsFrom',
-    'eqBPsTo',
-    'eqBreakpointsAsc',
-    'eqBreakpointsDesc',
-    'eqSliceCurrent',
-    'eqSlices',
-    'eqSlicesFrom',
-    'eqSlicesTo',
-    'eqWidth',
-    'eqHeight',
-    function () {
-      return this.getProperties(
-        'eqBPCurrent',
-        'eqBPCurrentIndex',
-        'eqBPsBetween',
-        'eqBPsFrom',
-        'eqBPsTo',
-        'eqBreakpointsAsc',
-        'eqBreakpointsDesc',
-        'eqSliceCurrent',
-        'eqSlices',
-        'eqSlicesFrom',
-        'eqSlicesTo',
-        'eqWidth',
-        'eqHeight'
-      )
-    }
-  ),
+  eqYieldable : computed(...YIELDABLE_PROPS, function () {
+    return this.getProperties(...YIELDABLE_PROPS)
+  }),
 
 
 
@@ -220,27 +137,19 @@ export default Mixin.create(EventForwardingMixin, {
 
 
   // ----- Public Methods -----
-  eqSliceForBP (bp) {
-    return this.get('eqSlices')[bp]
-  },
-
-  eqSlicesForBPs (bps) {
-    return bps.map(bp => this.eqSliceForBP(bp))
-  },
-
   eqUpdateSizes () {
     const element = this.get('element')
 
     if (!element || this.get('isDestroying') || this.get('isDestroyed')) return
 
     this.set('eqWidth',  element.offsetWidth)
-    this.set('eqHeight', element.offsetHeight)
 
-    return {
-      width  : element.offsetWidth,
-      height : element.offsetHeight
+    if (this.get('eqShouldUpdateHeight')) {
+      this.set('eqHeight', element.offsetHeight)
     }
   },
+
+
 
   // ----- Private methods -----
   _eqSetupTransitions () {
@@ -301,10 +210,8 @@ export default Mixin.create(EventForwardingMixin, {
     if (!this.get('eqEnabled')) return
 
     this.set('attributeBindings', [
-      'eqSliceCurrent:data-eq-current',
-      'eqSlicesFromAttr:data-eq-from',
-      'eqSlicesToAttr:data-eq-to',
-      'eqSlicesBetweenAttr:data-eq-between',
+      'eqBPsFromAttr:data-eq-from',
+      'eqBPsToAttr:data-eq-to',
     ])
   },
 
