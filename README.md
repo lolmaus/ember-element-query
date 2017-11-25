@@ -164,7 +164,7 @@ Install the addon:
 
     ember i ember-element-query
 
-:warning: Add `assets/element-query-mapping.js` script into your `app/index.html` and `tests/index.html`:
+:warning: Add the `assets/element-query-mapping.js` script into your `app/index.html` and `tests/index.html`:
 
 ```html
     <script src="{{rootURL}}assets/vendor.js"></script>
@@ -172,7 +172,7 @@ Install the addon:
     <script src="{{rootURL}}assets/element-query-mapping.js"></script>
 ```
 
-Why: this file is a way to pass information from a build into the app. Element query selectors have to be extracted from *compiled* CSS. Unfortunately, when compiled CSS becomes available in Ember CLI pipeline, it's too late to 
+Why: this file is a way to pass information from a build into the app. Element query selectors have to be extracted from *compiled* CSS. Unfortunately, when compiled CSS becomes available in the Ember CLI pipeline, it's too late to manipulate with JS modules.
 
 
 
