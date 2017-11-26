@@ -1,7 +1,7 @@
 import Mixin from '@ember/object/mixin'
 // import {computed} from '@ember/object'
 import Evented/*, {on}*/ from '@ember/object/evented'
-import {scheduleOnce} from '@ember/runloop'
+import {next, scheduleOnce} from '@ember/runloop'
 import {inject as service} from '@ember/service'
 
 import {ParentMixin, ChildMixin} from 'ember-composability-tools'
@@ -34,12 +34,14 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
 
   // ----- Public methods -----
+  // Overridable
   eqHandleResize () {
     this.eqTriggerResize()
   },
 
   eqTriggerResize () {
-    this.trigger(RESIZE_EVENT_NAME)
+    // this.trigger(RESIZE_EVENT_NAME)
+    next(this, this.trigger, RESIZE_EVENT_NAME) // https://github.com/emberjs/ember.js/issues/15479#issuecomment-347006683
   },
 
 
