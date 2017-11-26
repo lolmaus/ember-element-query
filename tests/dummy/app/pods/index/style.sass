@@ -1,5 +1,7 @@
 @at-root
 
+  @import addon/styles/mixins
+
   $grid-gutter  : 0.02
   $grid-basis   : 450px
   $item-width   : 500px
@@ -202,3 +204,18 @@
     // ----- Looks -----
     background : grey
     color      : white
+
+
+
+
+  ////------------------------------------------
+  .route-index-xFoo
+    //------------------------------------------
+
+    // ----- Border -----
+    border-top    : 1px solid black
+    border-bottom : 1px solid black
+
+    // ----- RWD -----
+    +eq-from(500)
+      border-color : blue

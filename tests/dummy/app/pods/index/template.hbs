@@ -683,6 +683,7 @@
             {{/x-block}}
           {{/x-block}}
 
+
           {{!--#x-block}}
             {{#x-block}}
               {{#x-block}}
@@ -707,6 +708,9 @@
                                                     {{#x-block}}
                                                       {{#x-block}}
                                                         {{#x-block}}
+                                                          {{#x-block}}
+                                                            {{#x-block}}
+                                                              {{#x-block}}
           {{#x-block}}
             {{#x-block}}
               {{#x-block}}
@@ -731,7 +735,67 @@
                                                     {{#x-block}}
                                                       {{#x-block}}
                                                         {{#x-block}}
-                                                          {{x-block}}
+                                                          {{#x-block}}
+                                                            {{#x-block}}
+                                                              {{#x-block}}
+          {{#x-block}}
+            {{#x-block}}
+              {{#x-block}}
+                {{#x-block}}
+                  {{#x-block}}
+                    {{#x-block}}
+                      {{#x-block}}
+                        {{#x-block}}
+                          {{#x-block}}
+                            {{#x-block}}
+                              {{#x-block}}
+                                {{#x-block}}
+                                  {{#x-block}}
+                                    {{#x-block}}
+                                      {{#x-block}}
+                                        {{#x-block}}
+                                          {{#x-block}}
+                                            {{#x-block}}
+                                              {{#x-block}}
+                                                {{#x-block}}
+                                                  {{#x-block}}
+                                                    {{#x-block}}
+                                                      {{#x-block}}
+                                                        {{#x-block}}
+                                                          {{#x-block}}
+                                                            {{#x-block}}
+                                                              {{#x-block}}
+          {{#x-block}}
+            {{#x-block}}
+              {{#x-block}}
+                {{#x-block}}
+                  {{#x-block}}
+                    {{#x-block}}
+                      {{#x-block}}
+                        {{#x-block}}
+                          {{#x-block}}
+                            {{#x-block}}
+                              {{#x-block}}
+                                {{#x-block}}
+                                  {{#x-block}}
+                                    {{#x-block}}
+                                      {{#x-block}}
+                                        {{#x-block}}
+                                          {{#x-block}}
+                                            {{#x-block}}
+                                              {{#x-block}}
+                                                {{#x-block}}
+                                                  {{#x-block}}
+                                                    {{#x-block}}
+                                                      {{#x-block}}
+                                                        {{#x-block}}
+                                                          {{#x-block}}
+                                                            {{#x-block}}
+                                                              {{#x-block}}
+                                                                {{x-block}}
+                                                              {{/x-block}}
+                                                            {{/x-block}}
+                                                          {{/x-block}}
                                                         {{/x-block}}
                                                       {{/x-block}}
                                                     {{/x-block}}
@@ -756,6 +820,63 @@
               {{/x-block}}
             {{/x-block}}
           {{/x-block}}
+                                                              {{/x-block}}
+                                                            {{/x-block}}
+                                                          {{/x-block}}
+                                                        {{/x-block}}
+                                                      {{/x-block}}
+                                                    {{/x-block}}
+                                                  {{/x-block}}
+                                                {{/x-block}}
+                                              {{/x-block}}
+                                            {{/x-block}}
+                                          {{/x-block}}
+                                        {{/x-block}}
+                                      {{/x-block}}
+                                    {{/x-block}}
+                                  {{/x-block}}
+                                {{/x-block}}
+                              {{/x-block}}
+                            {{/x-block}}
+                          {{/x-block}}
+                        {{/x-block}}
+                      {{/x-block}}
+                    {{/x-block}}
+                  {{/x-block}}
+                {{/x-block}}
+              {{/x-block}}
+            {{/x-block}}
+          {{/x-block}}
+                                                              {{/x-block}}
+                                                            {{/x-block}}
+                                                          {{/x-block}}
+                                                        {{/x-block}}
+                                                      {{/x-block}}
+                                                    {{/x-block}}
+                                                  {{/x-block}}
+                                                {{/x-block}}
+                                              {{/x-block}}
+                                            {{/x-block}}
+                                          {{/x-block}}
+                                        {{/x-block}}
+                                      {{/x-block}}
+                                    {{/x-block}}
+                                  {{/x-block}}
+                                {{/x-block}}
+                              {{/x-block}}
+                            {{/x-block}}
+                          {{/x-block}}
+                        {{/x-block}}
+                      {{/x-block}}
+                    {{/x-block}}
+                  {{/x-block}}
+                {{/x-block}}
+              {{/x-block}}
+            {{/x-block}}
+          {{/x-block}}
+                                                              {{/x-block}}
+                                                            {{/x-block}}
+                                                          {{/x-block}}
                                                         {{/x-block}}
                                                       {{/x-block}}
                                                     {{/x-block}}
@@ -792,6 +913,237 @@
       Thank you for your attention!
 
       Andrey Mikhaylov aka [lolmaus](https://github.com/lolmaus/)
+
+      Next: [13. Heavy nesting test](#/?page=13)
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+
+  {{else if (eq currentPage 13)}}
+
+
+
+    {{markdown-to-html (trim-markdown "
+      ## 13. Heavy nesting test
+
+      Ember has a ridiculous way of detecting an infinite render loop: if a rerender has been triggered from a rerender 10 times in a row, the loop is considered infinite... and Ember chooses to crash the app! :dizzy_face:
+
+      See [source](https://github.com/emberjs/ember.js/blob/00c4c82a3f6fd03fe692601ad8e052f7bb5e2914/packages/ember-glimmer/lib/renderer.ts#L190-L195) and corresponding issue: [#15749](https://github.com/emberjs/ember.js/issues/15479#issuecomment-347006683).
+
+      To work around this problem, `ember-elemenet-query` wraps event propagation (from a parent to its children) into `Ember.run.next`. This prevents the crash and distributes layout thrashing over time, avoiding UI lock. But the cost is that nested EQ components realign sequentially rather than all at once, i. e. you can notice realignment spread from parents to children in a fraction of a second.
+
+      This rectangle contains 101 nested components. When they cross the 500px width, they change color. Sometimes it happens instantly, sometimes you can see the color change propagate:
+    ") extensions='hljs' class="pr-copy pr-p"}}
+
+
+    <div class="route-index-demo _13">
+      <div class="route-index-grid _ruler">
+
+        {{#e-q class="route-index-xFoo"}}
+            {{#e-q class="route-index-xFoo"}}
+              {{#e-q class="route-index-xFoo"}}
+                {{#e-q class="route-index-xFoo"}}
+                  {{#e-q class="route-index-xFoo"}}
+                      {{#e-q class="route-index-xFoo"}}
+                        {{#e-q class="route-index-xFoo"}}
+                          {{#e-q class="route-index-xFoo"}}
+                            {{#e-q class="route-index-xFoo"}}
+                                {{#e-q class="route-index-xFoo"}}
+                                  {{#e-q class="route-index-xFoo"}}
+                                    {{#e-q class="route-index-xFoo"}}
+                                      {{#e-q class="route-index-xFoo"}}
+                                          {{#e-q class="route-index-xFoo"}}
+                                            {{#e-q class="route-index-xFoo"}}
+                                              {{#e-q class="route-index-xFoo"}}
+                                                {{#e-q class="route-index-xFoo"}}
+                                                    {{#e-q class="route-index-xFoo"}}
+                                                      {{#e-q class="route-index-xFoo"}}
+                                                        {{#e-q class="route-index-xFoo"}}
+        {{#e-q class="route-index-xFoo"}}
+            {{#e-q class="route-index-xFoo"}}
+              {{#e-q class="route-index-xFoo"}}
+                {{#e-q class="route-index-xFoo"}}
+                  {{#e-q class="route-index-xFoo"}}
+                      {{#e-q class="route-index-xFoo"}}
+                        {{#e-q class="route-index-xFoo"}}
+                          {{#e-q class="route-index-xFoo"}}
+                            {{#e-q class="route-index-xFoo"}}
+                                {{#e-q class="route-index-xFoo"}}
+                                  {{#e-q class="route-index-xFoo"}}
+                                    {{#e-q class="route-index-xFoo"}}
+                                      {{#e-q class="route-index-xFoo"}}
+                                          {{#e-q class="route-index-xFoo"}}
+                                            {{#e-q class="route-index-xFoo"}}
+                                              {{#e-q class="route-index-xFoo"}}
+                                                {{#e-q class="route-index-xFoo"}}
+                                                    {{#e-q class="route-index-xFoo"}}
+                                                      {{#e-q class="route-index-xFoo"}}
+                                                        {{#e-q class="route-index-xFoo"}}
+        {{#e-q class="route-index-xFoo"}}
+            {{#e-q class="route-index-xFoo"}}
+              {{#e-q class="route-index-xFoo"}}
+                {{#e-q class="route-index-xFoo"}}
+                  {{#e-q class="route-index-xFoo"}}
+                      {{#e-q class="route-index-xFoo"}}
+                        {{#e-q class="route-index-xFoo"}}
+                          {{#e-q class="route-index-xFoo"}}
+                            {{#e-q class="route-index-xFoo"}}
+                                {{#e-q class="route-index-xFoo"}}
+                                  {{#e-q class="route-index-xFoo"}}
+                                    {{#e-q class="route-index-xFoo"}}
+                                      {{#e-q class="route-index-xFoo"}}
+                                          {{#e-q class="route-index-xFoo"}}
+                                            {{#e-q class="route-index-xFoo"}}
+                                              {{#e-q class="route-index-xFoo"}}
+                                                {{#e-q class="route-index-xFoo"}}
+                                                    {{#e-q class="route-index-xFoo"}}
+                                                      {{#e-q class="route-index-xFoo"}}
+                                                        {{#e-q class="route-index-xFoo"}}
+        {{#e-q class="route-index-xFoo"}}
+            {{#e-q class="route-index-xFoo"}}
+              {{#e-q class="route-index-xFoo"}}
+                {{#e-q class="route-index-xFoo"}}
+                  {{#e-q class="route-index-xFoo"}}
+                      {{#e-q class="route-index-xFoo"}}
+                        {{#e-q class="route-index-xFoo"}}
+                          {{#e-q class="route-index-xFoo"}}
+                            {{#e-q class="route-index-xFoo"}}
+                                {{#e-q class="route-index-xFoo"}}
+                                  {{#e-q class="route-index-xFoo"}}
+                                    {{#e-q class="route-index-xFoo"}}
+                                      {{#e-q class="route-index-xFoo"}}
+                                          {{#e-q class="route-index-xFoo"}}
+                                            {{#e-q class="route-index-xFoo"}}
+                                              {{#e-q class="route-index-xFoo"}}
+                                                {{#e-q class="route-index-xFoo"}}
+                                                    {{#e-q class="route-index-xFoo"}}
+                                                      {{#e-q class="route-index-xFoo"}}
+                                                        {{#e-q class="route-index-xFoo"}}
+        {{#e-q class="route-index-xFoo"}}
+            {{#e-q class="route-index-xFoo"}}
+              {{#e-q class="route-index-xFoo"}}
+                {{#e-q class="route-index-xFoo"}}
+                  {{#e-q class="route-index-xFoo"}}
+                      {{#e-q class="route-index-xFoo"}}
+                        {{#e-q class="route-index-xFoo"}}
+                          {{#e-q class="route-index-xFoo"}}
+                            {{#e-q class="route-index-xFoo"}}
+                                {{#e-q class="route-index-xFoo"}}
+                                  {{#e-q class="route-index-xFoo"}}
+                                    {{#e-q class="route-index-xFoo"}}
+                                      {{#e-q class="route-index-xFoo"}}
+                                          {{#e-q class="route-index-xFoo"}}
+                                            {{#e-q class="route-index-xFoo"}}
+                                              {{#e-q class="route-index-xFoo"}}
+                                                {{#e-q class="route-index-xFoo"}}
+                                                    {{#e-q class="route-index-xFoo"}}
+                                                      {{#e-q class="route-index-xFoo"}}
+                                                        {{#e-q class="route-index-xFoo"}}
+         {{e-q class="route-index-xFoo"}}
+                                                        {{/e-q}}
+                                                      {{/e-q}}
+                                                    {{/e-q}}
+                                                {{/e-q}}
+                                              {{/e-q}}
+                                            {{/e-q}}
+                                          {{/e-q}}
+                                      {{/e-q}}
+                                    {{/e-q}}
+                                  {{/e-q}}
+                                {{/e-q}}
+                            {{/e-q}}
+                          {{/e-q}}
+                        {{/e-q}}
+                      {{/e-q}}
+                  {{/e-q}}
+                {{/e-q}}
+              {{/e-q}}
+            {{/e-q}}
+        {{/e-q}}
+                                                        {{/e-q}}
+                                                      {{/e-q}}
+                                                    {{/e-q}}
+                                                {{/e-q}}
+                                              {{/e-q}}
+                                            {{/e-q}}
+                                          {{/e-q}}
+                                      {{/e-q}}
+                                    {{/e-q}}
+                                  {{/e-q}}
+                                {{/e-q}}
+                            {{/e-q}}
+                          {{/e-q}}
+                        {{/e-q}}
+                      {{/e-q}}
+                  {{/e-q}}
+                {{/e-q}}
+              {{/e-q}}
+            {{/e-q}}
+        {{/e-q}}
+                                                        {{/e-q}}
+                                                      {{/e-q}}
+                                                    {{/e-q}}
+                                                {{/e-q}}
+                                              {{/e-q}}
+                                            {{/e-q}}
+                                          {{/e-q}}
+                                      {{/e-q}}
+                                    {{/e-q}}
+                                  {{/e-q}}
+                                {{/e-q}}
+                            {{/e-q}}
+                          {{/e-q}}
+                        {{/e-q}}
+                      {{/e-q}}
+                  {{/e-q}}
+                {{/e-q}}
+              {{/e-q}}
+            {{/e-q}}
+        {{/e-q}}
+                                                        {{/e-q}}
+                                                      {{/e-q}}
+                                                    {{/e-q}}
+                                                {{/e-q}}
+                                              {{/e-q}}
+                                            {{/e-q}}
+                                          {{/e-q}}
+                                      {{/e-q}}
+                                    {{/e-q}}
+                                  {{/e-q}}
+                                {{/e-q}}
+                            {{/e-q}}
+                          {{/e-q}}
+                        {{/e-q}}
+                      {{/e-q}}
+                  {{/e-q}}
+                {{/e-q}}
+              {{/e-q}}
+            {{/e-q}}
+        {{/e-q}}
+                                                        {{/e-q}}
+                                                      {{/e-q}}
+                                                    {{/e-q}}
+                                                {{/e-q}}
+                                              {{/e-q}}
+                                            {{/e-q}}
+                                          {{/e-q}}
+                                      {{/e-q}}
+                                    {{/e-q}}
+                                  {{/e-q}}
+                                {{/e-q}}
+                            {{/e-q}}
+                          {{/e-q}}
+                        {{/e-q}}
+                      {{/e-q}}
+                  {{/e-q}}
+                {{/e-q}}
+              {{/e-q}}
+            {{/e-q}}
+        {{/e-q}}
+      </div>{{! grid }}
+    </div>{{! demo }}
+
+    {{!markdown-to-html (trim-markdown "
     ") extensions='hljs' class="pr-copy pr-p"}}
 
   {{/if}}

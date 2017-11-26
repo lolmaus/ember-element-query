@@ -125,6 +125,8 @@ In your CSS, the `data-eq-from` and `data-eq-to` attribute selectors must always
 
 ## Drawbacks
 
+### Layout thrashing
+
 Whenever a resize event is triggered, the topmost EQ component reads its `offsetWidth` and, if necessary, updates its `data-eq-from` and `data-eq-to` attributes. Then its EQ descendants, if any, do the same recursively.
 
 Updating any attribute invalidates the browser layout. Reading `offsetWidth` when the layout has been invalidated will trigger a browser reflow. 
@@ -132,6 +134,30 @@ Updating any attribute invalidates the browser layout. Reading `offsetWidth` whe
 Subsequent `offsetWidth` reads will not trigger more reflows until the layout is invalidated again, and a single reflow typically takes a few milliseconds, depending on amount of elements and styles.
 
 But an update of an EQ parent may cause all its EQ descendants to read-and-update recursively, resulting in a sequence of reflows and causing a performance impact known as [layout thrashing](http://kellegous.com/j/2013/01/26/layout-performance/).
+
+
+
+### FastBoot incompatibility
+
+The element query technique is incompatible with server-side rendering. The server is tragically unaware of client window size and can only render for some predefined page width.
+
+When the JS app loads and element queries apply, the page may realign.
+
+Hypothetically, you can use a JS snippet that runs early as `index.html` loads, reads window width and redirects, passing the width in a query param.
+
+
+
+## Known issues
+
+### Delayed event propagation
+
+Ember has a ridiculous way of detecting an infinite render loop: if a rerender has been triggered from a rerender 10 times in a row, the loop is considered infinite... and Ember chooses to crash the app! :dizzy_face:
+
+See [source](https://github.com/emberjs/ember.js/blob/00c4c82a3f6fd03fe692601ad8e052f7bb5e2914/packages/ember-glimmer/lib/renderer.ts#L190-L195) and corresponding issue: [#15749](https://github.com/emberjs/ember.js/issues/15479#issuecomment-347006683).
+
+To work around this problem, `ember-elemenet-query` wraps event propagation (from a parent to its children) into `Ember.run.next`. This prevents the crash and distributes layout thrashing over time, avoiding UI lock. But the cost is that nested EQ components realign sequentially rather than all at once, i. e. you can notice realignment spread from parents to children in a fraction of a second.
+
+See the [heavy nesting demo](http://localhost:4200/#/?page=13).
 
 
 

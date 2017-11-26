@@ -1,7 +1,7 @@
 import Mixin from '@ember/object/mixin'
 // import {computed} from '@ember/object'
 import Evented/*, {on}*/ from '@ember/object/evented'
-import {next, scheduleOnce} from '@ember/runloop'
+import {next} from '@ember/runloop'
 import {inject as service} from '@ember/service'
 
 import {ParentMixin, ChildMixin} from 'ember-composability-tools'
@@ -63,19 +63,15 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
     this.$().data(DATA_KEY, this)
   },
 
-  _eqScheduleEqHandleResize () {
-    scheduleOnce('afterRender', this, this.eqHandleResize)
-  },
-
   _eqSubscribeToParent () {
     const eqParent = this._eqGetParent()
     this.setProperties({eqParent})
-    eqParent.on(RESIZE_EVENT_NAME, this, this._eqScheduleEqHandleResize)
+    eqParent.on(RESIZE_EVENT_NAME, this, this.eqHandleResize)
   },
 
   _eqUnsubscribeFromParent () {
     const eqParent = this.get('eqParent')
-    eqParent.off(RESIZE_EVENT_NAME, this, this._eqScheduleEqHandleResize)
+    eqParent.off(RESIZE_EVENT_NAME, this, this.eqHandleResize)
   },
 
 

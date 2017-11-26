@@ -22,7 +22,7 @@ export default Controller.extend({
 
 
   // ----- Static properties -----
-  maxPage           : 12,
+  maxPage           : 13,
   isSidebarExpanded : false,
 
 
