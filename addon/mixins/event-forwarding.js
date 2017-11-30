@@ -80,7 +80,7 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
   didInsertParent () {
     this._super(...arguments)
 
-    if (!this.get('eqEnabled')) return
+    if (!this.get('eqEnabled') || this.get('isDstroying') || this.get('isDestroyed')) return
 
     this._eqRegisterDataAttribute()
     this._eqSubscribeToParent()
