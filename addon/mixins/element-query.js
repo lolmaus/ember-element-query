@@ -218,7 +218,7 @@ export default Mixin.create(EventForwardingMixin, {
   didInsertParent () {
     this._super(...arguments)
 
-    if (!this.get('eqEnabled') || this.get('isDstroying') || this.get('isDestroyed')) return
+    if (!this.get('eqEnabled') || this.get('isDstroying') || this.get('isDestroyed') || !this.$()) return
 
     this._eqSetupTransitions()
   },
