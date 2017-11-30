@@ -71,6 +71,7 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
   _eqUnsubscribeFromParent () {
     const eqParent = this.get('eqParent')
+    if (!eqParent) return
     eqParent.off(RESIZE_EVENT_NAME, this, this.eqHandleResize)
   },
 
