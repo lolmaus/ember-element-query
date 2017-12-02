@@ -83,7 +83,7 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
     if (!this.get('eqEnabled')) return
 
-    if (!this.get('element')) throw new Error('ember-element-query used on a tagless component or old unsupported Ember version')
+    if (!this.get('element')) throw new Error('ember-element-query used on a tagless component')
 
     this._eqRegisterDataAttribute()
     this._eqSubscribeToParent()

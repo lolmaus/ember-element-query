@@ -2862,6 +2862,14 @@ ember-cli@~2.16.0-beta.2:
     walk-sync "^0.3.0"
     yam "0.0.22"
 
+ember-composability-tools@lolmaus/ember-composability-tools#bugfix-16-no-init:
+  version "0.0.9"
+  resolved "https://codeload.github.com/lolmaus/ember-composability-tools/tar.gz/cfa730463bb8704140b0f5cf277cbe03e235eaae"
+  dependencies:
+    ember-cli-babel "^6.10.0"
+    ember-cli-htmlbars "^1.0.3"
+    ember-wormhole "0.5.3"
+
 ember-composability-tools@lolmaus/ember-composability-tools#feature-optional-parent:
   version "0.0.8"
   resolved "https://codeload.github.com/lolmaus/ember-composability-tools/tar.gz/273168c86d75360e3df0cf107905fcf5553b8fe0"
@@ -3040,6 +3048,13 @@ ember-wormhole@0.5.1:
   dependencies:
     ember-cli-babel "^5.1.6"
     ember-cli-htmlbars "^1.0.3"
+
+ember-wormhole@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/ember-wormhole/-/ember-wormhole-0.5.3.tgz#441fdd7729a3b5eed3b0103db84f0ab880ac7f87"
+  dependencies:
+    ember-cli-babel "^6.8.2"
+    ember-cli-htmlbars "^2.0.1"
 
 encodeurl@~1.0.1:
   version "1.0.1"

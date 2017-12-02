@@ -20,7 +20,7 @@
   "dependencies": {
     "ember-cli-babel": "^6.6.0",
     "ember-cli-htmlbars": "^2.0.1",
-    "ember-composability-tools": "lolmaus/ember-composability-tools#feature-optional-parent",
+    "ember-composability-tools": "lolmaus/ember-composability-tools#bugfix-16-no-init",
     "ember-macro-helpers": "^0.17.0"
   },
   "devDependencies": {
