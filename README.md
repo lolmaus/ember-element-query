@@ -24,7 +24,6 @@ For example, if you put a responsive component into a tight sidebar, it will ali
 * [Alternatives](#alternatives)
 * [Demo](#demo)
 * [Installation](#installation)
-* [Dependencies](#dependencies)
 * [Usage](#usage)
   * [Enabling element queries on an Ember component](#enabling-element-queries-on-an-ember-component)
   * [Enabling element queries on an HTML element](#enabling-element-queries-on-an-html-element)
@@ -199,12 +198,6 @@ Install the addon:
 ```
 
 Why: this file is a way to pass information from a build into the app. Element query selectors have to be extracted from *compiled* CSS. Unfortunately, when compiled CSS becomes available in the Ember CLI pipeline, it's too late to manipulate with JS modules.
-
-
-
-## Dependencies
-
-This addon uses jQuery for namespaced events as well as weakly-bound data attributes and traversing parents.
 
 
 
@@ -411,12 +404,13 @@ import {ElementQueryMixin} from 'ember-element-query'
 
 export default Component.extend(ElementQueryMixin, {
 
-  eqTransitionSelectors: ['#the-sidebar'],
+  classNames: ['main-layout'],
+  eqTransitionSelectors: ['.main-layout--sidebar'],
 
 })
 ```
 
-Note: selectors are looked up globally.
+Note: selectors are looked up among current component's child elements only. If you need to react to a transition of an element that appears outside of given component, you should work with that element's nearest parent component (make it `EventForwardingMixin` or `ElementQueryMixin` and apply transition selectors there).
 
 
 

@@ -1,21 +1,20 @@
 import Mixin from '@ember/object/mixin'
-// import {computed} from '@ember/object'
+import {computed} from '@ember/object'
 import Evented/*, {on}*/ from '@ember/object/evented'
-import {next} from '@ember/runloop'
+import {next, scheduleOnce} from '@ember/runloop'
 import {inject as service} from '@ember/service'
 
 import {ParentMixin, ChildMixin} from 'ember-composability-tools'
 
-import {
-  DATA_KEY,
-  RESIZE_EVENT_NAME,
-} from '../constants'
-
-import $ from 'jquery'
+import {RESIZE_EVENT_NAME} from '../constants'
 
 
 
-export default Mixin.create(ParentMixin, ChildMixin, Evented, {
+const EventForwardingMixin = Mixin.create(ParentMixin, ChildMixin, Evented, {
+
+  // ----- Arguments -----
+  eqTransitionSelectors : null,
+
 
 
   // ----- Services -----
@@ -25,11 +24,37 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
   // ----- Static properties -----
   eqEnabled : true,
-  eqParent  : null,
 
 
 
   // ----- Computed properties -----
+  eqParent : computed(function () {
+    return this.nearestOfType(EventForwardingMixin) || this.get('eq')
+  }),
+
+  eqTransitionEventName : computed(() => {
+    const el = document.createElement('fakeelement')
+    const transitions = {
+      'transition'       : 'transitionend',
+      'OTransition'      : 'oTransitionEnd',
+      'MozTransition'    : 'transitionend',
+      'WebkitTransition' : 'webkitTransitionEnd',
+    }
+
+    const transitionKey =
+      Object
+        .keys(transitions)
+        .find(t => el.style[t] !== undefined)
+
+    return transitions[transitionKey]
+  }),
+
+
+
+  // ----- Private computed properties -----
+  _eqTrigger : computed(function () {
+    return () => scheduleOnce('afterRender', this, this.eqHandleResize)
+  }),
 
 
 
@@ -47,32 +72,64 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
 
   // ----- Private Methods -----
-  _eqGetParent () {
-    const parent = this
-      .$()
-      .parents()
-      .toArray()
-      .find(el => $(el).data(DATA_KEY))
-
-    return parent
-      ? $(parent).data(DATA_KEY)
-      : this.get('eq')
-  },
-
-  _eqRegisterDataAttribute () {
-    this.$().data(DATA_KEY, this)
-  },
-
   _eqSubscribeToParent () {
-    const eqParent = this._eqGetParent()
-    this.setProperties({eqParent})
+    const eqParent = this.get('eqParent')
     eqParent.on(RESIZE_EVENT_NAME, this, this.eqHandleResize)
   },
 
   _eqUnsubscribeFromParent () {
     const eqParent = this.get('eqParent')
-    if (!eqParent) return
     eqParent.off(RESIZE_EVENT_NAME, this, this.eqHandleResize)
+  },
+
+  _eqFind (selector) {
+    const element = this.get('element')
+    const children = element.querySelectorAll(selector)
+    return [].slice.call(children) // convert NodeList to Array
+  },
+
+  _eqSetupTransitions () {
+    const eqTransitionEventName = this.get('eqTransitionEventName')
+    const eqTransitionSelectors = this.get('eqTransitionSelectors')
+
+    if (
+      !eqTransitionEventName
+      || !eqTransitionSelectors
+      || !eqTransitionSelectors.length
+    ) {
+      return
+    }
+
+    const eqTrigger = this.get('_eqTrigger')
+
+    eqTransitionSelectors
+      .forEach(className => {
+        const children = this._eqFind(className)
+
+        children.forEach(child => child.addEventListener(eqTransitionEventName, eqTrigger))
+      })
+  },
+
+  _eqTeardownTransitions () {
+    const eqTransitionEventName = this.get('eqTransitionEventName')
+    const eqTransitionSelectors = this.get('eqTransitionSelectors')
+
+    if (
+      !eqTransitionEventName
+      || !eqTransitionSelectors
+      || !eqTransitionSelectors.length
+    ) {
+      return
+    }
+
+    const eqTrigger = this.get('_eqTrigger')
+
+    eqTransitionSelectors
+      .forEach(className => {
+        const children = this._eqFind(className)
+
+        children.forEach(child => child.removeEventListener(eqTransitionEventName, eqTrigger))
+      })
   },
 
 
@@ -85,15 +142,18 @@ export default Mixin.create(ParentMixin, ChildMixin, Evented, {
 
     if (!this.get('element')) throw new Error('ember-element-query used on a tagless component')
 
-    this._eqRegisterDataAttribute()
     this._eqSubscribeToParent()
+    this._eqSetupTransitions()
   },
 
   willDestroyParent () {
     this._super(...arguments)
 
-    if (!this.get('eqEnabled')) return
-
+    this._eqTeardownTransitions()
     this._eqUnsubscribeFromParent()
   },
 })
+
+
+
+export default EventForwardingMixin

@@ -28,8 +28,7 @@ const YIELDABLE_PROPS = [
 export default Mixin.create(EventForwardingMixin, {
 
   // ----- Arguments -----
-  eqShouldUpdateHeight  : false,
-  eqTransitionSelectors : null,
+  eqShouldUpdateHeight : false,
 
 
 
@@ -106,32 +105,8 @@ export default Mixin.create(EventForwardingMixin, {
       .join(' ')
   }).readOnly(),
 
-  eqTransitionEventName : computed(() => {
-    const el = document.createElement('fakeelement')
-    const transitions = {
-      'transition'       : 'transitionend',
-      'OTransition'      : 'oTransitionEnd',
-      'MozTransition'    : 'transitionend',
-      'WebkitTransition' : 'webkitTransitionEnd',
-    }
-
-    const transitionKey =
-      Object
-        .keys(transitions)
-        .find(t => el.style[t] !== undefined)
-
-    return transitions[transitionKey]
-  }),
-
   eqYieldable : computed(...YIELDABLE_PROPS, function () {
     return this.getProperties(...YIELDABLE_PROPS)
-  }),
-
-
-
-  // ----- Private computed properties -----
-  _eqTrigger : computed(function () {
-    return () => this.eqHandleResize()
   }),
 
 
@@ -152,49 +127,6 @@ export default Mixin.create(EventForwardingMixin, {
 
 
   // ----- Private methods -----
-  _eqSetupTransitions () {
-    const eqTransitionEventName = this.get('eqTransitionEventName')
-    const eqTransitionSelectors = this.get('eqTransitionSelectors')
-
-    if (
-      !eqTransitionEventName
-      || !eqTransitionSelectors
-      || !eqTransitionSelectors.length
-    ) {
-      return
-    }
-
-    const eqTrigger = this.get('_eqTrigger')
-
-    eqTransitionSelectors
-      .forEach(className => {
-        this
-          .$(className)[0]
-          .addEventListener(eqTransitionEventName, eqTrigger)
-      })
-  },
-
-  _eqTeardownTransitions () {
-    const eqTransitionEventName = this.get('eqTransitionEventName')
-    const eqTransitionSelectors = this.get('eqTransitionSelectors')
-
-    if (
-      !eqTransitionEventName
-      || !eqTransitionSelectors
-      || !eqTransitionSelectors.length
-    ) {
-      return
-    }
-
-    const eqTrigger = this.get('_eqTrigger')
-
-    eqTransitionSelectors
-      .forEach(className => {
-        this
-          .$(className)[0]
-          .removeEventListener(eqTransitionEventName, eqTrigger)
-      })
-  },
 
 
 
@@ -215,28 +147,10 @@ export default Mixin.create(EventForwardingMixin, {
     ])
   },
 
-  didInsertParent () {
-    this._super(...arguments)
-
-    if (!this.get('eqEnabled')) return
-
-    if (!this.get('element')) throw new Error('ember-element-query used on a tagless component')
-
-    this._eqSetupTransitions()
-  },
-
-  willDestroyParent () {
-    this._super(...arguments)
-
-    if (!this.get('eqEnabled')) return
-
-    this._eqTeardownTransitions()
-  },
-
 
 
   // ----- Events -----
-  _eqHandleDidRender : on('didRender', function () {
+  _eqHandleResizeOnDidRender : on('didRender', function () {
     this.eqHandleResize()
   }),
 })
