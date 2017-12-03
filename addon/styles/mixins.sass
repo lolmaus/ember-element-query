@@ -1,16 +1,50 @@
-=eq-from($from)
-  &[data-eq-from~="#{$from}px"]
+@import ./variables
+@import ./functions
+
+
+
+=eq-from($from, $slices: $eq-slices)
+  $bp: eq-bp($from, $slices)
+  &[data-eq-from~="#{$bp}px"]
     @content
 
 
 
-=eq-to($to)
-  &[data-eq-to~="#{$to - 1}px"]
+=eq-to($to, $slices: $eq-slices)
+  $bp: eq-bp($to, $slices) - 1
+
+  @if $bp < 0
+    @if eq-is-number($to)
+      @error "ember-element-query: use of `#{$to}` in eq-to or as second arg in eq-between is meaningless because the styles will never be applied"
+    @else
+      @error "ember-element-query: `#{$to}` is the first slice. Using the first slice in eq-to or as second arg in eq-between is meaningless because the styles will never be applied"
+
+  &[data-eq-to~="#{$bp}px"]
     @content
 
 
 
-=eq-between($from, $to)
-  +eq-from($from)
-    +eq-to($to)
+=eq-between($from, $to, $slices: $eq-slices)
+  +eq-from($from, $slices)
+    +eq-to($to, $slices)
+      @content
+
+
+
+=eq-at($slice, $slices: $eq-slices)
+  @if eq-is-number($slice)
+    @error "ember-element-query: eq-at can only be used for slices, not numeric breakpoints. Use eq-between instead."
+
+  $bp       : eq-bp($slice, $slices)
+  $bps      : map-values($slices)
+  $bp-index : index($bps, $bp)
+
+  @if $bp-index == length($bps)
+    +eq-from($bp)
+      @content
+
+  @else
+    $next-bp: nth($bps, $bp-index + 1)
+
+    +eq-between($bp, $next-bp)
       @content

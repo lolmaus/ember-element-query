@@ -1,0 +1,26 @@
+@function eq-is-number($value)
+  @return type-of($value) == 'number'
+
+
+
+@function eq-strip-unit($number, $prev: false)
+  @return $number / ($number * 0 + 1)
+
+
+
+@function eq-bp($bp-or-slice, $slices: $eq-slices)
+  $bp: null
+
+  @if eq-is-number($bp-or-slice)
+    $bp: $bp-or-slice
+  @else if map-has-key($slices, $bp-or-slice)
+    $bp: map-get($slices, $bp-or-slice)
+  @else
+    @error "ember-element-query: attempted to use a mixin with arg `#{$bp-or-slice}`, but it's neither a number nor a key on the $slices map"
+
+  @if unit($bp) == px
+    $bp: eq-strip-unit($bp)
+  @else if not unitless($bp)
+    @error "ember-element-query: attempted to use a breakpoint `#{$bp}` with unit #{unit($bp)}, but only px and unitless values are accepted"
+
+  @return $bp

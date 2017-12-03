@@ -414,9 +414,225 @@ Note: selectors are looked up among current component's child elements only. If 
 
 
 
+## Using slices
+
+Slices are a feature from the v1 version of `ember-element-query`. The addon has been since rewritten to eliminate the need in slices.
+
+Yet the addon still supports slices for users who grew attached to them.
+
+:warning: If you are upgrading from v1 or from [breakpoint-slicer](https://github.com/lolmaus/breakpoint-slicer], mind that `eq-to` and the second argument of `eq-between` are now non-inclusive.
+
+:warning: Slices are only available with Sass and are now defined in Sass.
+
+
+
+### What are slices
+
+Slices are ranges between breakpoints. Say, your component uses a few breakpoints:
+
+    Breakpoint:   0       200px     400px     600px     800px     1000px    1200px    1400px    
+                  ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
+
+See those intervals between numbers? Let's give them names:
+
+
+    Breakpoint:   0       200px     400px     600px     800px     1000px    1200px    1400px  
+                  ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
+    Slice:        ·   xxs   ·    xs   ·    s    ·    m    ·    l    ·    xl   ·   xxl   ·   xxxl   
+
+
+You can use slices in the mixins. For example, `eq-from(s)` is equivalent to `eq-from(400)`.
+
+The above combination of breakpoints and slices is the default. If you want to adjust them, define a Sass map like this:
+
+```scss
+$eq-slices: (
+   xxs:    0,
+    xs:  200,
+     s:  400,
+     m:  600,
+     l:  800,
+    xl: 1000,
+   xxl: 1200,
+  xxxl: 1400,
+);
+```
+
+Breakpoints must be ordered in ascending order. The first breakpoint must always be zero.
+
+The number next to a slice name indicates its left side. The slice will span up to where the next span starts.
+
+In this example, `xss` is a slice ranging from `0` to `199px`, and `xs` ranges from `200px` to `399px`.
+
+
+
+## Understanding slices
+
+Given a slices definition like this:
+
+```scss
+$eq-slices: (
+   xxs:    0,
+    xs:  200,
+     s:  400,
+     m:  600,
+     l:  800,
+    xl: 1000,
+);
+```
+
+Here is how some mixin calls look on an axis:
+
+
+    Breakpoint:   0       200px     400px     600px     800px     1000px      
+                  ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
+    Slice:        ·   xxs   ·    xs   ·    s    ·    m    ·    l    ·    xl    
+                  ·         ·         ·         ·         ·         ·          
+                  ·         ·         ·         ·  at(m)  ·         ·          
+                  ·         ·         ·         ├────────┤·         ·          
+                  ·         ·         ·         ·         ·         ·          
+                  ·         ·         ·         ·         · from(m) ·          
+                  ·         ·         ·         ├─────────────────────────────>
+                  ·         ·         ·         ·         ·                    
+                  ·         ·  to(m)  ·         ·         ·                    
+                  ├────────────────────────────┤·         ·                    
+                                      ·                   ·                    
+                                      ·   between(s, l)   ·                    
+                                      ├──────────────────┤·                    
+
+Saying `eq-from(m)` is equivalent of `eq-from(600)`.
+
+Saying `eq-to(m)` is equivalent of `eq-to(600)`.
+
+`eq-at(m)` is equivalent of `eq-between(600, 800)`.
+
+`eq-between(s, l)` is equivalent of `eq-between(400, 800)`.
+
+
+
+### Edge cases of slices
+
+Note that the largest slice does not have a right edge. When it is invoked, there will be no max-width limitation.
+
+Thus, some mixin invocations are synonymous:
+
+     Breakpoint:   0       200px     400px     600px     800px     1000px       
+                   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
+     Slice:            xxs        xs   ·    s    ·    m         l    ·    xl    
+                                       ·         ·                   ·          
+                                       ·   at(s) ·                   ·  at(xl)  
+                                       ├────────┤·                   ├─────────>
+                                       ·         ·                   ·          
+                                      between(s, m)                  · from(xl) 
+                                       ├────────┤·                   ├─────────>
+
+…some become meaningless, they do not limit anything:
+
+     Breakpoint:   0       200px     400px     600px     800px     1000px       
+                   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
+     Slice:        ·   xxs        xs        s         m         l         xl    
+                   ·                                                            
+                   ·  from(xxs)                                                 
+                   ├───────────────────────────────────────────────────────────>
+
+…and some are impossible. This will trigger an error:
+
+     Breakpoint:   0       200px     400px     600px     800px     1000px       
+                   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
+     Slice:        ·   xxs        xs        s         m         l         xl    
+                   ·                                                            
+          to(xxs)  ·                                                             
+         ─────────┤·                                                            
+
+
+
+### Overriding $eq-slices definition for individual components
+
+The `$eq-slices` map can only be overridden globally. Overriding it locally does not work unless you use the `!global` flag:
+
+```sass
+// This will be applied globally
+$eq-slices: (small: 0, medium: 300, large: 600)
+
+.my-component
+
+  // This will have no effect
+  $eq-slices: (small: 0, large: 500)
+  
+  // This will be applied globally to all usages below this line, even outside `.my-component`
+  $eq-slices: (small: 0, large: 500) !global
+```
+
+If you want to override slices for a single component, pass them as an additional argument to mixins:
+
+```
+.my-component
+  $slices: (small: 0, large: 500)
+  
+  +eq-at(small, $slices)
+    color: red
+  
+  +eq-from(large, $slices)
+    color: blue
+```
+
+
+
 ## Upgrading
 
-v3 is a complete rewrite, 
+### From v1 to v3
+
+v3 is a complete rewrite. Upgrading from v1 requires quite some changes:
+
+1. Follow the new installation instructions.
+
+2. Update import path in JS:
+
+   ```js
+   import {ElementQueryMixin} from 'ember-element-query'
+   ```
+
+3. Update import path in Sass:
+
+   ```sass
+   @import 'node_modules/ember-element/query/addon/styles/mixins'
+   ```
+
+4. Pass a semantic HTML classname to every EQ-driven component:
+
+    * To `{{e-q}}` via `class="my-component"`
+    * To `ElementQueryMixin` via `classNames: ['my-component']`
+
+5. Update your styles to either use px breakpoints or define `$eq-slices` in Sass. See the docs above.
+
+6. If you chose to use slices, mind that `eq-to` and the second argument of `eq-between` are now non-inclusive.
+
+    Before:
+    
+    ```sass
+    +eq-to(xs)
+      color: red
+
+    +eq-from(s)
+      color: red
+    ```
+
+    After:
+    
+    ```sass
+    $bp: s
+
+    +eq-to($bp)
+      color: red
+
+    +eq-from($bp)
+      color: red
+    ```
+
+7. Remove `eqSlices` definitions from JS/Handlebars. 
+
+8. Remove the `trigger` import in JS. See the docs above on how to trigger programmatically.
+
 
 
 

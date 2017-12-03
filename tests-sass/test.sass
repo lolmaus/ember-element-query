@@ -1,0 +1,266 @@
+@import true
+@import ../addon/styles/mixins
+
+
+$true-terminal-output: false
+$slices: (small: 0, medium: 250, large: 500)
+
+
++describe('eq-is-number')
+  +it('unitless number')
+    +assert-equal(eq-is-number(1), true)
+
+  +it('px')
+    +assert-equal(eq-is-number(1px), true)
+
+  +it('rem')
+    +assert-equal(eq-is-number(1rem), true)
+
+  +it('string')
+    +assert-equal(eq-is-number('adsf'), false)
+
+  +it('list')
+    +assert-equal(eq-is-number((1 2)), false)
+
+
+
++describe('eq-strip-unit')
+  +it('px')
+    +assert-equal(eq-strip-unit(50px), 50)
+
+  +it('rem')
+    +assert-equal(eq-strip-unit(0rem), 0)
+
+  +it('unitless')
+    +assert-equal(eq-strip-unit(-2), -2)
+
+  +it('complex')
+    +assert-equal(eq-strip-unit(2rem * 3px), 6)
+
+
+
++describe('eq-bp')
+  +it('unitless number')
+    +assert-equal(eq-bp(400), 400)
+
+  +it('px number')
+    +assert-equal(eq-bp(400px), 400)
+
+  +it('xxs defalt')
+    +assert-equal(eq-bp(xxs), 0)
+
+  +it('xs defalt')
+    +assert-equal(eq-bp(xs), 200)
+
+  +it('s defalt')
+    +assert-equal(eq-bp(s), 400)
+
+  +it('m defalt')
+    +assert-equal(eq-bp(m), 600)
+
+  +it('l defalt')
+    +assert-equal(eq-bp(l), 800)
+
+  +it('xl defalt')
+    +assert-equal(eq-bp(xl), 1000)
+
+  +it('xxl defalt')
+    +assert-equal(eq-bp(xxl), 1200)
+
+  +it('xxxl defalt')
+    +assert-equal(eq-bp(xxxl), 1400)
+
+  +it('small custom')
+    +assert-equal(eq-bp(small, $slices), 0)
+
+  +it('large custom')
+    +assert-equal(eq-bp(large, $slices), 500)
+
+
+
++describe('eq-from')
+  +it('400')
+    +assert
+      +output
+        .foo
+          +eq-from(400)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="400px"]
+            color: red
+
+  +it('m default')
+    +assert
+      +output
+        .foo
+          +eq-from(m)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="600px"]
+            color: red
+
+  +it('small custom')
+    +assert
+      +output
+        .foo
+          +eq-from(small, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="0px"]
+            color: red
+
+  +it('large custom')
+    +assert
+      +output
+        .foo
+          +eq-from(large, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="500px"]
+            color: red
+
+
+
++describe('eq-to')
+  +it('400')
+    +assert
+      +output
+        .foo
+          +eq-to(400)
+            color: red
+
+      +expect
+        .foo[data-eq-to~="399px"]
+            color: red
+
+  +it('m default')
+    +assert
+      +output
+        .foo
+          +eq-to(m)
+            color: red
+
+      +expect
+        .foo[data-eq-to~="599px"]
+            color: red
+
+  +it('medium custom')
+    +assert
+      +output
+        .foo
+          +eq-to(medium, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-to~="249px"]
+            color: red
+
+
+
++describe('eq-between')
+  +it('400, 600')
+    +assert
+      +output
+        .foo
+          +eq-between(400, 600)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="400px"][data-eq-to~="599px"]
+            color: red
+
+  +it('s, xl default')
+    +assert
+      +output
+        .foo
+          +eq-between(s, xl)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="400px"][data-eq-to~="999px"]
+            color: red
+
+  +it('small, medium custom')
+    +assert
+      +output
+        .foo
+          +eq-between(small, medium, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="0px"][data-eq-to~="249px"]
+            color: red
+
+
+
++describe('eq-at')
+
+  +it('xxs default')
+    +assert
+      +output
+        .foo
+          +eq-at(xxs)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="0px"][data-eq-to~="199px"]
+            color: red
+
+  +it('m default')
+    +assert
+      +output
+        .foo
+          +eq-at(m)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="600px"][data-eq-to~="799px"]
+            color: red
+
+  +it('xxxl default')
+    +assert
+      +output
+        .foo
+          +eq-at(xxxl)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="1400px"]
+            color: red
+
+  +it('small custom')
+    +assert
+      +output
+        .foo
+          +eq-at(small, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="0px"][data-eq-to~="249px"]
+            color: red
+
+  +it('medium custom')
+    +assert
+      +output
+        .foo
+          +eq-at(medium, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="250px"][data-eq-to~="499px"]
+            color: red
+
+  +it('large custom')
+    +assert
+      +output
+        .foo
+          +eq-at(large, $slices)
+            color: red
+
+      +expect
+        .foo[data-eq-from~="500px"]
+            color: red
