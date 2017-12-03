@@ -1,17 +1,42 @@
 {
   "name": "ember-element-query",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "Element queries for Ember",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "element-query",
+    "element-queries",
+    "e-q",
+    "responsive-web-design",
+    "responsive",
+    "rwd",
+    "element query",
+    "element queries",
+    "eq",
+    "responsive web design",
+    "ember",
+    "sass",
+    "scss",
+    "slice",
+    "slices",
+    "breakpoint-slicer",
+    "breakpoint slicer",
+    "media query",
+    "media-query",
+    "media queries",
+    "media-queries"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Andrey Mikhaylov (lolmaus) <lolmaus@gmail.com> (http://lolma.us/)",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "homepage": "https://github.com/lolmaus/ember-element-query",
+  "repository": "lolmaus/ember-element-query",
+  "bugs": {
+    "url": "https://github.com/Deveo/ember-drag-sort/issues"
+  },
   "scripts": {
     "build": "ember build",
     "start": "ember server",
@@ -70,6 +95,7 @@
     "node": ">= 8.6.0"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "demoURL": "https://lolmaus.github.io/ember-element-query/"
   }
 }
