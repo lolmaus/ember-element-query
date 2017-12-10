@@ -18,23 +18,37 @@ For example, if you put a responsive component into a tight sidebar, it will ali
 
 ## Table of content
 
+* [Table of content](#table-of-content)
 * [Rationale](#rationale)
 * [How it works](#how-it-works)
+  * [With Sass](#with-sass)
 * [Drawbacks](#drawbacks)
+  * [Layout thrashing](#layout-thrashing)
+  * [FastBoot incompatibility](#fastboot-incompatibility)
+  * [Known issues](#known-issues)
+    * [Delayed event propagation](#delayed-event-propagation)
 * [Alternatives](#alternatives)
 * [Demo](#demo)
 * [Installation](#installation)
 * [Usage](#usage)
-  * [Enabling element queries on an Ember component](#enabling-element-queries-on-an-ember-component)
+  * [Enabling element queries on an existing Ember component](#enabling-element-queries-on-an-existing-ember-component)
   * [Enabling element queries on an HTML element](#enabling-element-queries-on-an-html-element)
   * [Triggering an update](#triggering-an-update)
   * [Working with element query data programmatically](#working-with-element-query-data-programmatically)
   * [Waiting for transitions to finish](#waiting-for-transitions-to-finish)
+* [Using slices](#using-slices)
+  * [What are slices](#what-are-slices)
+* [Understanding slices](#understanding-slices)
+  * [Edge cases of slices](#edge-cases-of-slices)
+  * [Overriding $eq-slices definition for individual components](#overriding-eq-slices-definition-for-individual-components)
+* [Upgrading](#upgrading)
+  * [From v1 to v3](#from-v1-to-v3)
 * [Development](#development)
-  * [Do not use npm, use yarn](#do-not-use-npm-use-yarn)
+  * [Do not use npm, use Yarn](#do-not-use-npm-use-yarn)
   * [Installation for development](#installation-for-development)
   * [Running](#running)
   * [Branch names](#branch-names)
+  * [Code style](#code-style)
   * [Updating the table of contents](#updating-the-table-of-contents)
   * [Demo deployment](#demo-deployment)
 * [Credits](#credits)
@@ -47,30 +61,33 @@ For example, if you put a responsive component into a tight sidebar, it will ali
 
 CSS media queries have a few disadvantages:
 
-* They account for scrollbar width. On OSes with a scrollbar such as Windows and Linux, available viewport width is some 15px smaller than the one detected by a media query. This behavior may be inconsistent across browsers.
+* They account for scrollbar width. On OSes with a scrollbar such as Windows and Linux, available document width is some 15px smaller than the one detected by a media query. This behavior may be inconsistent across browsers.
 * They are designed for creating responsive layouts, whereas making *responsive components* is unreasonably hard:
   * If your responsive component appears in different contexts, you have to define media queries separately for each context and make sure they don't overlap.
-  * If you want to make a reusable responsive component, you can't apply responsive styles directly. Instead, you have to offer them as Sass mixins or CSS snippets, for the consumer to apply them by hand in every context.
-  * Responsive components put into complex contexts (such as collapsible sidebars, grids, nested responsive components, etc) require extremely large media queries, which involve unreasonably complicated math. Check out [this demo](https://lolmaus.github.io/ember-element-query/).
+  * If you want to make a reusable responsive component, you can't apply responsive styles directly. Instead, you have to offer them as preprocessor mixins or CSS snippets, for the consuming app developer to apply them by hand in every context.
+  * Responsive components put into complex contexts (such as collapsible sidebars, grids, nested responsive components, etc) require extremely large media queries, which involve unreasonably complicated math. Check out [the demo](https://lolmaus.github.io/ember-element-query/).
 
-All those problems didn't exist if we were able to apply styles conditionally based on element's own width:
+All those problems wouldn't exist if we were able to apply styles conditionally based on element's own width:
 
 ```css
 /* Hypothetical sample. I wish these were possible. */
 
+/* When .my-menu is <= 499px, apply margin-bottom to .my-menu--item */
 .my-menu:max-width(499px) .my-menu--item {
   margin-bottom: 10px;
 }
 
+/* When .my-menu is >= 500px, apply flex to it */
 .my-menu:min-width(500px) {
   display: flex;
 }
+/* When .my-menu is >= 500px, apply margin-right to .my-menu--item */
 .my-menu:min-width(500px) .my-menu--item {
   margin-right: 10px;
 }
 ```
 
-Unfortunately, CSS is not aware of element's current width, so pseudoselectors like `:min-width(500px)` are impossible.
+Unfortunately, CSS is not aware of element's current width, so pseudoselectors like `:min-width(500px)` are impossible... unless you use a tool like `ember-element-query`.
 
 
 
@@ -80,49 +97,59 @@ Unfortunately, CSS is not aware of element's current width, so pseudoselectors l
 
 ```css
 /* When .my-menu is <= 499px, apply margin-bottom to .my-menu--item */
-.my-menu[eq-data-to~=499px] .my-menu--item {
+.my-menu[data-eq-to~=499px] .my-menu--item {
   margin-bottom: 10px;
 }
 
-/* When .my-menu is >= 500px, apply flex to itself */
-.my-menu[eq-data-from~=500px] {
+/* When .my-menu is >= 500px, apply flex to it */
+.my-menu[data-eq-from~=500px] {
   display: flex;
 }
 
 /* When .my-menu is >= 500px, apply margin-right to .my-menu--item */
-.my-menu[eq-data-from~=500px] .my-menu--item {
+.my-menu[data-eq-from~=500px] .my-menu--item {
   margin-right: 10px;
 }
 ```
 
-Read [here](https://css-tricks.com/almanac/selectors/a/attribute/) about the "value is in a space-separated list" attribute selector.
+Read [here](https://css-tricks.com/almanac/selectors/a/attribute/) about the `~=` <abbr title="also known as">aka</abbr> "value is in a space-separated list" attribute selector, if you're not familiar with it.
 
-These selectors feel bulky, you're highly recommended to use Sass mixins instead:
+`ember-element-query` makes `data-eq-from` and `data-eq-to` attribute selectors possible by parsing the CSS of your app and discovering which breakpoints are applied to which components. Every element query-driven component will apply relevant values to its `data-eq-from` and `data-eq-to` attributes. 
+
+In your CSS, the `data-eq-from` and `data-eq-to` attribute selectors must always be paired with a semantic classname of a component. The same classname must be applied to the component in Ember via `class` or `classNames` property.
+
+### With Sass
+
+If you're lucky to use Sass, the above code can be simplified to:
 
 ```sass
 @import node_modules/ember-element/query/addon/styles/mixins
 
 .my-menu
-  $breakpoint: 500px // The `eq-to` mixin subtracts 1 from the argument, letting you reuse the breakpoint value.
+  $breakpoint: 500px
   
-  +eq-from($breakpoint)
+  +eq-to($breakpoint)
     .my-menu--item
       margin-bottom: 10px
       
-  +eq-to($breakpoint)
+  +eq-from($breakpoint)
     display: flex
 
     .my-menu--item
       margin-right: 10px
 ```
 
-`ember-element-query` makes `data-eq-from` and `data-eq-to` attribute selectors possible by parsing the CSS of your app and discovering which breakpoints are applied to which components. Every element query-driven component will apply relevant values to its `data-eq-from` and `data-eq-to` attributes. 
+Note: the `eq-to` mixin subtracts `1` from its argument, letting you reuse the same breakpoint value in both `eq-to` and `eq-from`. The resulting CSS will be identical to the previous example.
 
-In your CSS, the `data-eq-from` and `data-eq-to` attribute selectors must always be paired with a semantic classname of a component. The same classname must be applied to the component in Ember via `class` or `classNames` property.
+If you use a different preprocessor, you can make your own mixins. Don't hesitate to contribute them via a PR!
 
 
 
 ## Drawbacks
+
+The Element Query technique is a double-edged weapon.
+
+
 
 ### Layout thrashing
 
@@ -146,9 +173,9 @@ Hypothetically, you can use a JS snippet that runs early as `index.html` loads, 
 
 
 
-## Known issues
+### Known issues
 
-### Delayed event propagation
+#### Delayed event propagation
 
 Ember has a ridiculous way of detecting an infinite render loop: if a rerender has been triggered from a rerender 10 times in a row, the loop is considered infinite... and Ember chooses to crash the app! :dizzy_face:
 
@@ -162,11 +189,13 @@ See the [heavy nesting demo](http://localhost:4200/#/?page=13).
 
 ## Alternatives
 
-Every Element Query implementation is subject to the layout thrashing problem.
+Every Element Query implementation is subject to both layout thrashing and FastBoot incompatibility.
 
-The most promising alternative to this addon seems to be [EQCSS](http://elementqueries.com). It is an inspiration for the [CSS Element Queries proposal](https://tomhodgins.github.io/element-queries-spec/). The CSS syntax it uses is currently non-standard and may require [hacks](https://github.com/eqcss/eqcss/wiki/Using-EQCSS-with-CSS-Preprocessors) for your CSS preprocessor.
+The most promising alternative to this addon seems to be [EQCSS](http://elementqueries.com). It is an inspiration for the [CSS Element Queries proposal](https://tomhodgins.github.io/element-queries-spec/). The proposal is conceived by an individual developer and does not originate from an organization like W3C.
 
-[eq.js](https://github.com/Snugug/eq.js) claims to be the fastest implementation, though it hasn't been updated in a while. It uses standard CSS syntax with optional Sass mixins, but requires assigning names to breakpoints in HTML, which is quite tedious.
+EQCSS requires writing CSS that is currently non-standard and may require [hacks](https://github.com/eqcss/eqcss/wiki/Using-EQCSS-with-CSS-Preprocessors) for your CSS pre/postprocessor.
+
+[eq.js](https://github.com/Snugug/eq.js) is another viable alternative. It claims to be the fastest implementation, though it hasn't been updated in a while. It uses standard CSS syntax with optional Sass mixins, but requires assigning names to breakpoints in HTML, which is quite tedious.
 
 `ember-element-query` aims to be the best of both worlds:
 
@@ -197,15 +226,15 @@ Install the addon:
     <script src="{{rootURL}}assets/element-query-mapping.js"></script>
 ```
 
-Why: this file is a way to pass information from a build into the app. Element query selectors have to be extracted from *compiled* CSS. Unfortunately, when compiled CSS becomes available in the Ember CLI pipeline, it's too late to manipulate with JS modules.
+Why: this file is a way to pass information from the build build pipeline into the client app. Element query selectors have to be extracted from *compiled* CSS and then provided as a JS module. Unfortunately, when compiled CSS becomes available in the Ember CLI pipeline, it's too late to manipulate JS modules, and instead a new JS file is provided.
 
 
 
 ## Usage
 
-### Enabling element queries on an Ember component
+### Enabling element queries on an existing Ember component
 
-If you want to apply element queries to the root element of your component, use the mixin.
+If you want to apply element queries to the root element of your component, use the `ElementQueryMixin`.
 
 You are also required to give your component a semantic HTML class via `classNames`:
 
@@ -228,7 +257,7 @@ export default Component.extend(ElementQueryMixin, {
 Then you can apply element queries in your CSS:
 
 ```css
-.x-card[data-eq-min~=500px] { /*...*/ }
+.x-card[data-eq-from~=500px] { /*...*/ }
 ```
 
 or Sass:
@@ -247,7 +276,7 @@ The addon will parse CSS on build, letting the `x-card` component know which bre
 
 ### Enabling element queries on an HTML element
 
-If you want to apply element queries to an HTML element in a template, use the `e-q` component:
+If you want to apply element queries to an HTML element in a template, replace it with the  `e-q` component:
 
 Inline form: 
 
@@ -269,7 +298,7 @@ Block form:
 {{/e-q}}
 ```
 
-Again, you are required to pass an semantic HTML class name into the component, so that it can look for relevant element query usages in CSS and apply them to itself.
+Again, you are required to pass an semantic HTML class name into the component, so that it can look for relevant element query usages in CSS and apply them to itself. Note that when you pass the HTML classname from Handlebars, you use `class` instead of `classNames`.
 
 All properties passed to the `e-q` component become HTML attributes:
 
@@ -296,8 +325,7 @@ This button will not receive the `disabled` attribute:
 {{/e-q}}
 ```
 
-The example above also demonstrates how to attach an action to the `e-q` component without subclassing it.
-
+The example above also demonstrates how to attach an action to the `e-q` component.
 
 
 
@@ -305,43 +333,9 @@ The example above also demonstrates how to attach an action to the `e-q` compone
 
 `ember-element-query`-driven components update automatically on window resize.
 
-If you change the width of a container programmatically, e. g. expand/collapse a container, EQ components will not update automatically.
+But if you change the width of a parent element programmatically, e. g. expand/collapse a container, EQ components will not update automatically. You have to tell EQ components to update when necessary.
 
-There are three ways to tell them to update.
-
-1. Run the `triggerResize` method on the `eq` service (recommended):
-
-   ```js
-   this.get('eq').triggerResize()
-   ```
-
-2. Trigger the `resize` event on `window` with jQuery:
-
-   ```js
-   $(window).resize()
-   ```
-
-3. Two previous ways trigger the update on all EQ components on the page.
-
-    You might have a tiny performance benefit if you trigger the update on a specific EQ component:
-
-    ```js
-    this.eqHandleResize()  // triggers update on current component and its EQ children
-    this.eqTriggerResize() // triggers update on children only
-    ```
-
-    If your component isn't EQ-driven, but you want to trigger an update of its EQ children, you can include this mixin into it:
-
-    ```js
-    import {EventForwardingMixin} from 'ember-element-query'
-    ```
-    
-    And then run `this.eqTriggerResize()` in it.
-    
-    This mixin can not be included into a controller.
-
-
-A common place to run these is in an action of a parent component/controller:
+A common place to do so is in an action of a parent component/controller:
 
 ```js
 {
@@ -362,6 +356,39 @@ observer('isSidebarExpanded', function () {
   // <--- here
 })
 ```
+
+There are three ways to tell EQ components to update:
+
+1. Run the `triggerResize` method on the `eq` service (recommended):
+
+   ```js
+   this.get('eq').triggerResize()
+   ```
+
+2. Trigger the `resize` event on `window`:
+
+   ```js
+   window.dispatchEvent(new Event('resize'))
+   ```
+
+3. The above ways will trigger the update on all EQ components on the page.
+
+    You might have a tiny performance benefit if you trigger the update on a specific EQ component:
+
+    ```js
+    this.eqHandleResize()  // triggers update on current component and its EQ children
+    this.eqTriggerResize() // triggers update on children only
+    ```
+
+    If your component isn't EQ-driven, but you want to trigger an update of its EQ children, you can include this mixin into it:
+
+    ```js
+    import {EventForwardingMixin} from 'ember-element-query'
+    ```
+    
+    And then run `this.eqTriggerResize()` in it.
+    
+    :warning: This mixin can not be included into a controller.
 
 
 
@@ -392,11 +419,11 @@ You can also access them like this:
 
 Say, you trigger sidebar expanding/collapsing, which should cause some EQ components to realign.
 
-But sidebar is animated, and the resulting widths aren't available until after transition completes.
+But the sidebar is animated, and the resulting widths aren't available until after transition completes.
 
 To resolve this problem, you can subscribe your EQ components to the transition end event on given selectors.
 
-To do that, define `eqTransitionSelectors` array on your component:
+To do that, define `eqTransitionSelectors` array on a parent component, that contains both the sidebar and EQ components affected by sidebar width:
 
 ```js
 import Component from '@ember/component'
@@ -410,7 +437,7 @@ export default Component.extend(ElementQueryMixin, {
 })
 ```
 
-Note: selectors are looked up among current component's child elements only. If you need to react to a transition of an element that appears outside of given component, you should work with that element's nearest parent component (make it `EventForwardingMixin` or `ElementQueryMixin` and apply transition selectors there).
+Selectors are looked up among child elements only. If you need to react to a transition of an element that appears outside of given component, you should work with that element's nearest parent component (make it `EventForwardingMixin` or `ElementQueryMixin` and apply transition selectors there).
 
 
 
@@ -418,9 +445,9 @@ Note: selectors are looked up among current component's child elements only. If 
 
 Slices are a feature from the v1 version of `ember-element-query`. The addon has been since rewritten to eliminate the need in slices.
 
-Yet the addon still supports slices for users who grew attached to them.
+The addon still supports slices for users who grew attached to them.
 
-:warning: If you are upgrading from v1 or from [breakpoint-slicer](https://github.com/lolmaus/breakpoint-slicer], mind that `eq-to` and the second argument of `eq-between` are now non-inclusive.
+:warning: If you are upgrading from v1 or coming from [breakpoint-slicer](https://github.com/lolmaus/breakpoint-slicer], please mind that `eq-to` and the second argument of `eq-between` are now non-inclusive.
 
 :warning: Slices are only available with Sass and are now defined in Sass.
 
@@ -428,12 +455,12 @@ Yet the addon still supports slices for users who grew attached to them.
 
 ### What are slices
 
-Slices are ranges between breakpoints. Say, your component uses a few breakpoints:
+Slices are ranges between breakpoints. Say, your component uses these breakpoints:
 
     Breakpoint:   0       200px     400px     600px     800px     1000px    1200px    1400px    
                   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
 
-See those intervals between numbers? Let's give them names:
+See those intervals between numbers, e. g. 0—200, 200—400, etc? Those are "slices". Let's give them names:
 
 
     Breakpoint:   0       200px     400px     600px     800px     1000px    1200px    1400px  
@@ -441,9 +468,9 @@ See those intervals between numbers? Let's give them names:
     Slice:        ·   xxs   ·    xs   ·    s    ·    m    ·    l    ·    xl   ·   xxl   ·   xxxl   
 
 
-You can use slices in the mixins. For example, `eq-from(s)` is equivalent to `eq-from(400)`.
+You can use slices in the mixins. For example, `eq-from(s)` is equivalent to `eq-from(400)`. See [Understanding slices](#understanding-slices) below for more info.
 
-The above combination of breakpoints and slices is the default. If you want to adjust them, define a Sass map like this:
+The above combination of breakpoints and slices is the default. If you want to adjust them, define a `$eq-slices` global variable with a Sass map like this:
 
 ```scss
 $eq-slices: (
@@ -500,13 +527,13 @@ Here is how some mixin calls look on an axis:
                                       ·   between(s, l)   ·                    
                                       ├──────────────────┤·                    
 
-Saying `eq-from(m)` is equivalent of `eq-from(600)`.
+Saying `eq-from(m)` is equivalent of `eq-from(600)` and produces `[data-eq-from~=600px]`.
 
-Saying `eq-to(m)` is equivalent of `eq-to(600)`.
+Saying `eq-to(m)` is equivalent of `eq-to(600)` and produces `[data-eq-to~=599px]`. Note how this mixin is non-inclusive (the range does not include the `m` slice).
 
-`eq-at(m)` is equivalent of `eq-between(600, 800)`.
+`eq-at(m)` is equivalent of `eq-between(600, 800)` and produces `[data-eq-from~=600px][data-eq-to~=799px]`.
 
-`eq-between(s, l)` is equivalent of `eq-between(400, 800)`.
+`eq-between(s, l)` is equivalent of `eq-between(400, 800)` and produces `[data-eq-from~=600px][data-eq-to~=799px]`. Note how the right side of this mixin is non-inclusive (the range does not include the `l` slice).
 
 
 
@@ -526,7 +553,9 @@ Thus, some mixin invocations are synonymous:
                                       between(s, m)                  · from(xl) 
                                        ├────────┤·                   ├─────────>
 
-…some become meaningless, they do not limit anything:
+Note: in this example `1000` is the largest slice.
+
+Some become meaningless, they do not limit anything:
 
      Breakpoint:   0       200px     400px     600px     800px     1000px       
                    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
@@ -535,7 +564,7 @@ Thus, some mixin invocations are synonymous:
                    ·  from(xxs)                                                 
                    ├───────────────────────────────────────────────────────────>
 
-…and some are impossible. This will trigger an error:
+And some are impossible. This will trigger an error:
 
      Breakpoint:   0       200px     400px     600px     800px     1000px       
                    ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
@@ -580,9 +609,11 @@ If you want to override slices for a single component, pass them as an additiona
 
 ## Upgrading
 
+v2 has never been released.
+
 ### From v1 to v3
 
-v3 is a complete rewrite. Upgrading from v1 requires quite some changes:
+v3 is a complete rewrite. Upgrading from v1 requires many changes to your code:
 
 1. Follow the new installation instructions.
 
@@ -604,6 +635,8 @@ v3 is a complete rewrite. Upgrading from v1 requires quite some changes:
     * To `ElementQueryMixin` via `classNames: ['my-component']`
 
 5. Update your styles to either use px breakpoints or define `$eq-slices` in Sass. See the docs above.
+
+    Make sure your CSS selectors use the semantic HTML classnames.
 
 6. If you chose to use slices, mind that `eq-to` and the second argument of `eq-between` are now non-inclusive.
 
@@ -638,9 +671,11 @@ v3 is a complete rewrite. Upgrading from v1 requires quite some changes:
 
 ## Development
 
-### Do not use npm, use yarn
+### Do not use npm, use Yarn
 
-This project uses [Yarn](https://yarnpkg.com/) to lock dependencies. You can install yarn with `npm i -g yarn`.
+This project uses [Yarn](https://yarnpkg.com/) to lock dependencies. You can install yarn simply with `npm i -g yarn` or follow [installation instructions](https://yarnpkg.com/lang/en/docs/install/).
+
+
 
 ### Installation for development
 
@@ -655,7 +690,7 @@ For more information on using ember-cli, visit [https://ember-cli.com/](https://
 ### Running
 
 * `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+* Visit the dummy app at [http://localhost:4200](http://localhost:4200).
 
 
 
@@ -663,14 +698,20 @@ For more information on using ember-cli, visit [https://ember-cli.com/](https://
 
 Main branches are named as `gen-1`, `gen-2`, etc. Default branch on GitHub is where active development happens.
 
-This naming scheme is due to the fact that this project uses SemVer. As a result, major version number will rise very quickly, without any correlation with actual major changes in the app.
+This branch naming scheme is due to the fact that this project uses SemVer. As a result of SemVer, major version number will rise very quickly, without any correlation with actual major changes in the app.
 
-The number in the branch name, "generation", is supposed to be incremented in these cases:
+The number in the branch name, "generation", indicates a large update, bigger than a simple breaking change. The generation number is supposed to be incremented in these cases:
 * A huge improvement or change happens in the addon.
 * There's a change in the addon's API or architecture which introduces a necessity to maintain more than one branch at a time.
 * The codebase is started from scratch.
 
 Pull requests are welcome from feature branches. Make sure to discus proposed changes with addon maintainers to avoid wasted effort.
+
+
+
+### Code style
+
+Make sure to use ESLint and [EditorConfig](http://editorconfig.org/#download) to prevent tests from failing due to code style inconsistencies.
 
 
 
@@ -685,6 +726,8 @@ Maintaining the TOC by hand is extremely tedious. Use [this tiny webapp](https:/
 This command will deploy the dummy app to https://lolmaus.github.io/ember-element-query/ :
 
     ember deploy prod
+
+Contributor permissions are required.
 
 
 
