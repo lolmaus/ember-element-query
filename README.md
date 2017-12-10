@@ -42,7 +42,7 @@ For example, if you put a responsive component into a tight sidebar, it will ali
   * [Edge cases of slices](#edge-cases-of-slices)
   * [Overriding $eq-slices definition for individual components](#overriding-eq-slices-definition-for-individual-components)
 * [Upgrading](#upgrading)
-  * [From v1 to v3](#from-v1-to-v3)
+  * [From v1 to v2](#from-v1-to-v2)
 * [Development](#development)
   * [Do not use npm, use Yarn](#do-not-use-npm-use-yarn)
   * [Installation for development](#installation-for-development)
@@ -609,11 +609,9 @@ If you want to override slices for a single component, pass them as an additiona
 
 ## Upgrading
 
-v2 has never been released.
+### From v1 to v2
 
-### From v1 to v3
-
-v3 is a complete rewrite. Upgrading from v1 requires many changes to your code:
+v2 is a complete rewrite. Upgrading from v1 requires many changes to your code:
 
 1. Follow the new installation instructions.
 

@@ -66,6 +66,7 @@
     "ember-cli-inject-live-reload": "^1.4.1",
     "ember-cli-mocha": "^0.14.4",
     "ember-cli-node-modules-to-vendor": "^0.3.0",
+    "ember-cli-release": "^1.0.0-beta.2",
     "ember-cli-sass": "^7.1.1",
     "ember-cli-shims": "^1.1.0",
     "ember-cli-showdown": "^4.1.0",
