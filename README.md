@@ -8,6 +8,7 @@ It lets you implement reusable responsive components — with encapsulated style
 For example, if you put a responsive component into a tight sidebar, it will align its content vertically. When the sidebar expands, the component will realign horizontally in order to efficiently use available space.
 
 - [ember-element-query](#ember-element-query)
+  - [Roadmap](#roadmap)
   - [Rationale](#rationale)
   - [Concept of sizes](#concept-of-sizes)
   - [How ember-element-query works](#how-ember-element-query-works)
@@ -43,6 +44,40 @@ For example, if you put a responsive component into a tight sidebar, it will ali
   - [License](#license)
   - [Credit](#credit)
 
+
+
+Roadmap
+------------------------------------------------------------------------------
+
+This addon is in active development.
+
+* [ ] `{{element-query}}` modifier
+  * [x] Exists
+  * [x] Sets up a `ResizeObserver`
+  * [x] Calls the `onResize` callback with params
+  * [ ] Applies attributes to elements
+  * [ ] Accepts `sizes`
+  * [ ] Accepts `prefix`
+  * [ ] Accepts `direction`
+* [ ] `<ElementQuery>` component
+  * [ ] Exists
+  * [ ] Applies attributes to itself
+  * [ ] Yields block params
+  * [ ] Accepts `sizes`
+  * [ ] Accepts `prefix`
+  * [ ] Accepts `direction`
+* [ ] Expose types
+* [ ] CI
+* [ ] npm package
+* [ ] Documentation
+  * [x] Concept
+  * [x] Feature description
+  * [x] Usage
+  * [x] Browser support
+  * [x] Comparison with alternatives
+  * [ ] TypeDoc API documentation
+    * [ ] Document
+    * [ ] Set up auto deployment
 
 
 Rationale
@@ -288,10 +323,11 @@ You can pass a callback to the `onResize` argument and it will be called wheneve
 ```js
 @action
 reportResize(data) {
-  data.width  // => current element width in px (number)
-  data.height // => current element height in px (number)
-  data.ratio  // => current element aspect ratio (width/height, number)
-  data.size   // => current element size (string)
+  data.element // => current element
+  data.width   // => current element's width in px (number)
+  data.height  // => current element's height in px (number)
+  data.ratio   // => current element's aspect ratio (width/height, number)
+  data.size    // => current element's size (string)
 }
 ```
 
@@ -348,14 +384,14 @@ When the element has the width of `421px`, it will receive attributes `at-medium
 
 ### Using height instead of width
 
-Use the `orientation="height"` argument to make attributes get applied based on element height:
+Use the `direction="height"` argument to make attributes get applied based on element height:
 
 ```html
-<img {{element-query orientation="height"}}>
+<img {{element-query direction="height"}}>
 ```
 
 ```html
-<ElementQuery @orientation="height"></ElementQuery>
+<ElementQuery @direction="height"></ElementQuery>
 ```
 
 
@@ -383,8 +419,8 @@ You can use both width and height element queries on the same element like this:
 ```html
 <img
   class="foo"
-  {{element-query orientation="width"  prefix="width-"}}
-  {{element-query orientation="height" prefix="height-"}}
+  {{element-query direction="width"  prefix="width-"}}
+  {{element-query direction="height" prefix="height-"}}
 >
 ```
 
@@ -438,7 +474,7 @@ You can also pass `true` to `@sizesHeight`, which will enable default sizes. The
 Browser support
 ------------------------------------------------------------------------------
 
-`ember-element-query` is based on the ResizeObserver which is **not supported by IE**.
+`ember-element-query` is based on [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) which is **not supported by IE**.
 
 As of 2020-06, the following major browsers are supported:
 
@@ -447,6 +483,8 @@ As of 2020-06, the following major browsers are supported:
 * Safari: 13.1+ desktop, 13.4+ iOS (since 2020-03-24).
 
 See [caniuse.com](https://caniuse.com/#feat=resizeobserver) for detailed stats.
+
+⚠ Note that old iOS devices do not have `ResizeObserver`, so you might want to use a polyfill. iOS Safari is the new IE. 😬
 
 
 
