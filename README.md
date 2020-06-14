@@ -56,7 +56,7 @@ This addon is in active development.
   * [x] Sets up a `ResizeObserver`
   * [x] Calls the `onResize` callback with params
   * [x] Applies attributes to elements
-  * [ ] Accepts `sizes`
+  * [x] Accepts `sizes`
   * [ ] Accepts `prefix`
   * [ ] Accepts `direction`
 * [ ] `<ElementQuery>` component

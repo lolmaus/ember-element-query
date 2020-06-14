@@ -6,6 +6,7 @@ interface Args extends ModifierArgs {
   positional: [];
   named: {
     onResize?: (params: Measurements) => void;
+    sizes?: Sizes;
   };
 }
 
@@ -16,7 +17,7 @@ interface Measurements {
   ratio: number;
 }
 
-type Sizes = Record<string, number>;
+export type Sizes = Record<string, number>;
 
 export interface SizeObject {
   name: string;
@@ -39,7 +40,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
   // -------------------
 
   // prettier-ignore
-  sizes: Sizes = {
+  sizesDefault: Sizes = {
     xxs:  0,
     xs:   200,
     s:    400,
@@ -69,6 +70,10 @@ export default class ElementQueryModifier extends Modifier<Args> {
   get ratio(): number {
     if (!this._element) throw new Error('Expected this._element to be available');
     return this.width / this.height;
+  }
+
+  get sizes(): Sizes {
+    return this.args.named.sizes || this.sizesDefault;
   }
 
   get sizeObjectsSortedAsc(): SizeObject[] {
