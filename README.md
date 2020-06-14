@@ -55,7 +55,7 @@ This addon is in active development.
   * [x] Exists
   * [x] Sets up a `ResizeObserver`
   * [x] Calls the `onResize` callback with params
-  * [ ] Applies attributes to elements
+  * [x] Applies attributes to elements
   * [ ] Accepts `sizes`
   * [ ] Accepts `prefix`
   * [ ] Accepts `direction`
@@ -78,6 +78,7 @@ This addon is in active development.
   * [ ] TypeDoc API documentation
     * [ ] Document
     * [ ] Set up auto deployment
+* [ ] Demo app
 
 
 Rationale
