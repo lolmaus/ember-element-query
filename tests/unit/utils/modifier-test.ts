@@ -259,23 +259,29 @@ module('Unit | element-query modifier', function (/* hooks */) {
   module('convertSizeToAttribute', function (/* hooks */) {
     // prettier-ignore
     const cases = [
-      { size: 'foo', rangeDirection: 'at',   expected: 'at-foo'},
-      { size: 'foo', rangeDirection: 'from', expected: 'from-foo'},
-      { size: 'foo', rangeDirection: 'to',   expected: 'to-foo'},
+      { size: 'foo', rangeDirection: 'at',                       expected: 'at-foo'},
+      { size: 'foo', rangeDirection: 'from',                     expected: 'from-foo'},
+      { size: 'foo', rangeDirection: 'to',                       expected: 'to-foo'},
+      { size: 'foo', rangeDirection: 'at',   prefix: 'data-eq-', expected: 'data-eq-at-foo'},
+      { size: 'foo', rangeDirection: 'from', prefix: 'data-eq-', expected: 'data-eq-from-foo'},
+      { size: 'foo', rangeDirection: 'to',   prefix: 'data-eq-', expected: 'data-eq-to-foo'},
     ];
 
     cases.forEach(
       ({
         size,
         rangeDirection,
+        prefix,
         expected,
       }: {
         size: string;
         rangeDirection: RangeDirection;
+        prefix?: string;
         expected: string;
       }) => {
-        test(`size: ${size}, range direction: ${rangeDirection}`, function (assert) {
-          const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        test(`size: ${size}, range direction: ${rangeDirection}, prefix: ${prefix}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: { prefix } });
 
           assert.equal(modifier.convertSizeToAttribute(size, rangeDirection), expected);
         });

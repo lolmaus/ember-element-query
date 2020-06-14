@@ -7,6 +7,7 @@ interface Args extends ModifierArgs {
   named: {
     onResize?: (params: Measurements) => void;
     sizes?: Sizes;
+    prefix?: string;
   };
 }
 
@@ -142,7 +143,8 @@ export default class ElementQueryModifier extends Modifier<Args> {
   // -------------------
 
   convertSizeToAttribute(size: string, rangeDirection: RangeDirection): string {
-    return `${rangeDirection}-${size}`;
+    const prefix = this.args.named.prefix ?? '';
+    return `${prefix}${rangeDirection}-${size}`;
   }
 
   applyAttributesToElement(): void {
