@@ -5,6 +5,8 @@
 #eq-test {
   border: 10px solid;
   height: 100px;
+  resize: horizontal;
+  overflow: hidden;
 }
 
 #eq-test[at-xxs]:before {
