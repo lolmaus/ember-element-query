@@ -58,14 +58,14 @@ This addon is in active development.
   * [x] Applies attributes to elements
   * [x] Accepts `sizes`
   * [x] Accepts `prefix`
-  * [ ] Accepts `direction`
+  * [ ] Accepts `dimension`
 * [ ] `<ElementQuery>` component
   * [ ] Exists
   * [ ] Applies attributes to itself
   * [ ] Yields block params
   * [ ] Accepts `sizes`
   * [ ] Accepts `prefix`
-  * [ ] Accepts `direction`
+  * [ ] Accepts `dimension`
 * [ ] Expose types
 * [ ] CI
 * [ ] npm package
@@ -385,14 +385,14 @@ When the element has the width of `421px`, it will receive attributes `at-medium
 
 ### Using height instead of width
 
-Use the `direction="height"` argument to make attributes get applied based on element height:
+Use the `dimension="height"` argument to make attributes get applied based on element height:
 
 ```html
-<img {{element-query direction="height"}}>
+<img {{element-query dimension="height"}}>
 ```
 
 ```html
-<ElementQuery @direction="height"></ElementQuery>
+<ElementQuery @dimension="height"></ElementQuery>
 ```
 
 
@@ -420,8 +420,8 @@ You can use both width and height element queries on the same element like this:
 ```html
 <img
   class="foo"
-  {{element-query direction="width"  prefix="width-"}}
-  {{element-query direction="height" prefix="height-"}}
+  {{element-query dimension="width"  prefix="width-"}}
+  {{element-query dimension="height" prefix="height-"}}
 >
 ```
 

@@ -7,7 +7,7 @@ import sinon from 'sinon';
 
 module('Unit | element-query modifier', function (/* hooks */) {
   // prettier-ignore
-  const defaultSizes: SizeObject[] = [
+  const defaultSizeObjects: SizeObject[] = [
     {name: 'xxs',  value: 0,    index: 0},
     {name: 'xs',   value: 200,  index: 1},
     {name: 's',    value: 400,  index: 2},
@@ -16,6 +16,15 @@ module('Unit | element-query modifier', function (/* hooks */) {
     {name: 'xl',   value: 1000, index: 5},
     {name: 'xxl',  value: 1200, index: 6},
     {name: 'xxxl', value: 1400, index: 7},
+  ];
+
+  const sizes = { small: 0, medium: 300, large: 700 };
+
+  // prettier-ignore
+  const sizeObjects = [
+    { name: 'small',  value: 0, index: 0 },
+    { name: 'medium', value: 300, index: 1 },
+    { name: 'large',  value: 700, index: 2 },
   ];
 
   ///
@@ -46,46 +55,165 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
   ///
 
+  module('dimension', function () {
+    test('dimension default', function (assert) {
+      const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
+
+      modifier._element = {
+        clientWidth: 770,
+        clientHeight: 330,
+      };
+
+      assert.equal(modifier.dimension, 770);
+    });
+
+    test('dimension height', function (assert) {
+      const modifier = new ElementQueryModifier(null, {
+        positional: [],
+        named: { dimension: 'height' },
+      });
+
+      modifier._element = {
+        clientWidth: 770,
+        clientHeight: 330,
+      };
+
+      assert.equal(modifier.dimension, 330);
+    });
+  });
+
+  ///
+
   module('sizeObjectsSortedAsc', function (/* hooks */) {
     test('default sizes', function (assert) {
       const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
 
-      assert.deepEqual(modifier.sizeObjectsSortedAsc, defaultSizes);
+      assert.deepEqual(modifier.sizeObjectsSortedAsc, defaultSizeObjects);
     });
   });
 
   ///
 
   module('atSizeObject', function (/* hooks */) {
-    // prettier-ignore
-    const cases = [
-      { actualWidth: 0,    expectedIndex: 0 },
-      { actualWidth: 400,  expectedIndex: 2 },
-      { actualWidth: 550,  expectedIndex: 2 },
-      { actualWidth: 599,  expectedIndex: 2 },
-      { actualWidth: 600,  expectedIndex: 3 },
-      { actualWidth: 1650, expectedIndex: 7 },
-      { actualWidth: -100,                   throws: true},
-    ];
+    module('defaultSizes', function (/* hooks */) {
+      // prettier-ignore
+      const cases = [
+        { actualWidth: 0,    expectedIndex: 0 },
+        { actualWidth: 400,  expectedIndex: 2 },
+        { actualWidth: 550,  expectedIndex: 2 },
+        { actualWidth: 599,  expectedIndex: 2 },
+        { actualWidth: 600,  expectedIndex: 3 },
+        { actualWidth: 1650, expectedIndex: 7 },
+        { actualWidth: -100,                   throws: true},
+      ];
 
-    cases.forEach(({ actualWidth, expectedIndex, throws }) => {
-      test(`default sizes, width ${actualWidth}`, function (assert) {
-        const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
+      cases.forEach(({ actualWidth, expectedIndex, throws }) => {
+        test(`width ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
 
-        modifier._element = {
-          clientWidth: actualWidth,
-          clientHeight: 330,
-        };
+          modifier._element = {
+            clientWidth: actualWidth,
+            clientHeight: 330,
+          };
 
-        if (expectedIndex != null && !throws) {
-          assert.deepEqual(modifier.atSizeObject, defaultSizes[expectedIndex]);
-        } else if (expectedIndex == null && throws) {
-          assert.throws(() => modifier.atSizeObject, 'Expected width not to be negative');
-        } else if (expectedIndex != null && throws) {
-          throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
-        } else {
-          throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
-        }
+          if (expectedIndex != null && !throws) {
+            assert.deepEqual(modifier.atSizeObject, defaultSizeObjects[expectedIndex]);
+          } else if (expectedIndex == null && throws) {
+            assert.throws(() => modifier.atSizeObject, 'Expected dimensions not to be negative');
+          } else if (expectedIndex != null && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+
+        test(`height ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, {
+            positional: [],
+            named: { dimension: 'height' },
+          });
+
+          modifier._element = {
+            clientWidth: 330,
+            clientHeight: actualWidth,
+          };
+
+          if (expectedIndex != null && !throws) {
+            assert.deepEqual(modifier.atSizeObject, defaultSizeObjects[expectedIndex]);
+          } else if (expectedIndex == null && throws) {
+            assert.throws(() => modifier.atSizeObject, 'Expected dimensions not to be negative');
+          } else if (expectedIndex != null && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+      });
+    });
+
+    module('custom sizes', function (/* hooks */) {
+      // prettier-ignore
+      const cases = [
+        { actualWidth: 0,    expectedIndex: 0 },
+        { actualWidth: 150,  expectedIndex: 0 },
+        { actualWidth: 299,  expectedIndex: 0 },
+        { actualWidth: 300,  expectedIndex: 1 },
+        { actualWidth: 450,  expectedIndex: 1 },
+        { actualWidth: 699,  expectedIndex: 1 },
+        { actualWidth: 700,  expectedIndex: 2 },
+        { actualWidth: 1650, expectedIndex: 2 },
+        { actualWidth: -100,                   throws: true},
+      ];
+
+      cases.forEach(({ actualWidth, expectedIndex, throws }) => {
+        test(`width ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: { sizes } });
+
+          modifier._element = {
+            clientWidth: actualWidth,
+            clientHeight: 330,
+          };
+
+          if (expectedIndex != null && !throws) {
+            assert.deepEqual(modifier.atSizeObject, sizeObjects[expectedIndex]);
+          } else if (expectedIndex == null && throws) {
+            assert.throws(() => modifier.atSizeObject, 'Expected dimensions not to be negative');
+          } else if (expectedIndex != null && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+
+        test(`height ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, {
+            positional: [],
+            named: { dimension: 'height', sizes },
+          });
+
+          modifier._element = {
+            clientWidth: 330,
+            clientHeight: actualWidth,
+          };
+
+          if (expectedIndex != null && !throws) {
+            assert.deepEqual(modifier.atSizeObject, sizeObjects[expectedIndex]);
+          } else if (expectedIndex == null && throws) {
+            assert.throws(() => modifier.atSizeObject, 'Expected height not to be negative');
+          } else if (expectedIndex != null && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
       });
     });
   });
@@ -93,45 +221,169 @@ module('Unit | element-query modifier', function (/* hooks */) {
   ///
 
   module('fromSizeObjects', function (/* hooks */) {
-    let m;
+    module('default sizes', function (/* hooks */) {
+      let m;
 
-    // prettier-ignore
-    const cases = [
-      { actualWidth: 0,    expectedIndexes: [0] },
-      { actualWidth: 400,  expectedIndexes: [0, 1, 2] },
-      { actualWidth: 550,  expectedIndexes: [0, 1, 2] },
-      { actualWidth: 599,  expectedIndexes: [0, 1, 2] },
-      { actualWidth: 600,  expectedIndexes: [0, 1, 2, 3] },
-      { actualWidth: 1650, expectedIndexes: [0, 1, 2, 3, 4, 5, 6, 7] },
-      { actualWidth: -100,                   throws: true},
-    ];
+      // prettier-ignore
+      const cases = [
+        { actualWidth: 0,    expectedIndexes: [0] },
+        { actualWidth: 400,  expectedIndexes: [0, 1, 2] },
+        { actualWidth: 550,  expectedIndexes: [0, 1, 2] },
+        { actualWidth: 599,  expectedIndexes: [0, 1, 2] },
+        { actualWidth: 600,  expectedIndexes: [0, 1, 2, 3] },
+        { actualWidth: 1650, expectedIndexes: [0, 1, 2, 3, 4, 5, 6, 7] },
+        { actualWidth: -100,                   throws: true},
+      ];
 
-    cases.forEach(({ actualWidth, expectedIndexes, throws }) => {
-      test(`default sizes, width ${actualWidth}`, function (assert) {
-        const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
+      cases.forEach(({ actualWidth, expectedIndexes, throws }) => {
+        test(`width ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
 
-        modifier._element = {
-          clientWidth: actualWidth,
-          clientHeight: 330,
-        };
+          modifier._element = {
+            clientWidth: actualWidth,
+            clientHeight: 330,
+          };
 
-        if (expectedIndexes && !throws) {
-          const fromSizeObjects = modifier.fromSizeObjects;
+          if (expectedIndexes && !throws) {
+            const fromSizeObjects = modifier.fromSizeObjects;
 
-          m = 'count';
-          assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+            m = 'count';
+            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
 
-          expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
-            m = `#${expectedIndex} size`;
-            assert.deepEqual(fromSizeObjects[expectedIndexIndex], defaultSizes[expectedIndex], m);
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(
+                fromSizeObjects[expectedIndexIndex],
+                defaultSizeObjects[expectedIndex],
+                m
+              );
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+
+        test(`height ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, {
+            positional: [],
+            named: { dimension: 'height' },
           });
-        } else if (!expectedIndexes && throws) {
-          assert.throws(() => modifier.fromSizeObjects, 'Expected width not to be negative');
-        } else if (expectedIndexes && throws) {
-          throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
-        } else {
-          throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
-        }
+
+          modifier._element = {
+            clientWidth: 300,
+            clientHeight: actualWidth,
+          };
+
+          if (expectedIndexes && !throws) {
+            const fromSizeObjects = modifier.fromSizeObjects;
+
+            m = 'count';
+            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(
+                fromSizeObjects[expectedIndexIndex],
+                defaultSizeObjects[expectedIndex],
+                m
+              );
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+      });
+    });
+
+    module('custom sizes', function (/* hooks */) {
+      let m;
+
+      // prettier-ignore
+      const cases = [
+        { actualWidth: 0,    expectedIndexes: [0] },
+        { actualWidth: 150,  expectedIndexes: [0] },
+        { actualWidth: 299,  expectedIndexes: [0] },
+        { actualWidth: 300,  expectedIndexes: [0, 1] },
+        { actualWidth: 450,  expectedIndexes: [0, 1] },
+        { actualWidth: 699,  expectedIndexes: [0, 1] },
+        { actualWidth: 700,  expectedIndexes: [0, 1, 2] },
+        { actualWidth: 1650, expectedIndexes: [0, 1, 2] },
+        { actualWidth: -100,                   throws: true},
+      ];
+
+      cases.forEach(({ actualWidth, expectedIndexes, throws }) => {
+        test(`width ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: { sizes } });
+
+          modifier._element = {
+            clientWidth: actualWidth,
+            clientHeight: 330,
+          };
+
+          if (expectedIndexes && !throws) {
+            const fromSizeObjects = modifier.fromSizeObjects;
+
+            m = 'count';
+            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(fromSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+
+        test(`height ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, {
+            positional: [],
+            named: { dimension: 'height', sizes },
+          });
+
+          modifier._element = {
+            clientWidth: 300,
+            clientHeight: actualWidth,
+          };
+
+          if (expectedIndexes && !throws) {
+            const fromSizeObjects = modifier.fromSizeObjects;
+
+            m = 'count';
+            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(fromSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
       });
     });
   });
@@ -139,10 +391,11 @@ module('Unit | element-query modifier', function (/* hooks */) {
   ///
 
   module('toSizeObjects', function (/* hooks */) {
-    let m;
+    module('default sizes', function (/* hooks */) {
+      let m;
 
-    // prettier-ignore
-    const cases = [
+      // prettier-ignore
+      const cases = [
       { actualWidth: 0,    expectedIndexes: [0, 1, 2, 3, 4, 5, 6, 7] },
       { actualWidth: 400,  expectedIndexes: [      2, 3, 4, 5, 6, 7] },
       { actualWidth: 550,  expectedIndexes: [      2, 3, 4, 5, 6, 7] },
@@ -152,32 +405,155 @@ module('Unit | element-query modifier', function (/* hooks */) {
       { actualWidth: -100,                   throws: true},
     ];
 
-    cases.forEach(({ actualWidth, expectedIndexes, throws }) => {
-      test(`default sizes, width ${actualWidth}`, function (assert) {
-        const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
+      cases.forEach(({ actualWidth, expectedIndexes, throws }) => {
+        test(`width ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: {} });
 
-        modifier._element = {
-          clientWidth: actualWidth,
-          clientHeight: 330,
-        };
+          modifier._element = {
+            clientWidth: actualWidth,
+            clientHeight: 330,
+          };
 
-        if (expectedIndexes && !throws) {
-          const toSizeObjects = modifier.toSizeObjects;
+          if (expectedIndexes && !throws) {
+            const toSizeObjects = modifier.toSizeObjects;
 
-          m = 'count';
-          assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+            m = 'count';
+            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
 
-          expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
-            m = `#${expectedIndex} size`;
-            assert.deepEqual(toSizeObjects[expectedIndexIndex], defaultSizes[expectedIndex], m);
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(
+                toSizeObjects[expectedIndexIndex],
+                defaultSizeObjects[expectedIndex],
+                m
+              );
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+
+        test(`height ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, {
+            positional: [],
+            named: { dimension: 'height' },
           });
-        } else if (!expectedIndexes && throws) {
-          assert.throws(() => modifier.toSizeObjects, 'Expected width not to be negative');
-        } else if (expectedIndexes && throws) {
-          throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
-        } else {
-          throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
-        }
+
+          modifier._element = {
+            clientWidth: 330,
+            clientHeight: actualWidth,
+          };
+
+          if (expectedIndexes && !throws) {
+            const toSizeObjects = modifier.toSizeObjects;
+
+            m = 'count';
+            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(
+                toSizeObjects[expectedIndexIndex],
+                defaultSizeObjects[expectedIndex],
+                m
+              );
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+      });
+    });
+
+    module('custom sizes', function (/* hooks */) {
+      let m;
+
+      // prettier-ignore
+      const cases = [
+      { actualWidth: 0,    expectedIndexes: [0, 1, 2] },
+      { actualWidth: 150,  expectedIndexes: [0, 1, 2] },
+      { actualWidth: 299,  expectedIndexes: [0, 1, 2] },
+      { actualWidth: 300,  expectedIndexes: [   1, 2] },
+      { actualWidth: 450,  expectedIndexes: [   1, 2] },
+      { actualWidth: 699,  expectedIndexes: [   1, 2] },
+      { actualWidth: 700,  expectedIndexes: [      2] },
+      { actualWidth: 1650, expectedIndexes: [      2] },
+      { actualWidth: -100, throws: true},
+    ];
+
+      cases.forEach(({ actualWidth, expectedIndexes, throws }) => {
+        test(`width ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, { positional: [], named: { sizes } });
+
+          modifier._element = {
+            clientWidth: actualWidth,
+            clientHeight: 330,
+          };
+
+          if (expectedIndexes && !throws) {
+            const toSizeObjects = modifier.toSizeObjects;
+
+            m = 'count';
+            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(toSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
+
+        test(`height ${actualWidth}`, function (assert) {
+          const modifier = new ElementQueryModifier(null, {
+            positional: [],
+            named: { dimension: 'height', sizes },
+          });
+
+          modifier._element = {
+            clientWidth: 330,
+            clientHeight: actualWidth,
+          };
+
+          if (expectedIndexes && !throws) {
+            const toSizeObjects = modifier.toSizeObjects;
+
+            m = 'count';
+            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+
+            expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
+              m = `#${expectedIndex} size`;
+              assert.deepEqual(toSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+            });
+          } else if (!expectedIndexes && throws) {
+            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+          } else if (expectedIndexes && throws) {
+            throw new Error(
+              'Malformed test case: cannot use `expectedIndex` and `throws` together.'
+            );
+          } else {
+            throw new Error('Malformed test case: expected either `expectedIndex` or `throws`');
+          }
+        });
       });
     });
   });
@@ -208,7 +584,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         if (expectedAttributes && !throws) {
           assert.deepEqual(modifier.attributes, expectedAttributes);
         } else if (!expectedAttributes && throws) {
-          assert.throws(() => modifier.fromSizeObjects, 'Expected width not to be negative');
+          assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
         } else if (expectedAttributes && throws) {
           throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
         } else {
@@ -244,7 +620,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         if (expectedAttributes && !throws) {
           assert.deepEqual(modifier.attributesToRemove, expectedAttributes);
         } else if (!expectedAttributes && throws) {
-          assert.throws(() => modifier.fromSizeObjects, 'Expected width not to be negative');
+          assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
         } else if (expectedAttributes && throws) {
           throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
         } else {

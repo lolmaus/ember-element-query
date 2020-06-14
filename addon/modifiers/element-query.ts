@@ -8,6 +8,7 @@ interface Args extends ModifierArgs {
     onResize?: (params: Measurements) => void;
     sizes?: Sizes;
     prefix?: string;
+    dimension?: Dimension;
   };
 }
 
@@ -33,6 +34,7 @@ export interface ElementStub {
   removeAttribute?: (qualifiedName: string) => void;
 }
 
+export type Dimension = 'width' | 'height';
 export type RangeDirection = 'at' | 'from' | 'to';
 
 export default class ElementQueryModifier extends Modifier<Args> {
@@ -68,6 +70,10 @@ export default class ElementQueryModifier extends Modifier<Args> {
     return this._element.clientHeight!;
   }
 
+  get dimension(): number {
+    return this.args.named.dimension === 'height' ? this.height : this.width;
+  }
+
   get ratio(): number {
     if (!this._element) throw new Error('Expected this._element to be available');
     return this.width / this.height;
@@ -91,9 +97,9 @@ export default class ElementQueryModifier extends Modifier<Args> {
   }
 
   get atSizeObject(): SizeObject {
-    if (this.width < 0) throw new Error('Expected width not to be negative');
+    if (this.dimension < 0) throw new Error('Expected dimensions not to be negative');
 
-    const nextIndex = this.sizeObjectsSortedAsc.findIndex((size) => size.value > this.width)!;
+    const nextIndex = this.sizeObjectsSortedAsc.findIndex((size) => size.value > this.dimension)!;
 
     if (nextIndex === 0) throw new Error('Expected next index not to be 0');
 
