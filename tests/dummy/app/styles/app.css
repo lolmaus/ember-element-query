@@ -1,0 +1,108 @@
+* {
+  box-sizing: border-box;
+}
+
+#eq-test {
+  border: 10px solid;
+  height: 100px;
+}
+
+#eq-test[at-xxs]:before {
+  content: 'xxs';
+}
+
+#eq-test[at-xs]:before {
+  content: 'xs';
+}
+
+#eq-test[at-s]:before {
+  content: 's';
+}
+
+#eq-test[at-m]:before {
+  content: 'm';
+}
+
+#eq-test[at-l]:before {
+  content: 'l';
+}
+
+#eq-test[at-xl]:before {
+  content: 'xl';
+}
+
+#eq-test[at-xxl]:before {
+  content: 'xxl';
+}
+
+#eq-test[at-xxxl]:before {
+  content: 'xxxl';
+}
+
+
+
+#eq-test[from-xxs] {
+  background-color: #B0E0E6;
+}
+
+#eq-test[from-xs] {
+  background-color: #BBDAE1;
+}
+
+#eq-test[from-s] {
+  background-color: #C7D4DB;
+}
+
+#eq-test[from-m] {
+  background-color: #D2CED6;
+}
+
+#eq-test[from-l] {
+  background-color: #DDC8D1;
+}
+
+#eq-test[from-xl] {
+  background-color: #E8C2CC;
+}
+
+#eq-test[from-xxl] {
+  background-color: #F4BCC6;
+}
+
+#eq-test[from-xxxl] {
+  background-color: #FFB6C1;
+}
+
+
+
+#eq-test[to-xxxl] {
+  border-color: #FFA07A;
+}
+
+#eq-test[to-xxl] {
+  border-color: #F0AD7E;
+}
+
+#eq-test[to-xl] {
+  border-color: #E2BA83;
+}
+
+#eq-test[to-l] {
+  border-color: #D3C787;
+}
+
+#eq-test[to-m] {
+  border-color: #C4D48B;
+}
+
+#eq-test[to-s] {
+  border-color: #B5E18F;
+}
+
+#eq-test[to-xs] {
+  border-color: #A7EE94;
+}
+
+#eq-test[to-xxs] {
+  border-color: #98FB98;
+}
