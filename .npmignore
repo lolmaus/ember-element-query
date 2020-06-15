@@ -5,7 +5,7 @@
 # dependencies
 /bower_components/
 
-# misc
+# Default boilerplate
 /.bowerrc
 /.editorconfig
 /.ember-cli
@@ -30,3 +30,16 @@
 /.node_modules.ember-try/
 /bower.json.ember-try
 /package.json.ember-try
+
+# Custom boilerplate
+/.lintstagedrc.js
+/.prettierrc.js
+/jsconfig.json
+/tsconfig.json
+/tsconfig-node.json
+*.log
+
+# IDE
+/.idea/
+/.vscode/
+/.history/
