@@ -4,7 +4,7 @@ import { render, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import sinon, { SinonSpy } from 'sinon';
 import { TestContext } from 'ember-test-helpers';
-import { Sizes } from 'ember-element-query/modifiers/element-query';
+import { Sizes } from 'ember-element-query/-private/modifier';
 
 interface TestContextCustom extends TestContext {
   callback?: SinonSpy;

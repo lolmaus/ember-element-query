@@ -58,7 +58,8 @@ This addon is in active development.
   * [x] Applies attributes to elements
   * [x] Accepts `sizes`
   * [x] Accepts `prefix`
-  * [ ] Accepts `dimension`
+  * [x] Accepts `dimension`
+  * [ ] Updates on arugments change
 * [ ] `<ElementQuery>` component
   * [ ] Exists
   * [ ] Applies attributes to itself

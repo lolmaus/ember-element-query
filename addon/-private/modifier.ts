@@ -5,18 +5,20 @@ import { action } from '@ember/object';
 interface Args extends ModifierArgs {
   positional: [];
   named: {
-    onResize?: (params: Measurements) => void;
+    onResize?: (params: Yield) => void;
     sizes?: Sizes;
     prefix?: string;
     dimension?: Dimension;
   };
 }
 
-interface Measurements {
+interface Yield {
   element: ElementStub;
   width: number;
   height: number;
   ratio: number;
+  size: string;
+  attributes: string[];
 }
 
 export type Sizes = Record<string, number>;
@@ -96,7 +98,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
     return result;
   }
 
-  get atSizeObject(): SizeObject {
+  get sizeObjectAt(): SizeObject {
     if (this.dimension < 0) throw new Error('Expected dimensions not to be negative');
 
     const nextIndex = this.sizeObjectsSortedAsc.findIndex((size) => size.value > this.dimension)!;
@@ -108,23 +110,23 @@ export default class ElementQueryModifier extends Modifier<Args> {
       : this.sizeObjectsSortedAsc[this.sizeObjectsSortedAsc.length - 1];
   }
 
-  get fromSizeObjects(): SizeObject[] {
-    const nextIndex = this.atSizeObject.index + 1;
+  get sizeObjectsFrom(): SizeObject[] {
+    const nextIndex = this.sizeObjectAt.index + 1;
     return this.sizeObjectsSortedAsc.slice(0, nextIndex);
   }
 
-  get toSizeObjects(): SizeObject[] {
-    const index = this.atSizeObject.index;
+  get sizeObjectsTo(): SizeObject[] {
+    const index = this.sizeObjectAt.index;
     return this.sizeObjectsSortedAsc.slice(index);
   }
 
   get attributes(): string[] {
     return [
-      this.convertSizeToAttribute(this.atSizeObject.name, 'at'),
-      ...this.fromSizeObjects.map((fromSizeObject) =>
+      this.convertSizeToAttribute(this.sizeObjectAt.name, 'at'),
+      ...this.sizeObjectsFrom.map((fromSizeObject) =>
         this.convertSizeToAttribute(fromSizeObject.name, 'from')
       ),
-      ...this.toSizeObjects.map((toSizeObject) =>
+      ...this.sizeObjectsTo.map((toSizeObject) =>
         this.convertSizeToAttribute(toSizeObject.name, 'to')
       ),
     ];
@@ -133,15 +135,28 @@ export default class ElementQueryModifier extends Modifier<Args> {
   get attributesToRemove(): string[] {
     return [
       ...this.sizeObjectsSortedAsc
-        .filter((sizeObject) => sizeObject.name !== this.atSizeObject.name)
+        .filter((sizeObject) => sizeObject.name !== this.sizeObjectAt.name)
         .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'at')),
-      ...this.toSizeObjects
+      ...this.sizeObjectsTo
         .slice(1)
         .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'from')),
-      ...this.fromSizeObjects
+      ...this.sizeObjectsFrom
         .slice(0, -1)
         .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'to')),
     ];
+  }
+
+  get yield(): Yield {
+    if (!this._element) throw new Error('Expected this._element to be available');
+
+    return {
+      element: this._element,
+      width: this.width,
+      height: this.height,
+      ratio: this.ratio,
+      size: this.sizeObjectAt.name,
+      attributes: this.attributes,
+    };
   }
 
   // -------------------
@@ -167,14 +182,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
 
   callOnResize(): void {
     if (this.args.named.onResize) {
-      if (!this._element) throw new Error('Expected this._element to be available');
-
-      this.args.named.onResize({
-        element: this._element,
-        width: this.width,
-        height: this.height,
-        ratio: this.ratio,
-      });
+      this.args.named.onResize(this.yield);
     }
   }
 

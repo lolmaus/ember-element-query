@@ -1,1 +1,1 @@
-export { default } from 'ember-element-query/modifiers/element-query';
+export { default } from 'ember-element-query/-private/modifier';

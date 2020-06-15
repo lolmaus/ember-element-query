@@ -1,7 +1,7 @@
 import ElementQueryModifier, {
   SizeObject,
   RangeDirection,
-} from 'ember-element-query/modifiers/element-query';
+} from 'ember-element-query/-private/modifier';
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 
@@ -94,7 +94,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
   ///
 
-  module('atSizeObject', function (/* hooks */) {
+  module('sizeObjectAt', function (/* hooks */) {
     module('defaultSizes', function (/* hooks */) {
       // prettier-ignore
       const cases = [
@@ -117,9 +117,9 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndex != null && !throws) {
-            assert.deepEqual(modifier.atSizeObject, defaultSizeObjects[expectedIndex]);
+            assert.deepEqual(modifier.sizeObjectAt, defaultSizeObjects[expectedIndex]);
           } else if (expectedIndex == null && throws) {
-            assert.throws(() => modifier.atSizeObject, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectAt, 'Expected dimensions not to be negative');
           } else if (expectedIndex != null && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -141,9 +141,9 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndex != null && !throws) {
-            assert.deepEqual(modifier.atSizeObject, defaultSizeObjects[expectedIndex]);
+            assert.deepEqual(modifier.sizeObjectAt, defaultSizeObjects[expectedIndex]);
           } else if (expectedIndex == null && throws) {
-            assert.throws(() => modifier.atSizeObject, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectAt, 'Expected dimensions not to be negative');
           } else if (expectedIndex != null && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -179,9 +179,9 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndex != null && !throws) {
-            assert.deepEqual(modifier.atSizeObject, sizeObjects[expectedIndex]);
+            assert.deepEqual(modifier.sizeObjectAt, sizeObjects[expectedIndex]);
           } else if (expectedIndex == null && throws) {
-            assert.throws(() => modifier.atSizeObject, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectAt, 'Expected dimensions not to be negative');
           } else if (expectedIndex != null && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -203,9 +203,9 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndex != null && !throws) {
-            assert.deepEqual(modifier.atSizeObject, sizeObjects[expectedIndex]);
+            assert.deepEqual(modifier.sizeObjectAt, sizeObjects[expectedIndex]);
           } else if (expectedIndex == null && throws) {
-            assert.throws(() => modifier.atSizeObject, 'Expected height not to be negative');
+            assert.throws(() => modifier.sizeObjectAt, 'Expected height not to be negative');
           } else if (expectedIndex != null && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -220,7 +220,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
   ///
 
-  module('fromSizeObjects', function (/* hooks */) {
+  module('sizeObjectsFrom', function (/* hooks */) {
     module('default sizes', function (/* hooks */) {
       let m;
 
@@ -245,21 +245,21 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const fromSizeObjects = modifier.fromSizeObjects;
+            const sizeObjectsFrom = modifier.sizeObjectsFrom;
 
             m = 'count';
-            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsFrom.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
               assert.deepEqual(
-                fromSizeObjects[expectedIndexIndex],
+                sizeObjectsFrom[expectedIndexIndex],
                 defaultSizeObjects[expectedIndex],
                 m
               );
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsFrom, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -281,21 +281,21 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const fromSizeObjects = modifier.fromSizeObjects;
+            const sizeObjectsFrom = modifier.sizeObjectsFrom;
 
             m = 'count';
-            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsFrom.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
               assert.deepEqual(
-                fromSizeObjects[expectedIndexIndex],
+                sizeObjectsFrom[expectedIndexIndex],
                 defaultSizeObjects[expectedIndex],
                 m
               );
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsFrom, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -333,17 +333,17 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const fromSizeObjects = modifier.fromSizeObjects;
+            const sizeObjectsFrom = modifier.sizeObjectsFrom;
 
             m = 'count';
-            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsFrom.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
-              assert.deepEqual(fromSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+              assert.deepEqual(sizeObjectsFrom[expectedIndexIndex], sizeObjects[expectedIndex], m);
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsFrom, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -365,17 +365,17 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const fromSizeObjects = modifier.fromSizeObjects;
+            const sizeObjectsFrom = modifier.sizeObjectsFrom;
 
             m = 'count';
-            assert.equal(fromSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsFrom.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
-              assert.deepEqual(fromSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+              assert.deepEqual(sizeObjectsFrom[expectedIndexIndex], sizeObjects[expectedIndex], m);
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsFrom, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -390,7 +390,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
   ///
 
-  module('toSizeObjects', function (/* hooks */) {
+  module('sizeObjectsTo', function (/* hooks */) {
     module('default sizes', function (/* hooks */) {
       let m;
 
@@ -415,21 +415,21 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const toSizeObjects = modifier.toSizeObjects;
+            const sizeObjectsTo = modifier.sizeObjectsTo;
 
             m = 'count';
-            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsTo.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
               assert.deepEqual(
-                toSizeObjects[expectedIndexIndex],
+                sizeObjectsTo[expectedIndexIndex],
                 defaultSizeObjects[expectedIndex],
                 m
               );
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsTo, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -451,21 +451,21 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const toSizeObjects = modifier.toSizeObjects;
+            const sizeObjectsTo = modifier.sizeObjectsTo;
 
             m = 'count';
-            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsTo.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
               assert.deepEqual(
-                toSizeObjects[expectedIndexIndex],
+                sizeObjectsTo[expectedIndexIndex],
                 defaultSizeObjects[expectedIndex],
                 m
               );
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsTo, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -503,17 +503,17 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const toSizeObjects = modifier.toSizeObjects;
+            const sizeObjectsTo = modifier.sizeObjectsTo;
 
             m = 'count';
-            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsTo.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
-              assert.deepEqual(toSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+              assert.deepEqual(sizeObjectsTo[expectedIndexIndex], sizeObjects[expectedIndex], m);
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsTo, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -535,17 +535,17 @@ module('Unit | element-query modifier', function (/* hooks */) {
           };
 
           if (expectedIndexes && !throws) {
-            const toSizeObjects = modifier.toSizeObjects;
+            const sizeObjectsTo = modifier.sizeObjectsTo;
 
             m = 'count';
-            assert.equal(toSizeObjects.length, expectedIndexes.length, m);
+            assert.equal(sizeObjectsTo.length, expectedIndexes.length, m);
 
             expectedIndexes.forEach((expectedIndex, expectedIndexIndex) => {
               m = `#${expectedIndex} size`;
-              assert.deepEqual(toSizeObjects[expectedIndexIndex], sizeObjects[expectedIndex], m);
+              assert.deepEqual(sizeObjectsTo[expectedIndexIndex], sizeObjects[expectedIndex], m);
             });
           } else if (!expectedIndexes && throws) {
-            assert.throws(() => modifier.toSizeObjects, 'Expected dimensions not to be negative');
+            assert.throws(() => modifier.sizeObjectsTo, 'Expected dimensions not to be negative');
           } else if (expectedIndexes && throws) {
             throw new Error(
               'Malformed test case: cannot use `expectedIndex` and `throws` together.'
@@ -584,7 +584,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         if (expectedAttributes && !throws) {
           assert.deepEqual(modifier.attributes, expectedAttributes);
         } else if (!expectedAttributes && throws) {
-          assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+          assert.throws(() => modifier.sizeObjectsFrom, 'Expected dimensions not to be negative');
         } else if (expectedAttributes && throws) {
           throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
         } else {
@@ -620,7 +620,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         if (expectedAttributes && !throws) {
           assert.deepEqual(modifier.attributesToRemove, expectedAttributes);
         } else if (!expectedAttributes && throws) {
-          assert.throws(() => modifier.fromSizeObjects, 'Expected dimensions not to be negative');
+          assert.throws(() => modifier.sizeObjectsFrom, 'Expected dimensions not to be negative');
         } else if (expectedAttributes && throws) {
           throw new Error('Malformed test case: cannot use `expectedIndex` and `throws` together.');
         } else {
