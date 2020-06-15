@@ -51,7 +51,7 @@ Roadmap
 
 This addon is in active development.
 
-* [ ] `{{element-query}}` modifier
+* [x] `{{element-query}}` modifier
   * [x] Exists
   * [x] Sets up a `ResizeObserver`
   * [x] Calls the `onResize` callback with params
@@ -60,7 +60,7 @@ This addon is in active development.
   * [x] Accepts `prefix`
   * [x] Accepts `dimension`
   * [x] Updates on arugments change
-  * [ ] Add fool-proof exceptions
+  * [x] Add fool-proof exceptions
 * [ ] `<ElementQuery>` component
   * [ ] Exists
   * [ ] Applies attributes to itself
@@ -477,9 +477,11 @@ You can also pass `true` to `@sizesHeight`, which will enable default sizes. The
 Browser support
 ------------------------------------------------------------------------------
 
-`ember-element-query` is based on [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) which is **not supported by IE**.
+**IE is not supported** because `ember-element-query` uses modern ECMAScript APIs.
 
-As of 2020-06, the following major browsers are supported:
+`ember-element-query` is based on [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) which is also not supported by IE.
+
+As of 2020-06, `ResizeObserver` supports the following major browsers:
 
 * Chrome: 64+ (since 2018-01-23),
 * Firefox: 69+ (since 2019-09-02, desktop only),
@@ -487,7 +489,7 @@ As of 2020-06, the following major browsers are supported:
 
 See [caniuse.com](https://caniuse.com/#feat=resizeobserver) for detailed stats.
 
-⚠ Note that old iOS devices do not have `ResizeObserver`, so you might want to use a polyfill. iOS Safari is the new IE. 😬
+⚠ Note that old iOS devices do not have `ResizeObserver` support, so you might want to use a polyfill. iOS Safari is the new IE. 😬
 
 
 

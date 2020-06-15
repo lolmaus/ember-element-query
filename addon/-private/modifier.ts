@@ -74,11 +74,21 @@ export default class ElementQueryModifier extends Modifier<Args> {
   }
 
   get dimension(): number {
+    if (
+      this.args.named.dimension &&
+      this.args.named.dimension !== 'width' &&
+      this.args.named.dimension !== 'height'
+    ) {
+      throw new Error(
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        `element-query: Expected dimension to be 'width' or 'height', was ${this.args.named.dimension}`
+      );
+    }
+
     return this.args.named.dimension === 'height' ? this.height : this.width;
   }
 
   get ratio(): number {
-    if (!this._element) throw new Error('Expected this._element to be available');
     return this.width / this.height;
   }
 
@@ -89,12 +99,28 @@ export default class ElementQueryModifier extends Modifier<Args> {
   get sizeObjectsSortedAsc(): SizeObject[] {
     const result = Object.entries(this.sizes)
       .sort((a, b) => a[1] - b[1])
-      .reduce((result, [name, value], index) => {
+      .reduce((result, [name, value], index, sizesSorted) => {
+        if (!Number.isFinite(value) || value < 0) {
+          throw new Error(
+            `element-query: Expected sizes to be positive numbers, ${name} was ${
+              typeof value === 'string' ? `"${value}"` : `${value}` // eslint-disable-line
+            }`
+          );
+        }
+
+        if (index > 0 && value === sizesSorted[index - 1][1]) {
+          throw new Error(
+            `element-query: Sizes ${name} and ${
+              sizesSorted[index - 1][0]
+            } have identical value ${value}. All sizes must be unique`
+          );
+        }
+
         result.push({ name, value, index });
         return result;
       }, [] as SizeObject[]);
 
-    if (result[0].value !== 0) throw new Error('One of the element-query sizes must be `0`');
+    if (result[0].value !== 0) throw new Error('element-query: One of the sizes must be `0`');
 
     return result;
   }
@@ -166,6 +192,11 @@ export default class ElementQueryModifier extends Modifier<Args> {
 
   convertSizeToAttribute(size: string, rangeDirection: RangeDirection): string {
     const prefix = this.args.named.prefix ?? '';
+
+    if (typeof prefix !== 'string') {
+      throw new Error(`element-query: expected prefix to be a string, was ${typeof prefix}`);
+    }
+
     return `${prefix}${rangeDirection}-${size}`;
   }
 

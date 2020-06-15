@@ -19,6 +19,7 @@ module('Integration | Modifier | element-query', function (hooks) {
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('calls the onResize callback', async function (this: TestContextCustom, assert) {
+    let m;
     let callCount = 0;
     this.callback = sinon.spy(() => callCount++);
 
@@ -35,7 +36,13 @@ module('Integration | Modifier | element-query', function (hooks) {
     const element = document.getElementById('test-subject');
     if (!element) throw new Error('Expected element to exist');
 
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
     await waitUntil(() => callCount === 1);
+
+    m = 'Callback called once';
+    assert.ok(true, m);
 
     sinon.assert.calledWithExactly(
       this.callback.firstCall,
@@ -50,6 +57,9 @@ module('Integration | Modifier | element-query', function (hooks) {
     element.style.width = '400px';
 
     await waitUntil(() => callCount === 2);
+
+    m = 'Callback called twice';
+    assert.ok(true, m);
 
     // prettier-ignore
     sinon.assert.calledWithMatch(
@@ -246,14 +256,19 @@ module('Integration | Modifier | element-query', function (hooks) {
             const element = document.getElementById('test-subject');
             if (!element) throw new Error('Expected element to exist');
 
+            m = 'Element is rendered';
+            assert.ok(true, m);
+
             for (const attr of expectedAttributes) {
               await waitUntil(() => element.getAttribute(attr) != null);
+
               m = `Attribute ${attr} is expected to exist on the element`;
               assert.ok(true, m);
             }
 
             for (const attr of missingAttributes) {
               await waitUntil(() => element.getAttribute(attr) == null);
+
               m = `Attribute ${attr} is expected NOT to exist on the element`;
               assert.ok(true, m);
             }
@@ -324,14 +339,19 @@ module('Integration | Modifier | element-query', function (hooks) {
             const element = document.getElementById('test-subject');
             if (!element) throw new Error('Expected element to exist');
 
+            m = 'Element is rendered';
+            assert.ok(true, m);
+
             for (const attr of expectedAttributes) {
               await waitUntil(() => element.getAttribute(attr) != null);
+
               m = `Attribute ${attr} is expected to exist on the element`;
               assert.ok(true, m);
             }
 
             for (const attr of missingAttributes) {
               await waitUntil(() => element.getAttribute(attr) == null);
+
               m = `Attribute ${attr} is expected NOT to exist on the element`;
               assert.ok(true, m);
             }
@@ -414,14 +434,19 @@ module('Integration | Modifier | element-query', function (hooks) {
             const element = document.getElementById('test-subject');
             if (!element) throw new Error('Expected element to exist');
 
+            m = 'Element is rendered';
+            assert.ok(true, m);
+
             for (const attr of expectedAttributes) {
               await waitUntil(() => element.getAttribute(attr) != null);
+
               m = `Attribute ${attr} is expected to exist on the element`;
               assert.ok(true, m);
             }
 
             for (const attr of missingAttributes) {
               await waitUntil(() => element.getAttribute(attr) == null);
+
               m = `Attribute ${attr} is expected NOT to exist on the element`;
               assert.ok(true, m);
             }
@@ -492,14 +517,19 @@ module('Integration | Modifier | element-query', function (hooks) {
             const element = document.getElementById('test-subject');
             if (!element) throw new Error('Expected element to exist');
 
+            m = 'Element is rendered';
+            assert.ok(true, m);
+
             for (const attr of expectedAttributes) {
               await waitUntil(() => element.getAttribute(attr) != null);
+
               m = `Attribute ${attr} is expected to exist on the element`;
               assert.ok(true, m);
             }
 
             for (const attr of missingAttributes) {
               await waitUntil(() => element.getAttribute(attr) == null);
+
               m = `Attribute ${attr} is expected NOT to exist on the element`;
               assert.ok(true, m);
             }
