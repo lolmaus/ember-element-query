@@ -65,6 +65,110 @@ module('Integration | Modifier | element-query', function (hooks) {
     assert.ok(true);
   });
 
+  //
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('attributes smoke test + update on arguments change test', async function (this: TestContextCustom, assert) {
+    let m;
+    this.set('sizes', { small: 0, large: 300 });
+
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <div
+        id="test-subject"
+        style="width: 500px; height: 100px;"
+        {{element-query sizes=this.sizes}}
+      >
+      </div>
+    `);
+
+    const element = document.getElementById('test-subject');
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-large') != null);
+
+    m = 'Initial attribute is applied';
+    assert.ok(true, m);
+
+    this.set('sizes', { small: 0, large: 600 });
+
+    await waitUntil(() => element.getAttribute('at-small') != null);
+
+    m = 'Final attribute is applied';
+    assert.ok(true, m);
+  });
+
+  //
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('usning multiple modifiers on the same element with custom sizes', async function (this: TestContextCustom, assert) {
+    let m;
+
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <div
+        id="test-subject"
+        style="width: 500px; height: 100px;"
+        {{element-query sizes=(hash w-small=0 w-medium=300 w-large=600)}}
+        {{element-query sizes=(hash h-small=0 h-medium=300 h-large=600) dimension="height"}}
+      >
+      </div>
+    `);
+
+    const element = document.getElementById('test-subject');
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-w-medium') != null);
+
+    m = 'Width attribute is applied';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-h-small') != null);
+
+    m = 'Height attribute is applied';
+    assert.ok(true, m);
+  });
+
+  //
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('usning multiple modifiers on the same element with custom prefixes', async function (this: TestContextCustom, assert) {
+    let m;
+
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <div
+        id="test-subject"
+        style="width: 500px; height: 100px;"
+        {{element-query prefix="w-"}}
+        {{element-query prefix="h-" dimension="height"}}
+      >
+      </div>
+    `);
+
+    const element = document.getElementById('test-subject');
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('w-at-s') != null);
+
+    m = 'Width attribute is applied';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('h-at-xxs') != null);
+
+    m = 'Height attribute is applied';
+    assert.ok(true, m);
+  });
+
   ///
 
   module('attributes', function (/* hooks */) {

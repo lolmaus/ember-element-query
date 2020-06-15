@@ -59,7 +59,8 @@ This addon is in active development.
   * [x] Accepts `sizes`
   * [x] Accepts `prefix`
   * [x] Accepts `dimension`
-  * [ ] Updates on arugments change
+  * [x] Updates on arugments change
+  * [ ] Add fool-proof exceptions
 * [ ] `<ElementQuery>` component
   * [ ] Exists
   * [ ] Applies attributes to itself
@@ -506,7 +507,7 @@ Every time you need another rule, you need to add it on the component before you
 
 With `ember-element-query`, you only need to define *breakpoints*. The example above uses only two breakpoints: `350px` and `700px` — and all combinations of rules become available automatically via attributes.
 
-💡 **`ember-fill-up` and `ember-container-query` are tailored for template transformations, e. g. via `{{#if}}`. `ember-element-query` is tailored for pure CSS transformations, accoridng to the Responsive Web Design paradigm.** That said, each addon covers every case. Well, almost every case:
+💡 `ember-fill-up` and `ember-container-query` and `ember-element-query` are all full-featured element query addons. `ember-element-query`'s goal is to provide a simpler API, making it more convenient to use. It encourages using pure CSS transformations, accoridng to the Responsive Web Design paradigm, though template transformations are also possible and convenient.**
 
 
 

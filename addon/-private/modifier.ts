@@ -57,6 +57,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
   };
 
   _element?: ElementStub; // For some reason, this.element is not always available
+  teardownResizeObserver?: () => void;
 
   // -------------------
   // Computed properties
@@ -204,8 +205,14 @@ export default class ElementQueryModifier extends Modifier<Args> {
 
     this._element = this.element;
 
-    observeResize(this.element, [this.didResizeHandler]); // eslint-disable-line @typescript-eslint/unbound-method
+    this.teardownResizeObserver = observeResize(this.element, [this.didResizeHandler]); // eslint-disable-line @typescript-eslint/unbound-method
   }
 
-  willRemove(): void {}
+  didUpdateArguments(): void {
+    this.didResizeHandler();
+  }
+
+  willRemove(): void {
+    if (this.teardownResizeObserver) this.teardownResizeObserver();
+  }
 }
