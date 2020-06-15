@@ -1,6 +1,7 @@
 import Modifier, { ModifierArgs } from 'ember-modifier';
 import { observeResize } from 'ember-resize-observer-modifier/modifiers/observe-resize';
 import { action } from '@ember/object';
+import window from 'ember-window-mock';
 
 interface Args extends ModifierArgs {
   positional: [];
@@ -223,8 +224,12 @@ export default class ElementQueryModifier extends Modifier<Args> {
   // -------------------
 
   @action didResizeHandler(): void {
-    this.applyAttributesToElement();
-    this.callOnResize();
+    window.requestAnimationFrame(() => {
+      if (!this.isDestroying && !this.isDestroyed) {
+        this.applyAttributesToElement();
+        this.callOnResize();
+      }
+    });
   }
 
   // -------------------
