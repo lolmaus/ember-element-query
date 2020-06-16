@@ -5,6 +5,7 @@ import hbs from 'htmlbars-inline-precompile';
 import sinon, { SinonSpy } from 'sinon';
 import { TestContext } from 'ember-test-helpers';
 import { Sizes } from 'ember-element-query/-private/modifier';
+import pause from '../helpers/pause';
 
 interface TestContextCustom extends TestContext {
   callback?: SinonSpy;
@@ -12,6 +13,7 @@ interface TestContextCustom extends TestContext {
   actualHeight?: number;
   sizes?: Sizes;
   prefix?: string;
+  isDisabled?: boolean;
 }
 
 module('Integration | Modifier | element-query', function (hooks) {
@@ -73,6 +75,88 @@ module('Integration | Modifier | element-query', function (hooks) {
     );
 
     assert.ok(true);
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('does not call the onResize when isDisabled is initially set', async function (this: TestContextCustom, assert) {
+    let m;
+    let callCount = 0;
+    this.callback = sinon.spy(() => callCount++);
+
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <div
+        id="test-subject"
+        style="width: 300px; height: 100px;"
+        {{element-query onResize=this.callback isDisabled=true}}
+      >
+      </div>
+    `);
+
+    const element = document.getElementById('test-subject');
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    await pause(500);
+
+    m = 'Call count';
+    assert.equal(callCount, 0, m);
+
+    m = 'Attr `at-xs` presence';
+    assert.equal(element.getAttribute('at-xs'), null, m);
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('stops calling the onResize callback after updating isDisabled after rendering', async function (this: TestContextCustom, assert) {
+    let m;
+    let callCount = 0;
+    this.callback = sinon.spy(() => callCount++);
+    this.set('isDisabled', false);
+
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <div
+        id="test-subject"
+        style="width: 300px; height: 100px;"
+        {{element-query onResize=this.callback isDisabled=this.isDisabled}}
+      >
+      </div>
+    `);
+
+    const element = document.getElementById('test-subject');
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    await waitUntil(() => callCount === 1);
+
+    m = 'Callback called once';
+    assert.ok(true, m);
+
+    sinon.assert.calledWithExactly(
+      this.callback.firstCall,
+      sinon.match({
+        element,
+        width: 300,
+        height: 100,
+        ratio: 3,
+      })
+    );
+
+    this.set('isDisabled', true);
+
+    element.style.width = '400px';
+
+    await pause(500);
+
+    m = 'Call count';
+    assert.equal(callCount, 1, m);
+
+    m = 'Attr `at-s` presence';
+    assert.equal(element.getAttribute('at-s'), null, m);
   });
 
   //

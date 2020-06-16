@@ -26,6 +26,7 @@ For example, if you put a responsive component into a tight sidebar, it will ali
     - [Customizing attribute prefix](#customizing-attribute-prefix)
     - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
     - [Using both width and height on the Element Query component](#using-both-width-and-height-on-the-element-query-component)
+    - [Disabling](#disabling)
   - [Browser support](#browser-support)
   - [Alternatives](#alternatives)
     - [Comparison](#comparison)
@@ -61,6 +62,7 @@ This addon is in active development.
   * [x] Accepts `dimension`
   * [x] Updates on arugments change
   * [x] Add fool-proof exceptions
+  * [x] Disabling
 * [ ] `<ElementQuery>` component
   * [ ] Exists
   * [ ] Applies attributes to itself
@@ -68,6 +70,7 @@ This addon is in active development.
   * [ ] Accepts `sizes`
   * [ ] Accepts `prefix`
   * [ ] Accepts `dimension`
+  * [ ] Disabling
 * [ ] Expose types
 * [ ] CI
 * [ ] npm package
@@ -469,6 +472,25 @@ You can also pass `true` to `@sizesHeight`, which will enable default sizes. The
   <to.s><from.lHeight>
     I am thin and tall.
   </from.lHeight></to.s>
+</ElementQuery>
+```
+
+
+
+### Disabling
+
+Pass a truthy value into `isDisabled` (modifier) or `@isDisabled` (component) to disable element query functionality:
+
+```
+<img
+  {{element-query @isDisabled=true}}
+>
+```
+
+```
+<ElementQuery
+  @isDisabled={{true}}
+>
 </ElementQuery>
 ```
 

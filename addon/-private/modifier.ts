@@ -10,6 +10,7 @@ interface Args extends ModifierArgs {
     sizes?: Sizes;
     prefix?: string;
     dimension?: Dimension;
+    isDisabled?: boolean;
   };
 }
 
@@ -225,7 +226,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
 
   @action didResizeHandler(): void {
     window.requestAnimationFrame(() => {
-      if (!this.isDestroying && !this.isDestroyed) {
+      if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
         this.applyAttributesToElement();
         this.callOnResize();
       }
