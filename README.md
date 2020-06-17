@@ -27,6 +27,7 @@ For example, if you put a responsive component into a tight sidebar, it will ali
     - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
     - [Using both width and height on the Element Query component](#using-both-width-and-height-on-the-element-query-component)
     - [Disabling](#disabling)
+    - [FastBoot fallback](#fastboot-fallback)
   - [Browser support](#browser-support)
   - [Alternatives](#alternatives)
     - [Comparison](#comparison)
@@ -129,11 +130,9 @@ Concept of sizes
 
 The default sizes scale is:
 
-```
     Breakpoints:  0       200px     400px     600px     800px     1000px    1200px    1400px  
                   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
     Sizes:        ·   xxs   ·    xs   ·    s    ·    m    ·    l    ·    xl   ·   xxl   ·   xxxl   
-```
 
 The left limit of each size range is inclusive, the right limit is non-inclusive.
 
@@ -141,7 +140,6 @@ For example, an element is considered to be of size `m` when its width is `>= 60
 
 Here's an explicit sizes chart:
 
-```
     Breakpoints:  0       200px     400px     600px     800px     1000px    1200px    1400px  
                   ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────>
     Sizes:        ·   xxs   ·    xs   ·    s    ·    m    ·    l    ·    xl   ·   xxl   ·   xxxl   
@@ -169,7 +167,6 @@ Here's an explicit sizes chart:
                   ·         ·         ·         ·         ·         ·         ·         ·
         xxxl      ├─────────────────────────────────────────────────────────────────────┤
         1400+     ├──────────────────────────────────────────────────────────────────────────>
-```
 
 
 
@@ -479,20 +476,60 @@ You can also pass `true` to `@sizesHeight`, which will enable default sizes. The
 
 ### Disabling
 
-Pass a truthy value into `isDisabled` (modifier) or `@isDisabled` (component) to disable element query functionality:
+Pass a truthy value into `isDisabled` to disable element query functionality:
 
-```
+```html
 <img
   {{element-query @isDisabled=true}}
 >
 ```
 
-```
+```html
 <ElementQuery
   @isDisabled={{true}}
 >
 </ElementQuery>
 ```
+
+⚠ This property is intended for debugging purposes or disabling element queries entirely. If you change `isDisabled` to `true` dynamically, element query attributes will freeze in their current state, there is no cleanup.
+
+
+
+### FastBoot fallback
+
+Unfortunately, FastBoot does not have information about user's screen size. When a user vistis a FastBoot-driven website, they initially see a page without any `ember-element-query` attributes. When FastBoot rehydrates, element queries kick in. As a result, page layout may suddenly change after the user has already started reading and scrolling, causing frustration.
+
+One workaround is to use [ember-useragent](https://github.com/willviles/ember-useragent). Its `isMobile`, `isTablet` and `isDesktop` boolean properties let you apply defaults. The result is very crude but better than nothing.
+
+Since reusable components can be used in different contexts, it is recommended that you apply the fallback on parent level.
+
+Responsive component:
+
+```html
+<div
+  class="my-component"
+  {{element-querysizes=(hash small=0 medium=350 large=700)}}
+  ...attributes
+>
+</div>
+```
+
+```css
+.my-component { /*  */}
+.my-component[from-medium] { /*  */ }
+.my-component[from-large] { /*  */ }
+```
+
+Parent:
+
+```html
+<MyComponent
+  from-medium={{and this.fastboot.isFastBoot (or this.userAgent.device.isTablet this.userAgent.device.isDesktop)}}
+  from-large-={{and this.fastboot.isFastBoot this.userAgent.device.isDeskto)}}
+/>
+```
+
+Unfortunately, this requires the parent to know which attributes are used in component's CSS, since providing all possible attributes would be quite tedious, especially for default sizes, which are numerous.
 
 
 
