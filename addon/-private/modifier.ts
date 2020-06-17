@@ -238,6 +238,9 @@ export default class ElementQueryModifier extends Modifier<Args> {
   // -------------------
 
   didInstall(): void {
+    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
+    if (!ResizeObserver) return;
+
     if (!this.element) throw new Error('Expected this.element to be available');
 
     this._element = this.element;
@@ -246,10 +249,16 @@ export default class ElementQueryModifier extends Modifier<Args> {
   }
 
   didUpdateArguments(): void {
+    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
+    if (!ResizeObserver) return;
+
     this.didResizeHandler();
   }
 
   willRemove(): void {
+    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
+    if (!ResizeObserver) return;
+
     if (this.teardownResizeObserver) this.teardownResizeObserver();
   }
 }

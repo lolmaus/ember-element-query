@@ -6,6 +6,7 @@ import sinon, { SinonSpy } from 'sinon';
 import { TestContext } from 'ember-test-helpers';
 import { Sizes } from 'ember-element-query/-private/modifier';
 import pause from '../helpers/pause';
+import { setupWindowMock } from 'ember-window-mock';
 
 interface TestContextCustom extends TestContext {
   callback?: SinonSpy;
@@ -17,11 +18,35 @@ interface TestContextCustom extends TestContext {
 }
 
 module('Integration | Modifier | element-query', function (hooks) {
+  let m;
+
   setupRenderingTest(hooks);
+  setupWindowMock(hooks);
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('do not crash on missing resize observer', async function (this: TestContextCustom, assert) {
+    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
+    const resizeObserver = window.ResizeObserver as unknown;
+    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
+    window.ResizeObserver = undefined;
+
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <div
+        {{element-query}}
+      >
+      </div>
+    `);
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
+    window.ResizeObserver = resizeObserver;
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('calls the onResize callback', async function (this: TestContextCustom, assert) {
-    let m;
     let callCount = 0;
     this.callback = sinon.spy(() => callCount++);
 
@@ -79,7 +104,6 @@ module('Integration | Modifier | element-query', function (hooks) {
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('does not call the onResize when isDisabled is initially set', async function (this: TestContextCustom, assert) {
-    let m;
     let callCount = 0;
     this.callback = sinon.spy(() => callCount++);
 
@@ -110,7 +134,6 @@ module('Integration | Modifier | element-query', function (hooks) {
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('stops calling the onResize callback after updating isDisabled after rendering', async function (this: TestContextCustom, assert) {
-    let m;
     let callCount = 0;
     this.callback = sinon.spy(() => callCount++);
     this.set('isDisabled', false);
@@ -163,7 +186,6 @@ module('Integration | Modifier | element-query', function (hooks) {
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('attributes smoke test + update on arguments change test', async function (this: TestContextCustom, assert) {
-    let m;
     this.set('sizes', { small: 0, large: 300 });
 
     await render(hbs`
@@ -199,8 +221,6 @@ module('Integration | Modifier | element-query', function (hooks) {
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('usning multiple modifiers on the same element with custom sizes', async function (this: TestContextCustom, assert) {
-    let m;
-
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
       <div
@@ -233,8 +253,6 @@ module('Integration | Modifier | element-query', function (hooks) {
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('usning multiple modifiers on the same element with custom prefixes', async function (this: TestContextCustom, assert) {
-    let m;
-
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
       <div
@@ -314,7 +332,6 @@ module('Integration | Modifier | element-query', function (hooks) {
         cases.forEach(({ actualWidth, expectedAttributes, prefix }) => {
           // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/restrict-template-expressions
           test(`width ${actualWidth}, prefix ${prefix}`, async function (this: TestContextCustom, assert) {
-            let m;
             this.actualWidth = actualWidth;
             this.prefix = prefix;
 
@@ -396,7 +413,6 @@ module('Integration | Modifier | element-query', function (hooks) {
         cases.forEach(({ actualWidth, expectedAttributes, prefix }) => {
           // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/restrict-template-expressions
           test(`width ${actualWidth}, prefix: ${prefix}`, async function (this: TestContextCustom, assert) {
-            let m;
             this.actualWidth = actualWidth;
             this.sizes = sizes;
             this.prefix = prefix;
@@ -492,7 +508,6 @@ module('Integration | Modifier | element-query', function (hooks) {
         cases.forEach(({ actualHeight, expectedAttributes, prefix }) => {
           // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/restrict-template-expressions
           test(`height ${actualHeight}, prefix ${prefix}`, async function (this: TestContextCustom, assert) {
-            let m;
             this.actualHeight = actualHeight;
             this.prefix = prefix;
 
@@ -574,7 +589,6 @@ module('Integration | Modifier | element-query', function (hooks) {
         cases.forEach(({ actualHeight, expectedAttributes, prefix }) => {
           // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/restrict-template-expressions
           test(`height ${actualHeight}, prefix: ${prefix}`, async function (this: TestContextCustom, assert) {
-            let m;
             this.actualHeight = actualHeight;
             this.sizes = sizes;
             this.prefix = prefix;
