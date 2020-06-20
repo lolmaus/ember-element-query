@@ -64,10 +64,11 @@ This addon is in active development.
   * [x] Updates on arugments change
   * [x] Add fool-proof exceptions
   * [x] Disabling
-* [ ] `<ElementQuery>` component
+* [x] `<ElementQuery>` component
   * [x] Exists
   * [x] Applies attributes to itself
-  * [ ] Yields block params
+  * [x] Calls the `onResize` callback with params
+  * [x] Yields block params
   * [x] Accepts `sizes`
   * [x] Accepts `prefix`
   * [x] Accepts `dimension`
@@ -272,7 +273,7 @@ Usage
 
 ### As a modifier
 
-Using the modifier is preferred if you only do CSS transformations.
+Using the modifier is preferred if you only do **CSS transformations**, which is recommended according to the Responsiv Web Design doctrine.
 
 Simply apply the `{{element-query}}` modifier to any element or angle bracket component like this:
 
@@ -290,29 +291,44 @@ As a result, element query attributes will be applied to the element. The result
 
 ### As a component
 
-The component is useful when you need to do template transformations.
+The component is useful when you need to do **template transformations**.
 
-Use it like this:
+If you want to render chunks of template conditionally, use this syntax:
 
 ```html
-<ElementQuery as |at from to|>
-  <at.m>
+<ElementQuery as |EQ|>
+  <EQ.at-m>
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m`. }}
   </at.m>
 
-  <from.m>
+  <EQ.from-m>
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m` or larger. }}
-  </from.m>
+  </EQ.from-m>
 
-  <to.m>
+  <EQ.to-m>
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m` or smaller. }}
-  </to.m>
+  </EQ.to-m>
 
-  <from.s><to.l>
+  <EQ.from-s><EQ.to-l>
     {{! This will only be rendered when the `<ElementQuery>` component is of size `s`, `m` or `l`. }}
-  </to.l></from.s>
+  </EQ.to-l></EQ.from-s>
 </ElementQuery>
 ```
+
+If you want to "sprinke" your tempalte with small responsive bits, you may find it more convenient to use the `{{#if}}` syntax together with [ember-truth-helpers](https://github.com/jmurphyau/ember-truth-helpers):
+
+```html
+<ElementQuery as |EQ EQInfo|>
+  <SomeOtherComponent
+    @isMedium={{eq EQInfo.size "s"}}
+    @isMediumOrLarger={{bool EQ.from-m}}
+  >
+</ElementQuery>
+```
+
+The first yield argument `EQ` is a hash of current element query attributes. Keys are attribute names and values are truthy strings, so `{{bool EQ.from-m}}` gives you `true` when the element is of size `m` or larger, and `false` when the element is smaller than `m`.
+
+The second argument `EQInfo` is the same hash that is passed to the [onResize callback](#onresize-callback).
 
 
 
@@ -325,12 +341,16 @@ You can pass a callback to the `onResize` argument and it will be called wheneve
 
 ```js
 @action
-reportResize(data) {
-  data.element // => current element
-  data.width   // => current element's width in px (number)
-  data.height  // => current element's height in px (number)
-  data.ratio   // => current element's aspect ratio (width/height, number)
-  data.size    // => current element's size (string)
+reportResize(info) {
+  info.element     // => current element
+  info.width       // => current element's width in px (number)
+  info.height      // => current element's height in px (number)
+  info.ratio       // => current element's aspect ratio (width/height, number)
+  info.size        // => current element's width size (string or undefined)
+  info.sizeHeight  // => current element's height size (string or undefined)
+  info.dimension   // => current dimension ('width', 'height' or 'both')
+  info.prefix      // => current prefix (string or undefined)
+  info.attributes  // => element query attributes used on the element (array of strings)
 }
 ```
 
@@ -415,11 +435,11 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
 <ElementQuery
   @dimension="height"
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
-  as |at from to|
+  as |EQ|
 >
-  <to.small-width><from.large-height>
+  <EQ.to-small-width><EQ.from-large-height>
     I am thin and tall.
-  </from.large-height></to.small-width>
+  </EQ.from-large-height></EQ.to-small-width>
 </ElementQuery>
 ```
 
@@ -466,11 +486,11 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
 <ElementQuery
   @sizes={{hash smallWidth=0 mediumWidth=350 largeWidth=700}}
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
-  as |at from to|
+  as |EQ|
 >
-  <to.small-width><from.large-height>
+  <EQ.to-small-width><EQ.from-large-height>
     I am thin and tall.
-  </from.large-height></to.small-width>
+  </EQ.from-large-height></EQ.to-small-width>
 </ElementQuery>
 ```
 
@@ -726,19 +746,19 @@ Given breakpoints 350, 700 and 1050:
     <ElementQuery
       class="my-component"
       @sizes=(hash small=0 medium=350 large=700 extraLarge=1050)
-      as |at from to|
+      as |EQ|
     >
-      <at.small>...</at.small>
-      <at.medium>...</at.medium>
-      <at.large>...</at.large>
-      <at.extraLarge>...</at.extraLarge>
+      <EQ.at-small>...</EQ.at-small>
+      <EQ.at-medium>...</EQ.at-medium>
+      <EQ.at-large>...</EQ.at-large>
+      <EQ.at-extraLarge>...</EQ.at-extraLarge>
 
-      <from.medium>...</from.medium>
-      <from.large>...</from.large>
-      <to.medium>...</to.medium>
-      <to.large>...</to.large>
+      <EQ.from-medium>...</EQ.from-medium>
+      <EQ.from-large>...</EQ.from-large>
+      <EQ.to-medium>...</EQ.to-medium>
+      <EQ.to-large>...</EQ.to-large>
 
-      <from.medium><to.large>...</to.large></from.medium>
+      <EQ.from-medium><EQ.to-large>...</EQ.to-large></EQ.from-medium>
     </ElementQuery>
     ```
 
@@ -941,23 +961,23 @@ Given breakpoints 350, 700 and 1050:
 
     ```html
     <ElementQuery
-      @sizes=(hash smallWidth=0 mediumWidth=350 largeWidth=700)
-      @sizesHeight=(hash smallHeight=0 mediumHeight=200 largeHeight=400)
-      as |at from to|
+      @sizes=(hash small-width=0 medium-width=350 large-width=700)
+      @sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
+      as |EQ|
     >
-      <at.smallWidth><at.largeHeight>
+      <EQ.to-small-width><EQ.from-large-height>
         I am thin and tall.
-      </at.largeHeight></to.smallWidth>
+      </EQ.from-large-height></EQ.to-small-width>
     </ElementQuery>
     ```
 
     When usign default sizes, this gets even shorter:
 
     ```html
-    <ElementQuery @heightRules=true as |at from to|>
-      <at.s><at.lHeight>
+    <ElementQuery @heightRules=true as |EQ|>
+      <EQ.to-s><EQ.from-l-height>
         I am thin and tall.
-      </at.lHeight></at.s>
+      </EQ.from-l-height></EQ.to-s>
     </ElementQuery>
     ```
 

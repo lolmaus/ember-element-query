@@ -7,10 +7,10 @@
     prefix=@prefix
     sizes=@sizes
     sizesHeight=@sizesHeight
-    onResize=@onResize
+    onResize=this.onResize
   }}
 
   ...attributes
 >
-  {{yield}}
+  {{yield this.gates this.params}}
 </div>

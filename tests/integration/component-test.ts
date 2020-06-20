@@ -76,6 +76,22 @@ module('Integration | Component | element-query', function (hooks) {
         width: 300,
         height: 100,
         ratio: 3,
+        size: 'xs',
+        sizeHeight: undefined,
+        dimension: 'width',
+        prefix: undefined,
+        attributes: [
+          'at-xs',
+          'from-xxs',
+          'from-xs',
+          'to-xs',
+          'to-s',
+          'to-m',
+          'to-l',
+          'to-xl',
+          'to-xxl',
+          'to-xxxl',
+        ],
       })
     );
 
@@ -94,6 +110,22 @@ module('Integration | Component | element-query', function (hooks) {
         width: 400,
         height: 100,
         ratio: 4,
+        size: 's',
+        sizeHeight: undefined,
+        dimension: 'width',
+        prefix: undefined,
+        attributes: [
+          'at-s',
+          'from-xxs',
+          'from-xs',
+          'from-s',
+          'to-s',
+          'to-m',
+          'to-l',
+          'to-xl',
+          'to-xxl',
+          'to-xxxl',
+        ],
       }
     );
 
@@ -164,6 +196,22 @@ module('Integration | Component | element-query', function (hooks) {
         width: 300,
         height: 100,
         ratio: 3,
+        size: 'xs',
+        sizeHeight: undefined,
+        dimension: 'width',
+        prefix: undefined,
+        attributes: [
+          'at-xs',
+          'from-xxs',
+          'from-xs',
+          'to-xs',
+          'to-s',
+          'to-m',
+          'to-l',
+          'to-xl',
+          'to-xxl',
+          'to-xxxl',
+        ],
       })
     );
 
@@ -845,5 +893,177 @@ module('Integration | Component | element-query', function (hooks) {
         });
       });
     });
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('block params', async function (this: TestContextCustom, assert) {
+    const allAttributes = [
+      'to-xxs',
+      'to-xs',
+      'to-s',
+      'to-m',
+      'to-l',
+      'to-xl',
+      'to-xxl',
+      'to-xxxl',
+      'from-xxs',
+      'from-xs',
+      'from-s',
+      'from-m',
+      'from-l',
+      'from-xl',
+      'from-xxl',
+      'from-xxxl',
+      'at-xxs',
+      'at-xs',
+      'at-s',
+      'at-m',
+      'at-l',
+      'at-xl',
+      'at-xxl',
+      'at-xxxl',
+      'to-xxs-height',
+      'to-xs-height',
+      'to-s-height',
+      'to-m-height',
+      'to-l-height',
+      'to-xl-height',
+      'to-xxl-height',
+      'to-xxxl-height',
+      'from-xxs-height',
+      'from-xs-height',
+      'from-s-height',
+      'from-m-height',
+      'from-l-height',
+      'from-xl-height',
+      'from-xxl-height',
+      'from-xxxl-height',
+      'at-xxs-height',
+      'at-xs-height',
+      'at-s-height',
+      'at-m-height',
+      'at-l-height',
+      'at-xl-height',
+      'at-xxl-height',
+      'at-xxxl-height',
+    ];
+
+    const expectedAttributes = [
+      'at-s',
+      'from-xxs',
+      'from-xs',
+      'from-s',
+      'to-s',
+      'to-m',
+      'to-l',
+      'to-xl',
+      'to-xxl',
+      'to-xxxl',
+      'at-m-height',
+      'from-xxs-height',
+      'from-xs-height',
+      'from-s-height',
+      'from-m-height',
+      'to-m-height',
+      'to-l-height',
+      'to-xl-height',
+      'to-xxl-height',
+      'to-xxxl-height',
+    ];
+
+    const missingAttributes = allAttributes.filter((attr) => !expectedAttributes.includes(attr));
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    await render(hbs`
+        {{! template-lint-disable no-inline-styles }}
+        <ElementQuery
+          style="width: 550px; height: 650px;"
+          @dimension="both"
+          as |EQ EQInfo|
+        >
+          <EQ.to-xxs><span data-test-to-xxs></span></EQ.to-xxs>
+          <EQ.to-xs><span data-test-to-xs></span></EQ.to-xs>
+          <EQ.to-s><span data-test-to-s></span></EQ.to-s>
+          <EQ.to-m><span data-test-to-m></span></EQ.to-m>
+          <EQ.to-l><span data-test-to-l></span></EQ.to-l>
+          <EQ.to-xl><span data-test-to-xl></span></EQ.to-xl>
+          <EQ.to-xxl><span data-test-to-xxl></span></EQ.to-xxl>
+          <EQ.to-xxxl><span data-test-to-xxxl></span></EQ.to-xxxl>
+          <EQ.from-xxs><span data-test-from-xxs></span></EQ.from-xxs>
+          <EQ.from-xs><span data-test-from-xs></span></EQ.from-xs>
+          <EQ.from-s><span data-test-from-s></span></EQ.from-s>
+          <EQ.from-m><span data-test-from-m></span></EQ.from-m>
+          <EQ.from-l><span data-test-from-l></span></EQ.from-l>
+          <EQ.from-xl><span data-test-from-xl></span></EQ.from-xl>
+          <EQ.from-xxl><span data-test-from-xxl></span></EQ.from-xxl>
+          <EQ.from-xxxl><span data-test-from-xxxl></span></EQ.from-xxxl>
+          <EQ.at-xxs><span data-test-at-xxs></span></EQ.at-xxs>
+          <EQ.at-xs><span data-test-at-xs></span></EQ.at-xs>
+          <EQ.at-s><span data-test-at-s></span></EQ.at-s>
+          <EQ.at-m><span data-test-at-m></span></EQ.at-m>
+          <EQ.at-l><span data-test-at-l></span></EQ.at-l>
+          <EQ.at-xl><span data-test-at-xl></span></EQ.at-xl>
+          <EQ.at-xxl><span data-test-at-xxl></span></EQ.at-xxl>
+          <EQ.at-xxxl><span data-test-at-xxxl></span></EQ.at-xxxl>
+          <EQ.to-xxs-height><span data-test-to-xxs-height></span></EQ.to-xxs-height>
+          <EQ.to-xs-height><span data-test-to-xs-height></span></EQ.to-xs-height>
+          <EQ.to-s-height><span data-test-to-s-height></span></EQ.to-s-height>
+          <EQ.to-m-height><span data-test-to-m-height></span></EQ.to-m-height>
+          <EQ.to-l-height><span data-test-to-l-height></span></EQ.to-l-height>
+          <EQ.to-xl-height><span data-test-to-xl-height></span></EQ.to-xl-height>
+          <EQ.to-xxl-height><span data-test-to-xxl-height></span></EQ.to-xxl-height>
+          <EQ.to-xxxl-height><span data-test-to-xxxl-height></span></EQ.to-xxxl-height>
+          <EQ.from-xxs-height><span data-test-from-xxs-height></span></EQ.from-xxs-height>
+          <EQ.from-xs-height><span data-test-from-xs-height></span></EQ.from-xs-height>
+          <EQ.from-s-height><span data-test-from-s-height></span></EQ.from-s-height>
+          <EQ.from-m-height><span data-test-from-m-height></span></EQ.from-m-height>
+          <EQ.from-l-height><span data-test-from-l-height></span></EQ.from-l-height>
+          <EQ.from-xl-height><span data-test-from-xl-height></span></EQ.from-xl-height>
+          <EQ.from-xxl-height><span data-test-from-xxl-height></span></EQ.from-xxl-height>
+          <EQ.from-xxxl-height><span data-test-from-xxxl-height></span></EQ.from-xxxl-height>
+          <EQ.at-xxs-height><span data-test-at-xxs-height></span></EQ.at-xxs-height>
+          <EQ.at-xs-height><span data-test-at-xs-height></span></EQ.at-xs-height>
+          <EQ.at-s-height><span data-test-at-s-height></span></EQ.at-s-height>
+          <EQ.at-m-height><span data-test-at-m-height></span></EQ.at-m-height>
+          <EQ.at-l-height><span data-test-at-l-height></span></EQ.at-l-height>
+          <EQ.at-xl-height><span data-test-at-xl-height></span></EQ.at-xl-height>
+          <EQ.at-xxl-height><span data-test-at-xxl-height></span></EQ.at-xxl-height>
+          <EQ.at-xxxl-height><span data-test-at-xxxl-height></span></EQ.at-xxxl-height>
+
+          <EQ.from-s><EQ.to-l>
+            <span data-test-combined-1></span>
+          </EQ.to-l></EQ.from-s>
+
+          {{#if (and (eq EQInfo.size "s") (eq EQInfo.sizeHeight "m-height"))}}
+             <span data-test-combined-2></span>
+          {{/if}}
+          --}}
+        </ElementQuery>
+      `);
+
+    const element = find('.ElementQuery') as HTMLElement | null;
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    m = 'Element received yield content';
+    await waitUntil(() => find('[data-test-at-s]') != null);
+
+    for (const attr of expectedAttributes) {
+      m = `Block for ${attr} is expected to be rendered`;
+      assert.ok(find(`[data-test-${attr}]`), m);
+    }
+
+    for (const attr of missingAttributes) {
+      m = `Block for ${attr} is expected NOT to be rendered`;
+      assert.notOk(find(`[data-test-${attr}]`), m);
+    }
+
+    m = 'Nested gate';
+    assert.ok(find('[data-test-combined-1'), m);
+
+    m = 'If clause';
+    assert.ok(find('[data-test-combined-2'), m);
   });
 });

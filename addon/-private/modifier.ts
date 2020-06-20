@@ -6,7 +6,7 @@ import window from 'ember-window-mock';
 interface Args extends ModifierArgs {
   positional: [];
   named: {
-    onResize?: (params: Yield) => void;
+    onResize?: (params: CallbackArgs) => void;
     sizes?: Sizes;
     sizesHeight?: Sizes;
     prefix?: string;
@@ -15,12 +15,15 @@ interface Args extends ModifierArgs {
   };
 }
 
-export interface Yield {
+export interface CallbackArgs {
   element: ElementStub;
   width: number;
   height: number;
   ratio: number;
-  size: string;
+  size?: string;
+  sizeHeight?: string;
+  dimension: Dimension;
+  prefix?: string;
   attributes: string[];
 }
 
@@ -217,7 +220,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
     ];
   }
 
-  get yield(): Yield {
+  get yield(): CallbackArgs {
     if (!this._element) throw new Error('Expected this._element to be available');
 
     return {
@@ -225,7 +228,10 @@ export default class ElementQueryModifier extends Modifier<Args> {
       width: this.width,
       height: this.height,
       ratio: this.ratio,
-      size: this.sizeObjectWidthAt.name,
+      size: this.isDimensionWidth ? this.sizeObjectWidthAt.name : undefined,
+      sizeHeight: this.isDimensionHeight ? this.sizeObjectHeightAt.name : undefined,
+      dimension: this.args.named.dimension || 'width',
+      prefix: this.args.named.prefix,
       attributes: this.attributes,
     };
   }

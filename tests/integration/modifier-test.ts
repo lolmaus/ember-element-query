@@ -79,6 +79,22 @@ module('Integration | Modifier | element-query', function (hooks) {
         width: 300,
         height: 100,
         ratio: 3,
+        size: 'xs',
+        sizeHeight: undefined,
+        dimension: 'width',
+        prefix: undefined,
+        attributes: [
+          'at-xs',
+          'from-xxs',
+          'from-xs',
+          'to-xs',
+          'to-s',
+          'to-m',
+          'to-l',
+          'to-xl',
+          'to-xxl',
+          'to-xxxl',
+        ],
       })
     );
 
@@ -97,6 +113,22 @@ module('Integration | Modifier | element-query', function (hooks) {
         width: 400,
         height: 100,
         ratio: 4,
+        size: 's',
+        sizeHeight: undefined,
+        dimension: 'width',
+        prefix: undefined,
+        attributes: [
+          'at-s',
+          'from-xxs',
+          'from-xs',
+          'from-s',
+          'to-s',
+          'to-m',
+          'to-l',
+          'to-xl',
+          'to-xxl',
+          'to-xxxl',
+        ],
       }
     );
 
@@ -167,6 +199,22 @@ module('Integration | Modifier | element-query', function (hooks) {
         width: 300,
         height: 100,
         ratio: 3,
+        size: 'xs',
+        sizeHeight: undefined,
+        dimension: 'width',
+        prefix: undefined,
+        attributes: [
+          'at-xs',
+          'from-xxs',
+          'from-xs',
+          'to-xs',
+          'to-s',
+          'to-m',
+          'to-l',
+          'to-xl',
+          'to-xxl',
+          'to-xxxl',
+        ],
       })
     );
 

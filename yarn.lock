@@ -4702,7 +4702,28 @@ ember-cli-htmlbars-inline-precompile@^2.1.0:
     heimdalljs-logger "^0.1.9"
     silent-error "^1.1.0"
 
-ember-cli-htmlbars@^4.2.0, ember-cli-htmlbars@^4.3.1:
+ember-cli-htmlbars@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ember-cli-htmlbars/-/ember-cli-htmlbars-5.0.0.tgz#ba5469d3f3412e154b01c4d8b9fbc1d6f7dc7af1"
+  integrity sha512-K1bPl1X3eermPcZMThzRXHmGCfk1+GGceHhLar5b3NPZy55DKlUsuQOjsWKQ0vHG/c5aR3G40i3Drt1DdnIoSA==
+  dependencies:
+    "@ember/edition-utils" "^1.2.0"
+    babel-plugin-htmlbars-inline-precompile "^3.0.1"
+    broccoli-debug "^0.6.5"
+    broccoli-persistent-filter "^2.3.1"
+    broccoli-plugin "^4.0.3"
+    common-tags "^1.8.0"
+    ember-cli-babel-plugin-helpers "^1.1.0"
+    fs-tree-diff "^2.0.1"
+    hash-for-dep "^1.5.1"
+    heimdalljs-logger "^0.1.10"
+    json-stable-stringify "^1.0.1"
+    semver "^7.3.2"
+    silent-error "^1.1.1"
+    strip-bom "^4.0.0"
+    walk-sync "^2.1.0"
+
+ember-cli-htmlbars@^4.2.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/ember-cli-htmlbars/-/ember-cli-htmlbars-4.3.1.tgz#4af8adc21ab3c4953f768956b7f7d207782cb175"
   integrity sha512-CW6AY/yzjeVqoRtItOKj3hcYzc5dWPRETmeCzr2Iqjt5vxiVtpl0z5VTqHqIlT5fsFx6sGWBQXNHIe+ivYsxXQ==
@@ -5147,10 +5168,10 @@ ember-source-channel-url@^2.0.1:
   dependencies:
     got "^8.0.1"
 
-ember-source@~3.18.0:
-  version "3.18.1"
-  resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-3.18.1.tgz#64ef40261ef1094e529ef6baabd907e6171a51f7"
-  integrity sha512-hfBkU2w+R7zquHpdMI+HCCt51OiBA4vkVd/czm+Xr17+qkxswh748l/VQe0N0IJLhrWlbmeOI6gtrB+Hsk8QAg==
+ember-source@^3.19.0:
+  version "3.19.0"
+  resolved "https://registry.yarnpkg.com/ember-source/-/ember-source-3.19.0.tgz#ea156953d177374baf4911eb95d73625c7f8cbbb"
+  integrity sha512-WUL8FojIGNJDtCSxI5SjNguMb6axPPm9p/nskRwox9omj6W+hjbzLzl+pZcMbqRePkQtjCbUTAclVMBdBNaRYg==
   dependencies:
     "@babel/helper-module-imports" "^7.8.3"
     "@babel/plugin-transform-block-scoping" "^7.8.3"
@@ -5214,6 +5235,13 @@ ember-test-waiters@^1.1.1:
   dependencies:
     ember-cli-babel "^7.11.0"
     semver "^6.3.0"
+
+ember-truth-helpers@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/ember-truth-helpers/-/ember-truth-helpers-2.1.0.tgz#d4dab4eee7945aa2388126485977baeb33ca0798"
+  integrity sha512-BQlU8aTNl1XHKTYZ243r66yqtR9JU7XKWQcmMA+vkqfkE/c9WWQ9hQZM8YABihCmbyxzzZsngvldokmeX5GhAw==
+  dependencies:
+    ember-cli-babel "^6.6.0"
 
 ember-try-config@^3.0.0:
   version "3.0.0"
