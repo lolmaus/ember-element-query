@@ -792,7 +792,7 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-element-query`:
 
-    Provides [reasonable defaults(#concept-of-sizes).
+    Provides [reasonable defaults](#concept-of-sizes).
     
     **Those defaults can be used as a common design language, and all components in your app can be using them, reducing the boilerplate to:**
 
