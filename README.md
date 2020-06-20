@@ -961,6 +961,7 @@ Given breakpoints 350, 700 and 1050:
 
     ```html
     <ElementQuery
+      @dimension="both"
       @sizes=(hash small-width=0 medium-width=350 large-width=700)
       @sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
       as |EQ|
@@ -974,7 +975,7 @@ Given breakpoints 350, 700 and 1050:
     When usign default sizes, this gets even shorter:
 
     ```html
-    <ElementQuery @heightRules=true as |EQ|>
+    <ElementQuery @dimension="both" as |EQ|>
       <EQ.to-s><EQ.from-l-height>
         I am thin and tall.
       </EQ.from-l-height></EQ.to-s>
