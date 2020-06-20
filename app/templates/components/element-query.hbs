@@ -1,0 +1,16 @@
+<div
+  class="ElementQuery"
+
+  {{element-query
+    dimension=@dimension
+    isDisabled=@isDisabled
+    prefix=@prefix
+    sizes=@sizes
+    sizesHeight=@sizesHeight
+    onResize=@onResize
+  }}
+
+  ...attributes
+>
+  {{yield}}
+</div>

@@ -23,9 +23,9 @@ For example, if you put a responsive component into a tight sidebar, it will ali
     - [onResize callback](#onresize-callback)
     - [Custom sizes](#custom-sizes)
     - [Using height instead of width](#using-height-instead-of-width)
+    - [Using both width and height](#using-both-width-and-height)
     - [Customizing attribute prefix](#customizing-attribute-prefix)
     - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
-    - [Using both width and height on the Element Query component](#using-both-width-and-height-on-the-element-query-component)
     - [Disabling](#disabling)
     - [FastBoot fallback](#fastboot-fallback)
   - [Browser support](#browser-support)
@@ -65,13 +65,13 @@ This addon is in active development.
   * [x] Add fool-proof exceptions
   * [x] Disabling
 * [ ] `<ElementQuery>` component
-  * [ ] Exists
-  * [ ] Applies attributes to itself
+  * [x] Exists
+  * [x] Applies attributes to itself
   * [ ] Yields block params
-  * [ ] Accepts `sizes`
-  * [ ] Accepts `prefix`
-  * [ ] Accepts `dimension`
-  * [ ] Disabling
+  * [x] Accepts `sizes`
+  * [x] Accepts `prefix`
+  * [x] Accepts `dimension`
+  * [x] Disabling
 * [ ] Expose types
 * [ ] CI
 * [ ] npm package
@@ -397,6 +397,83 @@ Use the `dimension="height"` argument to make attributes get applied based on el
 <ElementQuery @dimension="height"></ElementQuery>
 ```
 
+Attributes representing height sizes will be postifed with `-height`: `xxs-height`, `xl-height`, etc.
+
+You can customize height sizes into `@sizesHeight`. Make sure that height size names are different from width sizes!
+
+```html
+<div
+  {{element-query
+    dimension="height"
+    sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
+  }}
+>
+</div>
+```
+
+```html
+<ElementQuery
+  @dimension="height"
+  @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
+  as |at from to|
+>
+  <to.small-width><from.large-height>
+    I am thin and tall.
+  </from.large-height></to.small-width>
+</ElementQuery>
+```
+
+Specifying `heightSizes` has no effect unless `dimension` is either `"height"` or `"both"`.
+
+
+
+### Using both width and height
+
+Use the `dimension="both"` argument:
+
+```html
+<img {{element-query dimension="both"}}>
+```
+
+```html
+<ElementQuery @dimension="both"></ElementQuery>
+```
+
+This will cause two sets of attributes get applied. Attributes representing width sizes will be the same as [usual](#concept-of-sizes). Attributes representing height sizes will be postifed with `-height`: `xxs-height`, `xl-height`, etc.
+
+This lets you apply CSS like this:
+
+```css
+.foo[to-s][from-xl-height] {
+  /* I am thin and tall */
+}
+```
+
+You can customize height sizes into `@sizesHeight`. Make sure that height size names are different from width sizes!
+
+```html
+<div
+  {{element-query
+    @dimension="both"
+    sizes=(hash small-width=0 medium-width=350 large-width=700)
+    sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
+  }}
+>
+</div>
+```
+
+```html
+<ElementQuery
+  @sizes={{hash smallWidth=0 mediumWidth=350 largeWidth=700}}
+  @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
+  as |at from to|
+>
+  <to.small-width><from.large-height>
+    I am thin and tall.
+  </from.large-height></to.small-width>
+</ElementQuery>
+```
+
 
 
 ### Customizing attribute prefix
@@ -417,60 +494,29 @@ This will result in attributes like `data-foo-at-xl`, `data-foo-from-m`, etc.
 
 ### Using multiple modifiers on the same element
 
+One use case for this is to apply new styles based on new breakpoints without breaking (and refactoring) existing styles.
+
 You can use both width and height element queries on the same element like this:
 
 ```html
 <img
   class="foo"
-  {{element-query dimension="width"  prefix="width-"}}
-  {{element-query dimension="height" prefix="height-"}}
+  {{element-query}}
+  {{element-query sizes=(new-small=0 new-large=700)}}
 >
 ```
 
-This lets you apply CSS like this:
-
-```
-.foo[width-at-m][height-from-m] {}
-```
-
-Another use case is when you already have many styles written for default attributes, and then your designer tells you to apply a new style based on non-default breakpoints. Multiple modifiers lets you do this without rewriting existing styles:
+or
 
 ```html
 <img
+  class="foo"
   {{element-query}}
-  {{element-query prefix="new-" sizes=(hash small=0 large=768)}}
+  {{element-query prefix="new-"}}
 >
 ```
 
-⚠ Never apply two or more modifiers with the same prefix to the same element. The `{{element-query}}` modifier adds and removes attributes aggressively and will interfere with other modifiers/libraries manipulating same attributes.
-
-
-
-### Using both width and height on the Element Query component
-
-You can pass your height sizes into `@sizesHeight`. Make sure that height size names are different from [width sizes](#concept-of-sizes)!
-
-```html
-<ElementQuery
-  @sizes=(hash smallWidth=0 mediumWidth=350 largeWidth=700)
-  @heightSizes=(hash smallHeight=0 mediumHeight=200 largeHeight=400)
-  as |at from to|
->
-  <to.smallWidth><from.largeHeight>
-    I am thin and tall.
-  </from.largeHeight></to.smallWidth>
-</ElementQuery>
-```
-
-You can also pass `true` to `@sizesHeight`, which will enable default sizes. They are the same as [width sizes](#concept-of-sizes) but postfixed with `Height`: `xxsHeight`, `xlHeight`, etc.
-
-```html
-<ElementQuery @heightRules=true as |at from to|>
-  <to.s><from.lHeight>
-    I am thin and tall.
-  </from.lHeight></to.s>
-</ElementQuery>
-```
+⚠ The `{{element-query}}` modifier adds and removes attributes aggressively and will interfere with other modifiers/libraries manipulating same attributes. It is your duty to ensure there is no conflict in attribute names. Adjust `sizes`, `sizesHeight` and `prefix` arguments to avoid conflicts.
 
 
 
@@ -896,7 +942,7 @@ Given breakpoints 350, 700 and 1050:
     ```html
     <ElementQuery
       @sizes=(hash smallWidth=0 mediumWidth=350 largeWidth=700)
-      @heightSizes=(hash smallHeight=0 mediumHeight=200 largeHeight=400)
+      @sizesHeight=(hash smallHeight=0 mediumHeight=200 largeHeight=400)
       as |at from to|
     >
       <at.smallWidth><at.largeHeight>

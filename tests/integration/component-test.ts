@@ -18,7 +18,7 @@ interface TestContextCustom extends TestContext {
   isDisabled?: boolean;
 }
 
-module('Integration | Modifier | element-query', function (hooks) {
+module('Integration | Component | element-query', function (hooks) {
   let m;
 
   setupRenderingTest(hooks);
@@ -33,10 +33,8 @@ module('Integration | Modifier | element-query', function (hooks) {
 
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
-      <div
-        {{element-query}}
-      >
-      </div>
+      <ElementQuery>
+      </ElementQuery>
     `);
 
     m = 'Element is rendered';
@@ -53,15 +51,14 @@ module('Integration | Modifier | element-query', function (hooks) {
 
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
-      <div
-        id="test-subject"
+      <ElementQuery
         style="width: 300px; height: 100px;"
-        {{element-query onResize=this.callback}}
+        @onResize={{this.callback}}
       >
-      </div>
+      </ElementQuery>
     `);
 
-    const element = find('#test-subject') as HTMLElement | null;
+    const element = find('.ElementQuery') as HTMLElement | null;
     if (!element) throw new Error('Expected element to exist');
 
     m = 'Element is rendered';
@@ -110,15 +107,15 @@ module('Integration | Modifier | element-query', function (hooks) {
 
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
-      <div
-        id="test-subject"
+      <ElementQuery
         style="width: 300px; height: 100px;"
-        {{element-query onResize=this.callback isDisabled=true}}
+        @onResize={{this.callback}}
+        @isDisabled={{true}}
       >
-      </div>
+      </ElementQuery>
     `);
 
-    const element = find('#test-subject') as HTMLElement | null;
+    const element = find('.ElementQuery') as HTMLElement | null;
     if (!element) throw new Error('Expected element to exist');
 
     m = 'Element is rendered';
@@ -141,15 +138,15 @@ module('Integration | Modifier | element-query', function (hooks) {
 
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
-      <div
-        id="test-subject"
+      <ElementQuery
         style="width: 300px; height: 100px;"
-        {{element-query onResize=this.callback isDisabled=this.isDisabled}}
+        @isDisabled={{this.isDisabled}}
+        @onResize={{this.callback}}
       >
-      </div>
+      </ElementQuery>
     `);
 
-    const element = find('#test-subject') as HTMLElement | null;
+    const element = find('.ElementQuery') as HTMLElement | null;
     if (!element) throw new Error('Expected element to exist');
 
     m = 'Element is rendered';
@@ -191,15 +188,14 @@ module('Integration | Modifier | element-query', function (hooks) {
 
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
-      <div
-        id="test-subject"
+      <ElementQuery
         style="width: 500px; height: 100px;"
-        {{element-query sizes=this.sizes}}
+        @sizes={{this.sizes}}
       >
-      </div>
+      </ElementQuery>
     `);
 
-    const element = find('#test-subject') as HTMLElement | null;
+    const element = find('.ElementQuery') as HTMLElement | null;
     if (!element) throw new Error('Expected element to exist');
 
     m = 'Element is rendered';
@@ -221,19 +217,49 @@ module('Integration | Modifier | element-query', function (hooks) {
   //
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  test('usning multiple modifiers on the same element with custom sizes', async function (this: TestContextCustom, assert) {
+  test('using both width and height on the same component with default sizes', async function (this: TestContextCustom, assert) {
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
-      <div
-        id="test-subject"
+      <ElementQuery
         style="width: 500px; height: 100px;"
-        {{element-query sizes=(hash w-small=0 w-medium=300 w-large=600)}}
-        {{element-query sizesHeight=(hash h-small=0 h-medium=300 h-large=600) dimension="height"}}
+        @dimension="both"
       >
-      </div>
+      </ElementQuery>
     `);
 
-    const element = find('#test-subject') as HTMLElement | null;
+    const element = find('.ElementQuery') as HTMLElement | null;
+    if (!element) throw new Error('Expected element to exist');
+
+    m = 'Element is rendered';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-s') != null);
+
+    m = 'Width attribute is applied';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-xxs-height') != null);
+
+    m = 'Height attribute is applied';
+    assert.ok(true, m);
+  });
+
+  //
+
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  test('using both width and height on the same component with custom sizes', async function (this: TestContextCustom, assert) {
+    await render(hbs`
+      {{! template-lint-disable no-inline-styles }}
+      <ElementQuery
+        style="width: 500px; height: 100px;"
+        @dimension="both"
+        @sizes={{hash w-small=0 w-medium=300 w-large=600}}
+        @sizesHeight={{hash h-small=0 h-medium=300 h-large=600}}
+      >
+      </ElementQuery>
+    `);
+
+    const element = find('.ElementQuery') as HTMLElement | null;
     if (!element) throw new Error('Expected element to exist');
 
     m = 'Element is rendered';
@@ -315,15 +341,14 @@ module('Integration | Modifier | element-query', function (hooks) {
 
             await render(hbs`
               {{! template-lint-disable no-inline-styles style-concatenation }}
-              <div
-                id="test-subject"
+              <ElementQuery
                 style="width: {{this.actualWidth}}px; height: 100px;"
-                {{element-query prefix=this.prefix}}
+                @prefix={{this.prefix}}
               >
-              </div>
+              </ElementQuery>
             `);
 
-            const element = find('#test-subject') as HTMLElement | null;
+            const element = find('.ElementQuery') as HTMLElement | null;
             if (!element) throw new Error('Expected element to exist');
 
             m = 'Element is rendered';
@@ -397,15 +422,15 @@ module('Integration | Modifier | element-query', function (hooks) {
 
             await render(hbs`
               {{! template-lint-disable no-inline-styles style-concatenation }}
-              <div
-                id="test-subject"
+              <ElementQuery
                 style="width: {{this.actualWidth}}px; height: 100px;"
-                {{element-query sizes=this.sizes prefix=this.prefix}}
+                @sizes={{this.sizes}}
+                @prefix={{this.prefix}}
               >
-              </div>
+              </ElementQuery>
             `);
 
-            const element = find('#test-subject') as HTMLElement | null;
+            const element = find('.ElementQuery') as HTMLElement | null;
             if (!element) throw new Error('Expected element to exist');
 
             m = 'Element is rendered';
@@ -491,15 +516,15 @@ module('Integration | Modifier | element-query', function (hooks) {
 
             await render(hbs`
               {{! template-lint-disable no-inline-styles style-concatenation }}
-              <div
-                id="test-subject"
+              <ElementQuery
                 style="width: 300px; height: {{this.actualHeight}}px;"
-                {{element-query prefix=this.prefix dimension="height"}}
+                @prefix={{this.prefix}}
+                @dimension="height"
               >
-              </div>
+              </ElementQuery>
             `);
 
-            const element = find('#test-subject') as HTMLElement | null;
+            const element = find('.ElementQuery') as HTMLElement | null;
             if (!element) throw new Error('Expected element to exist');
 
             m = 'Element is rendered';
@@ -573,15 +598,16 @@ module('Integration | Modifier | element-query', function (hooks) {
 
             await render(hbs`
               {{! template-lint-disable no-inline-styles style-concatenation }}
-              <div
-                id="test-subject"
+              <ElementQuery
                 style="width: 300px; height: {{this.actualHeight}}px;"
-                {{element-query sizesHeight=this.sizesHeight prefix=this.prefix dimension="height"}}
+                @sizesHeight={{this.sizesHeight}}
+                @prefix={{this.prefix}}
+                @dimension="height"
               >
-              </div>
+              </ElementQuery>
             `);
 
-            const element = find('#test-subject') as HTMLElement | null;
+            const element = find('.ElementQuery') as HTMLElement | null;
             if (!element) throw new Error('Expected element to exist');
 
             m = 'Element is rendered';
@@ -692,15 +718,15 @@ module('Integration | Modifier | element-query', function (hooks) {
 
             await render(hbs`
               {{! template-lint-disable no-inline-styles style-concatenation }}
-              <div
-                id="test-subject"
+              <ElementQuery
                 style="width: {{this.actualWidth}}px; height: {{this.actualHeight}}px;"
-                {{element-query prefix=this.prefix dimension="both"}}
+                @prefix={{this.prefix}}
+                @dimension="both"
               >
-              </div>
+              </ElementQuery>
             `);
 
-            const element = find('#test-subject') as HTMLElement | null;
+            const element = find('.ElementQuery') as HTMLElement | null;
             if (!element) throw new Error('Expected element to exist');
 
             m = 'Element is rendered';
@@ -724,24 +750,25 @@ module('Integration | Modifier | element-query', function (hooks) {
       });
 
       module('custom sizes', function (/* hooks */) {
+        const sizes = { small: 0, medium: 300, large: 700 };
         const sizesHeight = { 'small-height': 0, 'medium-height': 300, 'large-height': 700 };
 
         // prettier-ignore
         const cases = [
-          { actualHeight: 299,                     expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
-          { actualHeight: 0,                       expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
-          { actualHeight: 150,                     expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
-          { actualHeight: 300,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
-          { actualHeight: 450,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
-          { actualHeight: 699,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
-          { actualHeight: 700,                     expectedAttributes: ['at-large-height',  'from-small-height', 'from-medium-height', 'from-large-height', 'to-large-height']},
-          { actualHeight: 299, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualHeight: 0,   prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualHeight: 150, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualHeight: 300, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualHeight: 450, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualHeight: 699, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualHeight: 700, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-large-height',  'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-from-large-height', 'data-eq-to-large-height']},
+          { actualDimension: 299,                     expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
+          { actualDimension: 1,                       expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
+          { actualDimension: 150,                     expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
+          { actualDimension: 300,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
+          { actualDimension: 450,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
+          { actualDimension: 699,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
+          { actualDimension: 700,                     expectedAttributes: ['at-large-height',  'from-small-height', 'from-medium-height', 'from-large-height', 'to-large-height']},
+          { actualDimension: 299, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 1,   prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 150, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 300, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 450, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 699, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 700, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-large-height',  'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-from-large-height', 'data-eq-to-large-height']},
         ];
 
         const allAttributes = [
@@ -754,12 +781,23 @@ module('Integration | Modifier | element-query', function (hooks) {
           'to-small',
           'to-medium',
           'to-large',
+          'at-small-height',
+          'at-medium-height',
+          'at-large-height',
+          'from-small-height',
+          'from-medium-height',
+          'from-large-height',
+          'to-small-height',
+          'to-medium-height',
+          'to-large-height',
         ];
 
-        cases.forEach(({ actualHeight, expectedAttributes, prefix }) => {
+        cases.forEach(({ actualDimension, expectedAttributes, prefix }) => {
           // eslint-disable-next-line @typescript-eslint/no-misused-promises, @typescript-eslint/restrict-template-expressions
-          test(`height ${actualHeight}, prefix: ${prefix}`, async function (this: TestContextCustom, assert) {
-            this.actualHeight = actualHeight;
+          test(`height ${actualDimension}, prefix: ${prefix}`, async function (this: TestContextCustom, assert) {
+            this.actualWidth = actualDimension;
+            this.actualHeight = actualDimension;
+            this.sizes = sizes;
             this.sizesHeight = sizesHeight;
             this.prefix = prefix;
 
@@ -774,15 +812,17 @@ module('Integration | Modifier | element-query', function (hooks) {
 
             await render(hbs`
               {{! template-lint-disable no-inline-styles style-concatenation }}
-              <div
-                id="test-subject"
-                style="width: 300px; height: {{this.actualHeight}}px;"
-                {{element-query sizesHeight=this.sizesHeight prefix=this.prefix dimension="height"}}
+              <ElementQuery
+                style="width: {{this.actualWidth}}px; height: {{this.actualHeight}}px;"
+                @sizes={{this.sizes}}
+                @sizesHeight={{this.sizesHeight}}
+                @prefix={{this.prefix}}
+                @dimension="height"
               >
-              </div>
+              </ElementQuery>
             `);
 
-            const element = find('#test-subject') as HTMLElement | null;
+            const element = find('.ElementQuery') as HTMLElement | null;
             if (!element) throw new Error('Expected element to exist');
 
             m = 'Element is rendered';
