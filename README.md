@@ -1,50 +1,71 @@
+<!-- omit in toc -->
 ember-element-query
 ==============================================================================
 
-This Ember addon lets you apply styles to elements conditionally based on their own width, instead of using media queries based on window width.
+* Use element queries effortlessly on any element or component.
+* Use it in the form of the `{{element-query}}` modifier or the `<ElementQuery as |EQ|>` component.
+* Apply styles that respond based on element's own width rather than viewport width.
+* Do CSS transforations and template transformations.
+
+Element queries are [a technique](https://www.smashingmagazine.com/2016/07/how-i-ended-up-with-element-queries-and-how-you-can-use-them-today/) to do responsive transformations based on element's own size rather than viewport size.
 
 It lets you implement reusable responsive components — with encapsulated styles, decoupled from their parent context. Such components will realign their content depending on how much space is available to them.
 
 For example, if you put a responsive component into a tight sidebar, it will align its content vertically. When the sidebar expands, the component will realign horizontally in order to efficiently use available space.
 
-- [ember-element-query](#ember-element-query)
-  - [Roadmap](#roadmap)
-  - [Rationale](#rationale)
-  - [Concept of sizes](#concept-of-sizes)
-  - [How ember-element-query works](#how-ember-element-query-works)
-    - [Using attributes in CSS](#using-attributes-in-css)
-    - [Edge cases](#edge-cases)
-    - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [As a modifier](#as-a-modifier)
-    - [As a component](#as-a-component)
-  - [Advanced usage](#advanced-usage)
-    - [onResize callback](#onresize-callback)
-    - [Custom sizes](#custom-sizes)
-    - [Using height instead of width](#using-height-instead-of-width)
-    - [Using both width and height](#using-both-width-and-height)
-    - [Customizing attribute prefix](#customizing-attribute-prefix)
-    - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
-    - [Disabling](#disabling)
-    - [FastBoot fallback](#fastboot-fallback)
-  - [Browser support](#browser-support)
-  - [Alternatives](#alternatives)
-    - [Comparison](#comparison)
-      - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
-      - [Using default rule definitions](#using-default-rule-definitions)
-      - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
-      - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
-      - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
-      - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
-  - [Contributing](#contributing)
-    - [Tools](#tools)
-    - [Installation](#installation-1)
-    - [Linting](#linting)
-    - [Running tests](#running-tests)
-    - [Running the dummy application](#running-the-dummy-application)
-  - [License](#license)
-  - [Credit](#credit)
+Here's a biased comparison table with competing addons:
+
+|                                                    | ember-element-query | [ember-fill-up](https://github.com/chadian/ember-fill-up/) | [ember-container-query](https://github.com/ijlee2/ember-container-query/) |
+| -------------------------------------------------- | :-----------------: | :--------------------------------------------------------: | :-----------------------------------------------------------------------: |
+| Octane                                             | ✔                  | 🚫                                                         | ✔                                                                         |
+| [ResizeObserver](https://web.dev/resize-observer/) | ✔                  | ✔                                                          | 🚫                                                                        |
+| Offers a modifier                                  | ✔                  | 🚫                                                         | 🚫                                                                        |
+| Offers a component                                 | ✔                  | ✔                                                         | ✔                                                                        |
+| API convenience                                    | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                                                | ⭐⭐⭐⭐                                                                        |
+| CSS transformations                                | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                                                | ⭐⭐⭐⭐                                                                        |
+| Template transformations                           | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                                                | ⭐⭐⭐⭐                                                                        |
+
+See [detailed comparison](#comparison) with code samples.
+
+***
+
+- [Roadmap](#roadmap)
+- [Rationale](#rationale)
+- [Concept of sizes](#concept-of-sizes)
+- [How ember-element-query works](#how-ember-element-query-works)
+  - [Using attributes in CSS](#using-attributes-in-css)
+  - [Edge cases](#edge-cases)
+  - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [As a modifier](#as-a-modifier)
+  - [As a component](#as-a-component)
+- [Advanced usage](#advanced-usage)
+  - [onResize callback](#onresize-callback)
+  - [Custom sizes](#custom-sizes)
+  - [Using height instead of width](#using-height-instead-of-width)
+  - [Using both width and height](#using-both-width-and-height)
+  - [Customizing attribute prefix](#customizing-attribute-prefix)
+  - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
+  - [Disabling](#disabling)
+  - [FastBoot fallback](#fastboot-fallback)
+- [Browser support](#browser-support)
+- [Alternatives](#alternatives)
+  - [Comparison](#comparison)
+    - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
+    - [Using default rule definitions](#using-default-rule-definitions)
+    - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
+    - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
+    - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
+    - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
+- [Contributing](#contributing)
+  - [Tools](#tools)
+  - [Installation](#installation-1)
+  - [Linting](#linting)
+  - [Running tests](#running-tests)
+  - [Running the dummy application](#running-the-dummy-application)
+- [License](#license)
+- [Credit](#credit)
 
 
 
