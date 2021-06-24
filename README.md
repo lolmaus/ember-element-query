@@ -49,6 +49,7 @@ See [detailed comparison](#comparison) with code samples.
   - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
   - [Disabling](#disabling)
   - [Customizing component element](#customizing-component-element)
+  - [CSS fallback](#css-fallback)
   - [FastBoot fallback](#fastboot-fallback)
 - [Browser support](#browser-support)
 - [Alternatives](#alternatives)
@@ -86,6 +87,7 @@ This addon is in active development.
   * [x] Updates on arugments change
   * [x] Add fool-proof exceptions
   * [x] Disabling
+  * [x] Applying a general `[eq]` attribute 
 * [x] `<ElementQuery>` component
   * [x] Exists
   * [x] Applies attributes to itself
@@ -591,6 +593,57 @@ This wouuld result in the followingg HTML rendered (element query tags not shown
   The sidebar
 </aside>
 ```
+
+
+
+### CSS fallback
+
+⚠ When navigating between routes, there may be a flash of unstyled content: a very short moment when the component is rendered, but its element queries are not applied yet. This happens because  `ember-element-query` addon needs the component to be rendered in order to measure its size.
+
+Consider this SCSS. Here we have two layouts: horizontal and vertical.
+
+```scss
+.MyComponent {
+  &[to-m] {
+    // Vertical layout. Children should have margins between them.
+    > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  &[from-l] {
+    // Horizontal layout. Children should be positioned in a row.
+    margin-bottom: 20px;
+  }
+}
+```
+
+During the flash of unstyled content, neither layout is applied because `ember-element-query` hasn't yet applied its attributes.
+
+This is suboptimal. Instead, you want one of the layouts to be the default one: applied when element query attributes are unavailable.
+
+For this use case, `ember-element-query` applies the `eq` attribute to an element at all times. Thus, the `:not([eq])` selector matches the element does not have element queries applied.
+
+In order to make one of the layouts default, add `:not([eq])` to it's selectors:
+
+```scss
+.MyComponent {
+  &:not([eq]), &[to-m] {
+    // Vertical layout. Children should have margins between them.
+    > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  &[from-l] {
+    // Horizontal layout. Children should be positioned in a row.
+    margin-bottom: 20px;
+  }
+}
+```
+
+This would remove the flash of unstyled content at least for some screen sizes.
+
 
 
 ### FastBoot fallback

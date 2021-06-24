@@ -223,6 +223,9 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       if (!this._element) throw new Error('Expected this._element to be available');
       this._element.removeAttribute(attribute);
     });
+
+    if (!this._element) throw new Error('Expected this._element to be available');
+    this._element.setAttribute('eq', '');
   }
 
   callOnResize(): void {
