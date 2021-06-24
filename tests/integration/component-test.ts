@@ -1065,4 +1065,14 @@ module('Integration | Component | element-query', function (hooks) {
     m = 'If clause';
     assert.ok(find('[data-test-combined-2]'), m);
   });
+
+  test("Tweaking component's tag", async function (assert) {
+    await render(hbs`
+        <ElementQuery @tagName="aside"/>
+    `);
+
+    const element = find('aside') as HTMLElement | null;
+
+    assert.dom(element).hasClass('ElementQuery');
+  });
 });

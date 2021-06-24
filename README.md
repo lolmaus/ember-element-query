@@ -48,6 +48,7 @@ See [detailed comparison](#comparison) with code samples.
   - [Customizing attribute prefix](#customizing-attribute-prefix)
   - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
   - [Disabling](#disabling)
+  - [Customizing component element](#customizing-component-element)
   - [FastBoot fallback](#fastboot-fallback)
 - [Browser support](#browser-support)
 - [Alternatives](#alternatives)
@@ -93,9 +94,10 @@ This addon is in active development.
   * [x] Accepts `sizes`
   * [x] Accepts `prefix`
   * [x] Accepts `dimension`
+  * [x] Accepts `tagName`
   * [x] Disabling
-* [ ] Expose types
-* [ ] CI
+* [x] Expose types
+* [x] CI
 * [ ] npm package
 * [ ] Documentation
   * [x] Concept
@@ -570,6 +572,25 @@ Pass a truthy value into `isDisabled` to disable element query functionality:
 
 ⚠ This property is intended for debugging purposes or disabling element queries entirely. If you change `isDisabled` to `true` dynamically, element query attributes will freeze in their current state, there is no cleanup.
 
+
+
+### Customizing component element
+
+The `<ElementQuery>` component accepts a `@tagName` argument that allows tweaking the component's root tag:
+
+```hbs
+<ElementQuery @tagName="aside">
+  The sidebar
+</ElementQuery>
+```
+
+This wouuld result in the followingg HTML rendered (element query tags not shown):
+
+```html
+<aside>
+  The sidebar
+</aside>
+```
 
 
 ### FastBoot fallback
