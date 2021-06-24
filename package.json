@@ -5,7 +5,10 @@
   "keywords": [
     "ember-addon"
   ],
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lolmaus/ember-element-query.git"
+  },
   "license": "MIT",
   "author": "",
   "directories": {
@@ -29,6 +32,11 @@
     "prepublishOnly": "ember ts:precompile",
     "postpublish": "ember ts:clean",
     "release": "release-it"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "ember-cli-babel": "^7.26.3",
@@ -94,11 +102,15 @@
     "qunit": "^2.14.1",
     "qunit-dom": "^1.6.0",
     "release-it": "^14.10.0",
+    "release-it-lerna-changelog": "^3.1.0",
     "sinon": "^11.1.1",
     "typescript": "^4.3.4"
   },
   "engines": {
     "node": "10.* || >= 12"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "ember": {
     "edition": "octane"
@@ -106,9 +118,19 @@
   "ember-addon": {
     "configPath": "tests/dummy/config"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
     }
   },
   "volta": {
