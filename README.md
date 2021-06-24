@@ -338,7 +338,7 @@ If you want to render chunks of template conditionally, use this syntax:
 
 The first yield argument `EQ` is an object with current element query attributes. Keys are attribute names and values are `true`. Non-matching attributes are undefined. Thus,  `{{#if EQ.from-m}}` renders only when the element is of size `m` or larger.
 
-The second argument `EQInfo` is the same hash that is passed to the [onResize callback](#onresize-callback).
+The second argument `EQInfo` is the same object that is passed to the [onResize callback](#onresize-callback) described below.
 
 
 
@@ -351,17 +351,17 @@ You can pass a callback to the `onResize` argument and it will be called wheneve
 
 ```js
 @action
-reportResize(info) {
-  info.element          // => current element
-  info.width            // => current element's width in px (number)
-  info.height           // => current element's height in px (number)
-  info.ratio            // => current element's aspect ratio (width/height, number)
-  info.size             // => current element's width size (string or undefined)
-  info.sizeHeight       // => current element's height size (string or undefined)
-  info.dimension        // => current dimension ('width', 'height' or 'both')
-  info.prefix           // => current prefix (string or undefined)
-  info.attributes       // => matching element query attributes in array form: ['from-xxs', 'from-xs', ...]
-  info.attributesRecord // => matching element query attributes in object form: {'from-xxs': true, 'from-xs': true, ...}
+reportResize(eqInfo) {
+  eqInfo.element          // => current element
+  eqInfo.width            // => current element's width in px (number)
+  eqInfo.height           // => current element's height in px (number)
+  eqInfo.ratio            // => current element's aspect ratio (width/height, number)
+  eqInfo.size             // => current element's width size (string or undefined)
+  eqInfo.sizeHeight       // => current element's height size (string or undefined)
+  eqInfo.dimension        // => current dimension ('width', 'height' or 'both')
+  eqInfo.prefix           // => current prefix (string or undefined)
+  eqInfo.attributes       // => matching element query attributes in array form: ['from-xxs', 'from-xs', ...]
+  eqInfo.attributesRecord // => matching element query attributes in object form: {'from-xxs': true, 'from-xs': true, ...}
 }
 ```
 

@@ -6,7 +6,6 @@ const nodeFiles = [
   '.prettierrc.js',
   '.template-lintrc.{js,ts}',
   'ember-cli-build.{js,ts}',
-  'index.{js,ts}',
   'testem.{js,ts}',
   'blueprints/*/index.{js,ts}',
   'config/**/*.{js,ts}',

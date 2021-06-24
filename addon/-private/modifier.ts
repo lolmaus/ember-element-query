@@ -1,76 +1,30 @@
-import Modifier, { ModifierArgs } from 'ember-modifier';
+import Modifier from 'ember-modifier';
 import { observeResize } from 'ember-resize-observer-modifier/modifiers/observe-resize';
 import { action } from '@ember/object';
 import window from 'ember-window-mock';
-
-interface Args extends ModifierArgs {
-  positional: [];
-  named: {
-    onResize?: (params: CallbackArgs) => void;
-    sizes?: Sizes;
-    sizesHeight?: Sizes;
-    prefix?: string;
-    dimension?: Dimension;
-    isDisabled?: boolean;
-  };
-}
-
-export interface CallbackArgs {
-  element: ElementStub;
-  width: number;
-  height: number;
-  ratio: number;
-  size?: string;
-  sizeHeight?: string;
-  dimension: Dimension;
-  prefix?: string;
-  attributes: string[];
-  attributesRecord: Record<string, true>;
-}
-
-export type Sizes = Record<string, number>;
-
+import {
+  EQInfo,
+  ModifierArgs,
+  Sizes,
+  SIZES_DEFAULT,
+  SIZES_HEIGHT_DEFAULT,
+} from 'ember-element-query';
 export interface SizeObject {
   name: string;
   value: number;
   index: number;
 }
 
-export interface ElementStub {
-  clientWidth?: number;
-  clientHeight?: number;
-  setAttribute?: (qualifiedName: string, value: string) => void;
-  removeAttribute?: (qualifiedName: string) => void;
-}
+// export interface ElementStub {
+//   clientWidth?: number;
+//   clientHeight?: number;
+//   setAttribute?: (qualifiedName: string, value: string) => void;
+//   removeAttribute?: (qualifiedName: string) => void;
+// }
 
-export type Dimension = 'width' | 'height' | 'both';
 export type RangeDirection = 'at' | 'from' | 'to';
 
-// prettier-ignore
-const SIZES_DEFAULT: Sizes = {
-  xxs:  0,
-  xs:   200,
-  s:    400,
-  m:    600,
-  l:    800,
-  xl:   1000,
-  xxl:  1200,
-  xxxl: 1400,
-};
-
-// prettier-ignore
-const SIZES_HEIGHT_DEFAULT: Sizes = {
-  'xxs-height':  0,
-  'xs-height':   200,
-  's-height':    400,
-  'm-height':    600,
-  'l-height':    800,
-  'xl-height':   1000,
-  'xxl-height':  1200,
-  'xxxl-height': 1400,
-};
-
-export default class ElementQueryModifier extends Modifier<Args> {
+export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
   // Properties
   // -------------------
@@ -78,7 +32,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
   sizesDefault: Sizes = SIZES_DEFAULT;
   sizesHeightDefault: Sizes = SIZES_HEIGHT_DEFAULT;
 
-  _element?: ElementStub; // For some reason, this.element is not always available
+  _element?: HTMLElement; // For some reason, this.element is not always available
   teardownResizeObserver?: () => void;
 
   // -------------------
@@ -87,12 +41,12 @@ export default class ElementQueryModifier extends Modifier<Args> {
 
   get width(): number {
     if (!this._element) throw new Error('Expected this._element to be available');
-    return this._element.clientWidth!;
+    return this._element.clientWidth;
   }
 
   get height(): number {
     if (!this._element) throw new Error('Expected this._element to be available');
-    return this._element.clientHeight!;
+    return this._element.clientHeight;
   }
 
   get ratio(): number {
@@ -228,7 +182,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
     ];
   }
 
-  get yield(): CallbackArgs {
+  get yield(): EQInfo {
     if (!this._element) throw new Error('Expected this._element to be available');
 
     return {
@@ -262,12 +216,12 @@ export default class ElementQueryModifier extends Modifier<Args> {
   applyAttributesToElement(): void {
     this.attributes.forEach((attribute) => {
       if (!this._element) throw new Error('Expected this._element to be available');
-      this._element.setAttribute!(attribute, '');
+      this._element.setAttribute(attribute, '');
     });
 
     this.attributesToRemove.forEach((attribute) => {
       if (!this._element) throw new Error('Expected this._element to be available');
-      this._element.removeAttribute!(attribute);
+      this._element.removeAttribute(attribute);
     });
   }
 
