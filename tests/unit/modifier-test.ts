@@ -1079,7 +1079,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
     modifier.applyAttributesToElement();
 
     m = 'setAttribute call count';
-    assert.equal(setAttribute.callCount, 3, m);
+    assert.equal(setAttribute.callCount, 4, m);
 
     m = 'setAttribute first call args';
     assert.deepEqual(setAttribute.firstCall.args, ['foo', '']);
@@ -1090,7 +1090,10 @@ module('Unit | element-query modifier', function (/* hooks */) {
     m = 'setAttribute third call args';
     assert.deepEqual(setAttribute.thirdCall.args, ['baz', '']);
 
-    m = 'setAtremoveAttributetribute call count';
+    m = 'setAttribute fourth call args';
+    assert.deepEqual(setAttribute.getCall(3).args, ['eq', '']);
+
+    m = 'removeAttribute call count';
     assert.equal(removeAttribute.callCount, 2, m);
 
     m = 'removeAttribute first call args';
