@@ -11,6 +11,7 @@ const nodeFiles = [
   'config/**/*.{js,ts}',
   'lib/*/index.{js,ts}',
   'server/**/*.{js,ts}',
+  'tests/dummy/config/**/*.{js,ts}',
 ];
 
 const browserFiles = [
@@ -29,6 +30,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true,
+    },
     project: ['./tsconfig.json', './tsconfig-node.json'],
   },
   plugins: ['@typescript-eslint', 'ember', 'prettier'],
@@ -40,8 +44,7 @@ module.exports = {
     'plugin:ember/recommended',
     'standard',
 
-    'prettier/@typescript-eslint',
-    'prettier/standard',
+    'prettier',
 
     // This one should come last
     'plugin:prettier/recommended',
@@ -75,6 +78,7 @@ module.exports = {
     camelcase: 'off', // Have to keep this off for the TS equivalent to take precedence
     'no-console': ['error', { allow: ['debug', 'error', 'info', 'warn'] }],
     'no-unused-expressions': 'off',
+    'no-use-before-define': 'off', // We need circular references
     'no-useless-constructor': 'off', // This rule crashes ESLint unless disabled
 
     'node/no-unpublished-require': 'off', // Reenabled for non-Node files only
@@ -94,8 +98,8 @@ module.exports = {
         node: true,
       },
       plugins: ['node'],
+      extends: ['plugin:node/recommended'],
       rules: {
-        ...require('eslint-plugin-node').configs.recommended.rules, // eslint-disable-line node/no-unpublished-require
         // add your custom rules and overrides for node files here
         'node/no-unsupported-features/es-syntax': ['error', { version: '>=12.0.0' }],
       },

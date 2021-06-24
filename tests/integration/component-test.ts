@@ -4,9 +4,9 @@ import { render, waitUntil, find } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import sinon, { SinonSpy } from 'sinon';
 import { TestContext } from 'ember-test-helpers';
-import { Sizes } from 'ember-element-query/-private/modifier';
+import { Sizes } from 'ember-element-query';
 import pause from '../helpers/pause';
-import { setupWindowMock } from 'ember-window-mock';
+import { setupWindowMock } from 'ember-window-mock/test-support';
 
 interface TestContextCustom extends TestContext {
   callback?: SinonSpy;
@@ -981,63 +981,62 @@ module('Integration | Component | element-query', function (hooks) {
           @dimension="both"
           as |EQ EQInfo|
         >
-          <EQ.to-xxs><span data-test-to-xxs></span></EQ.to-xxs>
-          <EQ.to-xs><span data-test-to-xs></span></EQ.to-xs>
-          <EQ.to-s><span data-test-to-s></span></EQ.to-s>
-          <EQ.to-m><span data-test-to-m></span></EQ.to-m>
-          <EQ.to-l><span data-test-to-l></span></EQ.to-l>
-          <EQ.to-xl><span data-test-to-xl></span></EQ.to-xl>
-          <EQ.to-xxl><span data-test-to-xxl></span></EQ.to-xxl>
-          <EQ.to-xxxl><span data-test-to-xxxl></span></EQ.to-xxxl>
-          <EQ.from-xxs><span data-test-from-xxs></span></EQ.from-xxs>
-          <EQ.from-xs><span data-test-from-xs></span></EQ.from-xs>
-          <EQ.from-s><span data-test-from-s></span></EQ.from-s>
-          <EQ.from-m><span data-test-from-m></span></EQ.from-m>
-          <EQ.from-l><span data-test-from-l></span></EQ.from-l>
-          <EQ.from-xl><span data-test-from-xl></span></EQ.from-xl>
-          <EQ.from-xxl><span data-test-from-xxl></span></EQ.from-xxl>
-          <EQ.from-xxxl><span data-test-from-xxxl></span></EQ.from-xxxl>
-          <EQ.at-xxs><span data-test-at-xxs></span></EQ.at-xxs>
-          <EQ.at-xs><span data-test-at-xs></span></EQ.at-xs>
-          <EQ.at-s><span data-test-at-s></span></EQ.at-s>
-          <EQ.at-m><span data-test-at-m></span></EQ.at-m>
-          <EQ.at-l><span data-test-at-l></span></EQ.at-l>
-          <EQ.at-xl><span data-test-at-xl></span></EQ.at-xl>
-          <EQ.at-xxl><span data-test-at-xxl></span></EQ.at-xxl>
-          <EQ.at-xxxl><span data-test-at-xxxl></span></EQ.at-xxxl>
-          <EQ.to-xxs-height><span data-test-to-xxs-height></span></EQ.to-xxs-height>
-          <EQ.to-xs-height><span data-test-to-xs-height></span></EQ.to-xs-height>
-          <EQ.to-s-height><span data-test-to-s-height></span></EQ.to-s-height>
-          <EQ.to-m-height><span data-test-to-m-height></span></EQ.to-m-height>
-          <EQ.to-l-height><span data-test-to-l-height></span></EQ.to-l-height>
-          <EQ.to-xl-height><span data-test-to-xl-height></span></EQ.to-xl-height>
-          <EQ.to-xxl-height><span data-test-to-xxl-height></span></EQ.to-xxl-height>
-          <EQ.to-xxxl-height><span data-test-to-xxxl-height></span></EQ.to-xxxl-height>
-          <EQ.from-xxs-height><span data-test-from-xxs-height></span></EQ.from-xxs-height>
-          <EQ.from-xs-height><span data-test-from-xs-height></span></EQ.from-xs-height>
-          <EQ.from-s-height><span data-test-from-s-height></span></EQ.from-s-height>
-          <EQ.from-m-height><span data-test-from-m-height></span></EQ.from-m-height>
-          <EQ.from-l-height><span data-test-from-l-height></span></EQ.from-l-height>
-          <EQ.from-xl-height><span data-test-from-xl-height></span></EQ.from-xl-height>
-          <EQ.from-xxl-height><span data-test-from-xxl-height></span></EQ.from-xxl-height>
-          <EQ.from-xxxl-height><span data-test-from-xxxl-height></span></EQ.from-xxxl-height>
-          <EQ.at-xxs-height><span data-test-at-xxs-height></span></EQ.at-xxs-height>
-          <EQ.at-xs-height><span data-test-at-xs-height></span></EQ.at-xs-height>
-          <EQ.at-s-height><span data-test-at-s-height></span></EQ.at-s-height>
-          <EQ.at-m-height><span data-test-at-m-height></span></EQ.at-m-height>
-          <EQ.at-l-height><span data-test-at-l-height></span></EQ.at-l-height>
-          <EQ.at-xl-height><span data-test-at-xl-height></span></EQ.at-xl-height>
-          <EQ.at-xxl-height><span data-test-at-xxl-height></span></EQ.at-xxl-height>
-          <EQ.at-xxxl-height><span data-test-at-xxxl-height></span></EQ.at-xxxl-height>
+          {{#if EQ.to-xxs}}<span data-test-to-xxs></span>{{/if}}
+          {{#if EQ.to-xs}}<span data-test-to-xs></span>{{/if}}
+          {{#if EQ.to-s}}<span data-test-to-s></span>{{/if}}
+          {{#if EQ.to-m}}<span data-test-to-m></span>{{/if}}
+          {{#if EQ.to-l}}<span data-test-to-l></span>{{/if}}
+          {{#if EQ.to-xl}}<span data-test-to-xl></span>{{/if}}
+          {{#if EQ.to-xxl}}<span data-test-to-xxl></span>{{/if}}
+          {{#if EQ.to-xxxl}}<span data-test-to-xxxl></span>{{/if}}
+          {{#if EQ.from-xxs}}<span data-test-from-xxs></span>{{/if}}
+          {{#if EQ.from-xs}}<span data-test-from-xs></span>{{/if}}
+          {{#if EQ.from-s}}<span data-test-from-s></span>{{/if}}
+          {{#if EQ.from-m}}<span data-test-from-m></span>{{/if}}
+          {{#if EQ.from-l}}<span data-test-from-l></span>{{/if}}
+          {{#if EQ.from-xl}}<span data-test-from-xl></span>{{/if}}
+          {{#if EQ.from-xxl}}<span data-test-from-xxl></span>{{/if}}
+          {{#if EQ.from-xxxl}}<span data-test-from-xxxl></span>{{/if}}
+          {{#if EQ.at-xxs}}<span data-test-at-xxs></span>{{/if}}
+          {{#if EQ.at-xs}}<span data-test-at-xs></span>{{/if}}
+          {{#if EQ.at-s}}<span data-test-at-s></span>{{/if}}
+          {{#if EQ.at-m}}<span data-test-at-m></span>{{/if}}
+          {{#if EQ.at-l}}<span data-test-at-l></span>{{/if}}
+          {{#if EQ.at-xl}}<span data-test-at-xl></span>{{/if}}
+          {{#if EQ.at-xxl}}<span data-test-at-xxl></span>{{/if}}
+          {{#if EQ.at-xxxl}}<span data-test-at-xxxl></span>{{/if}}
+          {{#if EQ.to-xxs-height}}<span data-test-to-xxs-height></span>{{/if}}
+          {{#if EQ.to-xs-height}}<span data-test-to-xs-height></span>{{/if}}
+          {{#if EQ.to-s-height}}<span data-test-to-s-height></span>{{/if}}
+          {{#if EQ.to-m-height}}<span data-test-to-m-height></span>{{/if}}
+          {{#if EQ.to-l-height}}<span data-test-to-l-height></span>{{/if}}
+          {{#if EQ.to-xl-height}}<span data-test-to-xl-height></span>{{/if}}
+          {{#if EQ.to-xxl-height}}<span data-test-to-xxl-height></span>{{/if}}
+          {{#if EQ.to-xxxl-height}}<span data-test-to-xxxl-height></span>{{/if}}
+          {{#if EQ.from-xxs-height}}<span data-test-from-xxs-height></span>{{/if}}
+          {{#if EQ.from-xs-height}}<span data-test-from-xs-height></span>{{/if}}
+          {{#if EQ.from-s-height}}<span data-test-from-s-height></span>{{/if}}
+          {{#if EQ.from-m-height}}<span data-test-from-m-height></span>{{/if}}
+          {{#if EQ.from-l-height}}<span data-test-from-l-height></span>{{/if}}
+          {{#if EQ.from-xl-height}}<span data-test-from-xl-height></span>{{/if}}
+          {{#if EQ.from-xxl-height}}<span data-test-from-xxl-height></span>{{/if}}
+          {{#if EQ.from-xxxl-height}}<span data-test-from-xxxl-height></span>{{/if}}
+          {{#if EQ.at-xxs-height}}<span data-test-at-xxs-height></span>{{/if}}
+          {{#if EQ.at-xs-height}}<span data-test-at-xs-height></span>{{/if}}
+          {{#if EQ.at-s-height}}<span data-test-at-s-height></span>{{/if}}
+          {{#if EQ.at-m-height}}<span data-test-at-m-height></span>{{/if}}
+          {{#if EQ.at-l-height}}<span data-test-at-l-height></span>{{/if}}
+          {{#if EQ.at-xl-height}}<span data-test-at-xl-height></span>{{/if}}
+          {{#if EQ.at-xxl-height}}<span data-test-at-xxl-height></span>{{/if}}
+          {{#if EQ.at-xxxl-height}}<span data-test-at-xxxl-height></span>{{/if}}
 
-          <EQ.from-s><EQ.to-l>
+          {{#if (and EQ.from-s EQ.to-l)}}
             <span data-test-combined-1></span>
-          </EQ.to-l></EQ.from-s>
+          {{/if}}
 
           {{#if (and (eq EQInfo.size "s") (eq EQInfo.sizeHeight "m-height"))}}
              <span data-test-combined-2></span>
           {{/if}}
-          --}}
         </ElementQuery>
       `);
 
@@ -1061,9 +1060,19 @@ module('Integration | Component | element-query', function (hooks) {
     }
 
     m = 'Nested gate';
-    assert.ok(find('[data-test-combined-1'), m);
+    assert.ok(find('[data-test-combined-1]'), m);
 
     m = 'If clause';
-    assert.ok(find('[data-test-combined-2'), m);
+    assert.ok(find('[data-test-combined-2]'), m);
+  });
+
+  test("Tweaking component's tag", async function (assert) {
+    await render(hbs`
+        <ElementQuery @tagName="aside"/>
+    `);
+
+    const element = find('aside') as HTMLElement | null;
+
+    assert.dom(element).hasClass('ElementQuery');
   });
 });

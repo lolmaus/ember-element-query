@@ -52,7 +52,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
       clientHeight: 2,
     };
 
-    modifier._element = element;
+    modifier._element = element as HTMLElement;
 
     m = '_element';
     assert.equal(modifier._element, element, m);
@@ -192,7 +192,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: actualDimension,
             clientHeight: 330,
-          };
+          } as HTMLElement;
 
           if (expectedIndex != null && !throws) {
             assert.deepEqual(modifier.sizeObjectWidthAt, defaultSizeObjects[expectedIndex]);
@@ -219,7 +219,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: 330,
             clientHeight: actualDimension,
-          };
+          } as HTMLElement;
 
           if (expectedIndex != null && !throws) {
             assert.deepEqual(modifier.sizeObjectHeightAt, defaultSizeObjectsHeight[expectedIndex]);
@@ -260,7 +260,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: actualDimension,
             clientHeight: 330,
-          };
+          } as HTMLElement;
 
           if (expectedIndex != null && !throws) {
             assert.deepEqual(modifier.sizeObjectWidthAt, sizeObjects[expectedIndex]);
@@ -287,7 +287,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: 330,
             clientHeight: actualDimension,
-          };
+          } as HTMLElement;
 
           if (expectedIndex != null && !throws) {
             assert.deepEqual(modifier.sizeObjectHeightAt, sizeObjects[expectedIndex]);
@@ -332,7 +332,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: actualWidth,
             clientHeight: 330,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsWidthFrom = modifier.sizeObjectsWidthFrom;
@@ -371,7 +371,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: 300,
             clientHeight: actualWidth,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsHeightFrom = modifier.sizeObjectsHeightFrom;
@@ -426,7 +426,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: actualWidth,
             clientHeight: 330,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsWidthFrom = modifier.sizeObjectsWidthFrom;
@@ -465,7 +465,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: 300,
             clientHeight: actualWidth,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsHeightFrom = modifier.sizeObjectsHeightFrom;
@@ -522,7 +522,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: actualWidth,
             clientHeight: 330,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsWidthTo = modifier.sizeObjectsWidthTo;
@@ -561,7 +561,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: 330,
             clientHeight: actualWidth,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsHeightTo = modifier.sizeObjectsHeightTo;
@@ -616,7 +616,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: actualWidth,
             clientHeight: 330,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsWidthTo = modifier.sizeObjectsWidthTo;
@@ -655,7 +655,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
           modifier._element = {
             clientWidth: 330,
             clientHeight: actualWidth,
-          };
+          } as HTMLElement;
 
           if (expectedIndexes && !throws) {
             const sizeObjectsHeightTo = modifier.sizeObjectsHeightTo;
@@ -690,7 +690,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
   ///
 
-  module('attributesWidth and attributes', function (/* hooks */) {
+  module('attributesRecord, attributesWidth and attributes', function (/* hooks */) {
     // prettier-ignore
     const cases = [
       { actualWidth: 0,    expectedAttributes: ['at-xxs',  'from-xxs', 'to-xxs',  'to-xs',  'to-s',   'to-m',   'to-l',    'to-xl',    'to-xxl',    'to-xxxl']},
@@ -709,7 +709,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         modifier._element = {
           clientWidth: actualWidth,
           clientHeight: 330,
-        };
+        } as HTMLElement;
 
         if (expectedAttributes && !throws) {
           m = 'attributesWidth';
@@ -717,6 +717,19 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
           m = 'attributes';
           assert.deepEqual(modifier.attributes, expectedAttributes, m);
+
+          m = 'attributesRecord key count';
+          // Contains width and height attributes, so doubling the count
+          assert.equal(
+            Object.keys(modifier.attributesRecord).length,
+            expectedAttributes.length * 2,
+            m
+          );
+
+          expectedAttributes.forEach((attr) => {
+            m = `attributesRecord key "${attr}"`;
+            assert.equal(modifier.attributesRecord[attr], true, m);
+          });
         } else if (!expectedAttributes && throws) {
           m = 'attributesWidth';
           assert.throws(
@@ -757,7 +770,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         modifier._element = {
           clientWidth: actualWidth,
           clientHeight: 330,
-        };
+        } as HTMLElement;
 
         if (expectedAttributes && !throws) {
           m = 'attributesWidthToRemove';
@@ -788,7 +801,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
   ///
 
-  module('attributesHeight and attributes', function (/* hooks */) {
+  module('attributesRecord, attributesHeight and attributes', function (/* hooks */) {
     // prettier-ignore
     const cases = [
       { actualHeight: 0,    expectedAttributes: ['at-xxs-height',  'from-xxs-height', 'to-xxs-height',  'to-xs-height',  'to-s-height',   'to-m-height',   'to-l-height',    'to-xl-height',    'to-xxl-height',    'to-xxxl-height']},
@@ -810,7 +823,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         modifier._element = {
           clientWidth: 330,
           clientHeight: actualHeight,
-        };
+        } as HTMLElement;
 
         if (expectedAttributes && !throws) {
           m = 'attributesHeight';
@@ -818,6 +831,19 @@ module('Unit | element-query modifier', function (/* hooks */) {
 
           m = 'attributes';
           assert.deepEqual(modifier.attributes, expectedAttributes, m);
+
+          m = 'attributesRecord key count';
+          // Contains width and height attributes, so doubling the count
+          assert.equal(
+            Object.keys(modifier.attributesRecord).length,
+            expectedAttributes.length * 2,
+            m
+          );
+
+          expectedAttributes.forEach((attr) => {
+            m = `attributesRecord key "${attr}"`;
+            assert.equal(modifier.attributesRecord[attr], true, m);
+          });
         } else if (!expectedAttributes && throws) {
           m = 'attributesHeight';
           assert.throws(
@@ -861,7 +887,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         modifier._element = {
           clientWidth: 330,
           clientHeight: actualHeight,
-        };
+        } as HTMLElement;
 
         if (expectedAttributes && !throws) {
           m = 'attributesHeightToRemove';
@@ -916,10 +942,19 @@ module('Unit | element-query modifier', function (/* hooks */) {
         modifier._element = {
           clientWidth: actualDimension,
           clientHeight: actualDimension,
-        };
+        } as HTMLElement;
 
         if (expectedAttributes && !throws) {
-          assert.deepEqual(modifier.attributes, expectedAttributes);
+          m = 'attributes';
+          assert.deepEqual(modifier.attributes, expectedAttributes, m);
+
+          m = 'attributesRecord key count';
+          assert.equal(Object.keys(modifier.attributesRecord).length, expectedAttributes.length, m);
+
+          expectedAttributes.forEach((attr) => {
+            m = `attributesRecord key "${attr}"`;
+            assert.equal(modifier.attributesRecord[attr], true, m);
+          });
         } else if (!expectedAttributes && throws) {
           assert.throws(() => modifier.attributes, /Expected dimensions not to be negative/);
         } else if (expectedAttributes && throws) {
@@ -955,7 +990,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
         modifier._element = {
           clientWidth: actualDimension,
           clientHeight: actualDimension,
-        };
+        } as HTMLElement;
 
         if (expectedAttributes && !throws) {
           assert.deepEqual(modifier.attributesToRemove, expectedAttributes);
@@ -1031,7 +1066,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
       clientHeight: 330,
       setAttribute: setAttribute,
       removeAttribute: removeAttribute,
-    };
+    } as unknown as HTMLElement;
 
     Object.defineProperty(modifier, 'attributes', {
       value: ['foo', 'bar', 'baz'],
@@ -1044,7 +1079,7 @@ module('Unit | element-query modifier', function (/* hooks */) {
     modifier.applyAttributesToElement();
 
     m = 'setAttribute call count';
-    assert.equal(setAttribute.callCount, 3, m);
+    assert.equal(setAttribute.callCount, 4, m);
 
     m = 'setAttribute first call args';
     assert.deepEqual(setAttribute.firstCall.args, ['foo', '']);
@@ -1055,7 +1090,10 @@ module('Unit | element-query modifier', function (/* hooks */) {
     m = 'setAttribute third call args';
     assert.deepEqual(setAttribute.thirdCall.args, ['baz', '']);
 
-    m = 'setAtremoveAttributetribute call count';
+    m = 'setAttribute fourth call args';
+    assert.deepEqual(setAttribute.getCall(3).args, ['eq', '']);
+
+    m = 'removeAttribute call count';
     assert.equal(removeAttribute.callCount, 2, m);
 
     m = 'removeAttribute first call args';

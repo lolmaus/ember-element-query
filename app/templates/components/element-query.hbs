@@ -1,16 +1,18 @@
-<div
-  class="ElementQuery"
+{{#let (element (or @tagName "div")) as |Tag|}}
+  <Tag
+    class="ElementQuery"
 
-  {{element-query
-    dimension=@dimension
-    isDisabled=@isDisabled
-    prefix=@prefix
-    sizes=@sizes
-    sizesHeight=@sizesHeight
-    onResize=this.onResize
-  }}
+    {{element-query
+      dimension=@dimension
+      isDisabled=@isDisabled
+      prefix=@prefix
+      sizes=@sizes
+      sizesHeight=@sizesHeight
+      onResize=this.onResize
+    }}
 
-  ...attributes
->
-  {{yield this.gates this.params}}
-</div>
+    ...attributes
+  >
+    {{yield this.eqInfo.attributesRecord this.eqInfo}}
+  </Tag>
+{{/let}}

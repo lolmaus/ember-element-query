@@ -1,5 +1,7 @@
 <!-- omit in toc -->
 ember-element-query
+![npm version](https://img.shields.io/npm/v/ember-element-query)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/lolmaus/ember-element-query/CI)
 ==============================================================================
 
 * Use element queries effortlessly on any element or component.
@@ -29,43 +31,46 @@ See [detailed comparison](#comparison) with code samples.
 
 ***
 
-- [Roadmap](#roadmap)
-- [Rationale](#rationale)
-- [Concept of sizes](#concept-of-sizes)
-- [How ember-element-query works](#how-ember-element-query-works)
-  - [Using attributes in CSS](#using-attributes-in-css)
-  - [Edge cases](#edge-cases)
-  - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [As a modifier](#as-a-modifier)
-  - [As a component](#as-a-component)
-- [Advanced usage](#advanced-usage)
-  - [onResize callback](#onresize-callback)
-  - [Custom sizes](#custom-sizes)
-  - [Using height instead of width](#using-height-instead-of-width)
-  - [Using both width and height](#using-both-width-and-height)
-  - [Customizing attribute prefix](#customizing-attribute-prefix)
-  - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
-  - [Disabling](#disabling)
-  - [FastBoot fallback](#fastboot-fallback)
-- [Browser support](#browser-support)
-- [Alternatives](#alternatives)
-  - [Comparison](#comparison)
-    - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
-    - [Using default rule definitions](#using-default-rule-definitions)
-    - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
-    - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
-    - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
-    - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
-- [Contributing](#contributing)
-  - [Tools](#tools)
-  - [Installation](#installation-1)
-  - [Linting](#linting)
-  - [Running tests](#running-tests)
-  - [Running the dummy application](#running-the-dummy-application)
-- [License](#license)
-- [Credit](#credit)
+- [!GitHub Workflow Status](#)
+  - [Roadmap](#roadmap)
+  - [Rationale](#rationale)
+  - [Concept of sizes](#concept-of-sizes)
+  - [How ember-element-query works](#how-ember-element-query-works)
+    - [Using attributes in CSS](#using-attributes-in-css)
+    - [Edge cases](#edge-cases)
+    - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [As a modifier](#as-a-modifier)
+    - [As a component](#as-a-component)
+  - [Advanced usage](#advanced-usage)
+    - [onResize callback](#onresize-callback)
+    - [Custom sizes](#custom-sizes)
+    - [Using height instead of width](#using-height-instead-of-width)
+    - [Using both width and height](#using-both-width-and-height)
+    - [Customizing attribute prefix](#customizing-attribute-prefix)
+    - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
+    - [Disabling](#disabling)
+    - [Customizing component element](#customizing-component-element)
+    - [CSS fallback](#css-fallback)
+    - [FastBoot fallback](#fastboot-fallback)
+  - [Browser support](#browser-support)
+  - [Alternatives](#alternatives)
+    - [Comparison](#comparison)
+      - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
+      - [Using default rule definitions](#using-default-rule-definitions)
+      - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
+      - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
+      - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
+      - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
+  - [Contributing](#contributing)
+    - [Tools](#tools)
+    - [Installation](#installation-1)
+    - [Linting](#linting)
+    - [Running tests](#running-tests)
+    - [Running the dummy application](#running-the-dummy-application)
+  - [License](#license)
+  - [Credit](#credit)
 
 
 
@@ -85,6 +90,7 @@ This addon is in active development.
   * [x] Updates on arugments change
   * [x] Add fool-proof exceptions
   * [x] Disabling
+  * [x] Applying a general `[eq]` attribute 
 * [x] `<ElementQuery>` component
   * [x] Exists
   * [x] Applies attributes to itself
@@ -93,10 +99,11 @@ This addon is in active development.
   * [x] Accepts `sizes`
   * [x] Accepts `prefix`
   * [x] Accepts `dimension`
+  * [x] Accepts `tagName`
   * [x] Disabling
-* [ ] Expose types
-* [ ] CI
-* [ ] npm package
+* [x] Expose types
+* [x] CI
+* [x] npm package
 * [ ] Documentation
   * [x] Concept
   * [x] Feature description
@@ -318,38 +325,27 @@ If you want to render chunks of template conditionally, use this syntax:
 
 ```html
 <ElementQuery as |EQ|>
-  <EQ.at-m>
+  {{#if EQ.at-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m`. }}
-  </at.m>
+  {{/if}}
 
-  <EQ.from-m>
+  {{#if EQ.from-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m` or larger. }}
   </EQ.from-m>
 
-  <EQ.to-m>
+  {{#if EQ.to-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m` or smaller. }}
-  </EQ.to-m>
+  {{/EQ.to-m}}
 
-  <EQ.from-s><EQ.to-l>
+  {{#if (and EQ.from-s EQ.to-l)}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `s`, `m` or `l`. }}
-  </EQ.to-l></EQ.from-s>
+  {{/if}}
 </ElementQuery>
 ```
 
-If you want to "sprinke" your tempalte with small responsive bits, you may find it more convenient to use the `{{#if}}` syntax together with [ember-truth-helpers](https://github.com/jmurphyau/ember-truth-helpers):
+The first yield argument `EQ` is an object with current element query attributes. Keys are attribute names and values are `true`. Non-matching attributes are undefined. Thus,  `{{#if EQ.from-m}}` renders only when the element is of size `m` or larger.
 
-```html
-<ElementQuery as |EQ EQInfo|>
-  <SomeOtherComponent
-    @isMedium={{eq EQInfo.size "s"}}
-    @isMediumOrLarger={{bool EQ.from-m}}
-  >
-</ElementQuery>
-```
-
-The first yield argument `EQ` is a hash of current element query attributes. Keys are attribute names and values are truthy strings, so `{{bool EQ.from-m}}` gives you `true` when the element is of size `m` or larger, and `false` when the element is smaller than `m`.
-
-The second argument `EQInfo` is the same hash that is passed to the [onResize callback](#onresize-callback).
+The second argument `EQInfo` is the same object that is passed to the [onResize callback](#onresize-callback) described below.
 
 
 
@@ -362,16 +358,17 @@ You can pass a callback to the `onResize` argument and it will be called wheneve
 
 ```js
 @action
-reportResize(info) {
-  info.element     // => current element
-  info.width       // => current element's width in px (number)
-  info.height      // => current element's height in px (number)
-  info.ratio       // => current element's aspect ratio (width/height, number)
-  info.size        // => current element's width size (string or undefined)
-  info.sizeHeight  // => current element's height size (string or undefined)
-  info.dimension   // => current dimension ('width', 'height' or 'both')
-  info.prefix      // => current prefix (string or undefined)
-  info.attributes  // => element query attributes used on the element (array of strings)
+reportResize(eqInfo) {
+  eqInfo.element          // => current element
+  eqInfo.width            // => current element's width in px (number)
+  eqInfo.height           // => current element's height in px (number)
+  eqInfo.ratio            // => current element's aspect ratio (width/height, number)
+  eqInfo.size             // => current element's width size (string or undefined)
+  eqInfo.sizeHeight       // => current element's height size (string or undefined)
+  eqInfo.dimension        // => current dimension ('width', 'height' or 'both')
+  eqInfo.prefix           // => current prefix (string or undefined)
+  eqInfo.attributes       // => matching element query attributes in array form: ['from-xxs', 'from-xs', ...]
+  eqInfo.attributesRecord // => matching element query attributes in object form: {'from-xxs': true, 'from-xs': true, ...}
 }
 ```
 
@@ -458,9 +455,9 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
   as |EQ|
 >
-  <EQ.to-small-width><EQ.from-large-height>
+  {{#if (and EQ.to-small-width EQ.from-large-height)}}
     I am thin and tall.
-  </EQ.from-large-height></EQ.to-small-width>
+  {{/if}}
 </ElementQuery>
 ```
 
@@ -509,9 +506,9 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
   as |EQ|
 >
-  <EQ.to-small-width><EQ.from-large-height>
+  {{#if (and EQ.to-small-width EQ.from-large-height)}}
     I am thin and tall.
-  </EQ.from-large-height></EQ.to-small-width>
+  {{/if}}
 </ElementQuery>
 ```
 
@@ -579,6 +576,76 @@ Pass a truthy value into `isDisabled` to disable element query functionality:
 ```
 
 ⚠ This property is intended for debugging purposes or disabling element queries entirely. If you change `isDisabled` to `true` dynamically, element query attributes will freeze in their current state, there is no cleanup.
+
+
+
+### Customizing component element
+
+The `<ElementQuery>` component accepts a `@tagName` argument that allows tweaking the component's root tag:
+
+```hbs
+<ElementQuery @tagName="aside">
+  The sidebar
+</ElementQuery>
+```
+
+This wouuld result in the followingg HTML rendered (element query tags not shown):
+
+```html
+<aside>
+  The sidebar
+</aside>
+```
+
+
+
+### CSS fallback
+
+⚠ When navigating between routes, there may be a flash of unstyled content: a very short moment when the component is rendered, but its element queries are not applied yet. This happens because  `ember-element-query` addon needs the component to be rendered in order to measure its size.
+
+Consider this SCSS. Here we have two layouts: horizontal and vertical.
+
+```scss
+.MyComponent {
+  &[to-m] {
+    // Vertical layout. Children should have margins between them.
+    > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  &[from-l] {
+    // Horizontal layout. Children should be positioned in a row.
+    margin-bottom: 20px;
+  }
+}
+```
+
+During the flash of unstyled content, neither layout is applied because `ember-element-query` hasn't yet applied its attributes.
+
+This is suboptimal. Instead, you want one of the layouts to be the default one: applied when element query attributes are unavailable.
+
+For this use case, `ember-element-query` applies the `eq` attribute to an element at all times. Thus, the `:not([eq])` selector matches the element does not have element queries applied.
+
+In order to make one of the layouts default, add `:not([eq])` to it's selectors:
+
+```scss
+.MyComponent {
+  &:not([eq]), &[to-m] {
+    // Vertical layout. Children should have margins between them.
+    > *:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+
+  &[from-l] {
+    // Horizontal layout. Children should be positioned in a row.
+    margin-bottom: 20px;
+  }
+}
+```
+
+This would remove the flash of unstyled content at least for some screen sizes.
 
 
 
@@ -769,17 +836,17 @@ Given breakpoints 350, 700 and 1050:
       @sizes=(hash small=0 medium=350 large=700 extraLarge=1050)
       as |EQ|
     >
-      <EQ.at-small>...</EQ.at-small>
-      <EQ.at-medium>...</EQ.at-medium>
-      <EQ.at-large>...</EQ.at-large>
-      <EQ.at-extraLarge>...</EQ.at-extraLarge>
+      {{#if EQ.at-small}}...{{/if}}
+      {{#if EQ.at-medium}}...{{/if}}
+      {{#if EQ.at-large}}...{{/if}}
+      {{#if EQ.at-extraLarge}}...{{/if}}
 
-      <EQ.from-medium>...</EQ.from-medium>
-      <EQ.from-large>...</EQ.from-large>
-      <EQ.to-medium>...</EQ.to-medium>
-      <EQ.to-large>...</EQ.to-large>
+      {{#if EQ.from-medium}}...{{/if}}
+      {{#if EQ.from-large}}...{{/if}}
+      {{#if EQ.to-medium}}...{{/if}}
+      {{#if EQ.to-large}}...{{/if}}
 
-      <EQ.from-medium><EQ.to-large>...</EQ.to-large></EQ.from-medium>
+      {{#if (and EQ.from-medium EQ.to-large)}}...{{/if}}
     </ElementQuery>
     ```
 
@@ -797,7 +864,7 @@ Given breakpoints 350, 700 and 1050:
     .my-component[from-medium][to-large] {}
     ```
 
-  👆 Note how much shorter rule definitions are. 
+  👆 Note how much shorter the usage is, both in rule definitions and rule applications.
 
 
 
@@ -987,9 +1054,9 @@ Given breakpoints 350, 700 and 1050:
       @sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
       as |EQ|
     >
-      <EQ.to-small-width><EQ.from-large-height>
+      {{#if (and EQ.to-small-width EQ.from-large-height)}}
         I am thin and tall.
-      </EQ.from-large-height></EQ.to-small-width>
+      {{/if}}
     </ElementQuery>
     ```
 
@@ -997,9 +1064,9 @@ Given breakpoints 350, 700 and 1050:
 
     ```html
     <ElementQuery @dimension="both" as |EQ|>
-      <EQ.to-s><EQ.from-l-height>
+      {{#if (and EQ.to-s EQ.from-l-height)}}
         I am thin and tall.
-      </EQ.from-l-height></EQ.to-s>
+      {{/if}}
     </ElementQuery>
     ```
 
@@ -1060,4 +1127,6 @@ Credit
 
 Initially implemented by Andrey Mikhaylov ([lolmaus](https://github.com/lolmaus)) and [contributors](https://github.com/lolmaus/ember-element-query/graphs/contributors).
 
-Thanks to Chad Carbert ([chadian](https://github.com/chadian)) and Isaac Lee ([ijlee2](https://github.com/ijlee2)) for feedback, ideas, brainstorming and criticism.
+Thanks to Chad Carbert ([@chadian](https://github.com/chadian)) and Isaac Lee ([@ijlee2](https://github.com/ijlee2)) for feedback, ideas, brainstorming and criticism.
+
+Sponsored by [@kaliber5](https://github.com/kaliber5), https://kaliber5.de.
