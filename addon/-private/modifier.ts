@@ -25,6 +25,7 @@ export interface CallbackArgs {
   dimension: Dimension;
   prefix?: string;
   attributes: string[];
+  attributesRecord: Record<string, true>;
 }
 
 export type Sizes = Record<string, number>;
@@ -154,6 +155,13 @@ export default class ElementQueryModifier extends Modifier<Args> {
     return this.sizeObjectsHeightSortedAsc.slice(index);
   }
 
+  get attributesRecord(): Record<string, true> {
+    return [...this.attributesWidth, ...this.attributesHeight].reduce((result, attr) => {
+      result[attr] = true;
+      return result;
+    }, {} as Record<string, true>);
+  }
+
   get attributesWidth(): string[] {
     return [
       this.convertSizeToAttribute(this.sizeObjectWidthAt.name, 'at'),
@@ -233,6 +241,7 @@ export default class ElementQueryModifier extends Modifier<Args> {
       dimension: this.args.named.dimension || 'width',
       prefix: this.args.named.prefix,
       attributes: this.attributes,
+      attributesRecord: this.attributesRecord,
     };
   }
 

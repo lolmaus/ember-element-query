@@ -6,7 +6,7 @@ import sinon, { SinonSpy } from 'sinon';
 import { TestContext } from 'ember-test-helpers';
 import { Sizes } from 'ember-element-query/-private/modifier';
 import pause from '../helpers/pause';
-import { setupWindowMock } from 'ember-window-mock';
+import { setupWindowMock } from 'ember-window-mock/test-support';
 
 interface TestContextCustom extends TestContext {
   callback?: SinonSpy;

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   arrowParens: 'always', // It's convenient that you don't have to add them by hand when you need to add more args or a type
   singleQuote: true,     // Enabled to align with EmberJS Prettier config

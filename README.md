@@ -318,36 +318,25 @@ If you want to render chunks of template conditionally, use this syntax:
 
 ```html
 <ElementQuery as |EQ|>
-  <EQ.at-m>
+  {{#if EQ.at-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m`. }}
-  </at.m>
+  {{/if}}
 
-  <EQ.from-m>
+  {{#if EQ.from-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m` or larger. }}
   </EQ.from-m>
 
-  <EQ.to-m>
+  {{#if EQ.to-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m` or smaller. }}
-  </EQ.to-m>
+  {{/EQ.to-m}}
 
-  <EQ.from-s><EQ.to-l>
+  {{#if (and EQ.from-s EQ.to-l)}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `s`, `m` or `l`. }}
-  </EQ.to-l></EQ.from-s>
+  {{/if}}
 </ElementQuery>
 ```
 
-If you want to "sprinke" your tempalte with small responsive bits, you may find it more convenient to use the `{{#if}}` syntax together with [ember-truth-helpers](https://github.com/jmurphyau/ember-truth-helpers):
-
-```html
-<ElementQuery as |EQ EQInfo|>
-  <SomeOtherComponent
-    @isMedium={{eq EQInfo.size "s"}}
-    @isMediumOrLarger={{bool EQ.from-m}}
-  >
-</ElementQuery>
-```
-
-The first yield argument `EQ` is a hash of current element query attributes. Keys are attribute names and values are truthy strings, so `{{bool EQ.from-m}}` gives you `true` when the element is of size `m` or larger, and `false` when the element is smaller than `m`.
+The first yield argument `EQ` is an object with current element query attributes. Keys are attribute names and values are `true`. Non-matching attributes are undefined. Thus,  `{{#if EQ.from-m}}` renders only when the element is of size `m` or larger.
 
 The second argument `EQInfo` is the same hash that is passed to the [onResize callback](#onresize-callback).
 
@@ -363,15 +352,16 @@ You can pass a callback to the `onResize` argument and it will be called wheneve
 ```js
 @action
 reportResize(info) {
-  info.element     // => current element
-  info.width       // => current element's width in px (number)
-  info.height      // => current element's height in px (number)
-  info.ratio       // => current element's aspect ratio (width/height, number)
-  info.size        // => current element's width size (string or undefined)
-  info.sizeHeight  // => current element's height size (string or undefined)
-  info.dimension   // => current dimension ('width', 'height' or 'both')
-  info.prefix      // => current prefix (string or undefined)
-  info.attributes  // => element query attributes used on the element (array of strings)
+  info.element          // => current element
+  info.width            // => current element's width in px (number)
+  info.height           // => current element's height in px (number)
+  info.ratio            // => current element's aspect ratio (width/height, number)
+  info.size             // => current element's width size (string or undefined)
+  info.sizeHeight       // => current element's height size (string or undefined)
+  info.dimension        // => current dimension ('width', 'height' or 'both')
+  info.prefix           // => current prefix (string or undefined)
+  info.attributes       // => matching element query attributes in array form: ['from-xxs', 'from-xs', ...]
+  info.attributesRecord // => matching element query attributes in object form: {'from-xxs': true, 'from-xs': true, ...}
 }
 ```
 
@@ -458,9 +448,9 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
   as |EQ|
 >
-  <EQ.to-small-width><EQ.from-large-height>
+  {{#if (and EQ.to-small-width EQ.from-large-height)}}
     I am thin and tall.
-  </EQ.from-large-height></EQ.to-small-width>
+  {{/if}}
 </ElementQuery>
 ```
 
@@ -509,9 +499,9 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
   as |EQ|
 >
-  <EQ.to-small-width><EQ.from-large-height>
+  {{#if (and EQ.to-small-width EQ.from-large-height)}}
     I am thin and tall.
-  </EQ.from-large-height></EQ.to-small-width>
+  {{/if}}
 </ElementQuery>
 ```
 
@@ -769,17 +759,17 @@ Given breakpoints 350, 700 and 1050:
       @sizes=(hash small=0 medium=350 large=700 extraLarge=1050)
       as |EQ|
     >
-      <EQ.at-small>...</EQ.at-small>
-      <EQ.at-medium>...</EQ.at-medium>
-      <EQ.at-large>...</EQ.at-large>
-      <EQ.at-extraLarge>...</EQ.at-extraLarge>
+      {{#if EQ.at-small}}...{{/if}}
+      {{#if EQ.at-medium}}...{{/if}}
+      {{#if EQ.at-large}}...{{/if}}
+      {{#if EQ.at-extraLarge}}...{{/if}}
 
-      <EQ.from-medium>...</EQ.from-medium>
-      <EQ.from-large>...</EQ.from-large>
-      <EQ.to-medium>...</EQ.to-medium>
-      <EQ.to-large>...</EQ.to-large>
+      {{#if EQ.from-medium}}...{{/if}}
+      {{#if EQ.from-large}}...{{/if}}
+      {{#if EQ.to-medium}}...{{/if}}
+      {{#if EQ.to-large}}...{{/if}}
 
-      <EQ.from-medium><EQ.to-large>...</EQ.to-large></EQ.from-medium>
+      {{#if (and EQ.from-medium EQ.to-large)}}...{{/if}}
     </ElementQuery>
     ```
 
@@ -797,7 +787,7 @@ Given breakpoints 350, 700 and 1050:
     .my-component[from-medium][to-large] {}
     ```
 
-  👆 Note how much shorter rule definitions are. 
+  👆 Note how much shorter the usage is, both in rule definitions and rule applications.
 
 
 
@@ -987,9 +977,9 @@ Given breakpoints 350, 700 and 1050:
       @sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
       as |EQ|
     >
-      <EQ.to-small-width><EQ.from-large-height>
+      {{#if (and EQ.to-small-width EQ.from-large-height)}}
         I am thin and tall.
-      </EQ.from-large-height></EQ.to-small-width>
+      {{/if}}
     </ElementQuery>
     ```
 
@@ -997,9 +987,9 @@ Given breakpoints 350, 700 and 1050:
 
     ```html
     <ElementQuery @dimension="both" as |EQ|>
-      <EQ.to-s><EQ.from-l-height>
+      {{#if (and EQ.to-s EQ.from-l-height)}}
         I am thin and tall.
-      </EQ.from-l-height></EQ.to-s>
+      {{/if}}
     </ElementQuery>
     ```
 
@@ -1060,4 +1050,6 @@ Credit
 
 Initially implemented by Andrey Mikhaylov ([lolmaus](https://github.com/lolmaus)) and [contributors](https://github.com/lolmaus/ember-element-query/graphs/contributors).
 
-Thanks to Chad Carbert ([chadian](https://github.com/chadian)) and Isaac Lee ([ijlee2](https://github.com/ijlee2)) for feedback, ideas, brainstorming and criticism.
+Thanks to Chad Carbert ([@chadian](https://github.com/chadian)) and Isaac Lee ([@ijlee2](https://github.com/ijlee2)) for feedback, ideas, brainstorming and criticism.
+
+Sponsored by [@kaliber5](https://github.com/kaliber5), https://kaliber5.de.
