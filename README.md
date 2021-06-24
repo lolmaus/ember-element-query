@@ -1,5 +1,7 @@
 <!-- omit in toc -->
 ember-element-query
+![npm version](https://img.shields.io/npm/v/ember-element-query)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/lolmaus/ember-element-query/CI)
 ==============================================================================
 
 * Use element queries effortlessly on any element or component.
@@ -29,45 +31,46 @@ See [detailed comparison](#comparison) with code samples.
 
 ***
 
-- [Roadmap](#roadmap)
-- [Rationale](#rationale)
-- [Concept of sizes](#concept-of-sizes)
-- [How ember-element-query works](#how-ember-element-query-works)
-  - [Using attributes in CSS](#using-attributes-in-css)
-  - [Edge cases](#edge-cases)
-  - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [As a modifier](#as-a-modifier)
-  - [As a component](#as-a-component)
-- [Advanced usage](#advanced-usage)
-  - [onResize callback](#onresize-callback)
-  - [Custom sizes](#custom-sizes)
-  - [Using height instead of width](#using-height-instead-of-width)
-  - [Using both width and height](#using-both-width-and-height)
-  - [Customizing attribute prefix](#customizing-attribute-prefix)
-  - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
-  - [Disabling](#disabling)
-  - [Customizing component element](#customizing-component-element)
-  - [CSS fallback](#css-fallback)
-  - [FastBoot fallback](#fastboot-fallback)
-- [Browser support](#browser-support)
-- [Alternatives](#alternatives)
-  - [Comparison](#comparison)
-    - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
-    - [Using default rule definitions](#using-default-rule-definitions)
-    - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
-    - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
-    - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
-    - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
-- [Contributing](#contributing)
-  - [Tools](#tools)
-  - [Installation](#installation-1)
-  - [Linting](#linting)
-  - [Running tests](#running-tests)
-  - [Running the dummy application](#running-the-dummy-application)
-- [License](#license)
-- [Credit](#credit)
+- [!GitHub Workflow Status](#)
+  - [Roadmap](#roadmap)
+  - [Rationale](#rationale)
+  - [Concept of sizes](#concept-of-sizes)
+  - [How ember-element-query works](#how-ember-element-query-works)
+    - [Using attributes in CSS](#using-attributes-in-css)
+    - [Edge cases](#edge-cases)
+    - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [As a modifier](#as-a-modifier)
+    - [As a component](#as-a-component)
+  - [Advanced usage](#advanced-usage)
+    - [onResize callback](#onresize-callback)
+    - [Custom sizes](#custom-sizes)
+    - [Using height instead of width](#using-height-instead-of-width)
+    - [Using both width and height](#using-both-width-and-height)
+    - [Customizing attribute prefix](#customizing-attribute-prefix)
+    - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
+    - [Disabling](#disabling)
+    - [Customizing component element](#customizing-component-element)
+    - [CSS fallback](#css-fallback)
+    - [FastBoot fallback](#fastboot-fallback)
+  - [Browser support](#browser-support)
+  - [Alternatives](#alternatives)
+    - [Comparison](#comparison)
+      - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
+      - [Using default rule definitions](#using-default-rule-definitions)
+      - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
+      - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
+      - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
+      - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
+  - [Contributing](#contributing)
+    - [Tools](#tools)
+    - [Installation](#installation-1)
+    - [Linting](#linting)
+    - [Running tests](#running-tests)
+    - [Running the dummy application](#running-the-dummy-application)
+  - [License](#license)
+  - [Credit](#credit)
 
 
 
@@ -100,7 +103,7 @@ This addon is in active development.
   * [x] Disabling
 * [x] Expose types
 * [x] CI
-* [ ] npm package
+* [x] npm package
 * [ ] Documentation
   * [x] Concept
   * [x] Feature description
