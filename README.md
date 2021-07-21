@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 ember-element-query
 ![npm version](https://img.shields.io/npm/v/ember-element-query)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/lolmaus/ember-element-query/CI)
+[![CI](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml/badge.svg)](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml)
 ==============================================================================
 
 * Use element queries effortlessly on any element or component.
