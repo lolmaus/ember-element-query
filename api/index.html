@@ -1,0 +1,1096 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ember-element-query</title>
+	<meta name="description" content="Documentation for ember-element-query">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">ember-element-query</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>ember-element-query</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<!-- omit in toc -->
+				<p>ember-element-query
+					<img src="https://img.shields.io/npm/v/ember-element-query" alt="npm version">
+					<a href="https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml"><img src="https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+				===================</p>
+				<ul>
+					<li>Use element queries effortlessly on any element or component.</li>
+					<li>Use it in the form of the <code>{{element-query}}</code> modifier or the <code>&lt;ElementQuery as |EQ|&gt;</code> component.</li>
+					<li>Apply styles that respond based on element&#39;s own width rather than viewport width.</li>
+					<li>Do CSS transforations and template transformations.</li>
+				</ul>
+				<p>Element queries are <a href="https://www.smashingmagazine.com/2016/07/how-i-ended-up-with-element-queries-and-how-you-can-use-them-today/">a technique</a> to do responsive transformations based on element&#39;s own size rather than viewport size.</p>
+				<p>It lets you implement reusable responsive components — with encapsulated styles, decoupled from their parent context. Such components will realign their content depending on how much space is available to them.</p>
+				<p>For example, if you put a responsive component into a tight sidebar, it will align its content vertically. When the sidebar expands, the component will realign horizontally in order to efficiently use available space.</p>
+				<p>Here&#39;s a biased comparison table with competing addons:</p>
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th align="center">ember-element-query</th>
+							<th align="center"><a href="https://github.com/chadian/ember-fill-up/">ember-fill-up</a></th>
+							<th align="center"><a href="https://github.com/ijlee2/ember-container-query/">ember-container-query</a></th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>Octane</td>
+							<td align="center">✔</td>
+							<td align="center">🚫</td>
+							<td align="center">✔</td>
+						</tr>
+						<tr>
+							<td><a href="https://web.dev/resize-observer/">ResizeObserver</a></td>
+							<td align="center">✔</td>
+							<td align="center">✔</td>
+							<td align="center">🚫</td>
+						</tr>
+						<tr>
+							<td>Offers a modifier</td>
+							<td align="center">✔</td>
+							<td align="center">🚫</td>
+							<td align="center">🚫</td>
+						</tr>
+						<tr>
+							<td>Offers a component</td>
+							<td align="center">✔</td>
+							<td align="center">✔</td>
+							<td align="center">✔</td>
+						</tr>
+						<tr>
+							<td>API convenience</td>
+							<td align="center">⭐⭐⭐⭐⭐</td>
+							<td align="center">⭐⭐⭐⭐</td>
+							<td align="center">⭐⭐⭐⭐</td>
+						</tr>
+						<tr>
+							<td>CSS transformations</td>
+							<td align="center">⭐⭐⭐⭐⭐</td>
+							<td align="center">⭐⭐⭐⭐</td>
+							<td align="center">⭐⭐⭐⭐</td>
+						</tr>
+						<tr>
+							<td>Template transformations</td>
+							<td align="center">⭐⭐⭐⭐⭐</td>
+							<td align="center">⭐⭐⭐⭐</td>
+							<td align="center">⭐⭐⭐⭐</td>
+						</tr>
+				</tbody></table>
+				<p>See <a href="#comparison">detailed comparison</a> with code samples.</p>
+				<hr>
+				<ul>
+					<li><a href="#">!GitHub Workflow Status</a><ul>
+							<li><a href="#roadmap">Roadmap</a></li>
+							<li><a href="#rationale">Rationale</a></li>
+							<li><a href="#concept-of-sizes">Concept of sizes</a></li>
+							<li><a href="#how-ember-element-query-works">How ember-element-query works</a><ul>
+									<li><a href="#using-attributes-in-css">Using attributes in CSS</a></li>
+									<li><a href="#edge-cases">Edge cases</a></li>
+									<li><a href="#-use-in-compound-selectors-only">⚠ Use in compound selectors only!</a></li>
+								</ul>
+							</li>
+							<li><a href="#installation">Installation</a></li>
+							<li><a href="#usage">Usage</a><ul>
+									<li><a href="#as-a-modifier">As a modifier</a></li>
+									<li><a href="#as-a-component">As a component</a></li>
+								</ul>
+							</li>
+							<li><a href="#advanced-usage">Advanced usage</a><ul>
+									<li><a href="#onresize-callback">onResize callback</a></li>
+									<li><a href="#custom-sizes">Custom sizes</a></li>
+									<li><a href="#using-height-instead-of-width">Using height instead of width</a></li>
+									<li><a href="#using-both-width-and-height">Using both width and height</a></li>
+									<li><a href="#customizing-attribute-prefix">Customizing attribute prefix</a></li>
+									<li><a href="#using-multiple-modifiers-on-the-same-element">Using multiple modifiers on the same element</a></li>
+									<li><a href="#disabling">Disabling</a></li>
+									<li><a href="#customizing-component-element">Customizing component element</a></li>
+									<li><a href="#css-fallback">CSS fallback</a></li>
+									<li><a href="#fastboot-fallback">FastBoot fallback</a></li>
+								</ul>
+							</li>
+							<li><a href="#browser-support">Browser support</a></li>
+							<li><a href="#alternatives">Alternatives</a><ul>
+									<li><a href="#comparison">Comparison</a><ul>
+											<li><a href="#defining-custom-rules-rules-using-template-and-css-transformations">Defining custom rules rules, using template and CSS transformations</a></li>
+											<li><a href="#using-default-rule-definitions">Using default rule definitions</a></li>
+											<li><a href="#customizing-element-tag-while-doing-template-transformations">Customizing element tag while doing template transformations</a></li>
+											<li><a href="#customizing-element-tag-while-doing-pure-css-transformations">Customizing element tag while doing pure CSS transformations</a></li>
+											<li><a href="#using-directly-on-images-and-other-void-elements">Using directly on images and other void elements</a></li>
+											<li><a href="#using-both-width-and-height-in-a-rule-for-template-transformation">Using both width and height in a rule for template transformation</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li><a href="#contributing">Contributing</a><ul>
+									<li><a href="#tools">Tools</a></li>
+									<li><a href="#installation-1">Installation</a></li>
+									<li><a href="#linting">Linting</a></li>
+									<li><a href="#running-tests">Running tests</a></li>
+									<li><a href="#running-the-dummy-application">Running the dummy application</a></li>
+								</ul>
+							</li>
+							<li><a href="#license">License</a></li>
+							<li><a href="#credit">Credit</a></li>
+						</ul>
+					</li>
+				</ul>
+				<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
+					<h2>API Docs</h2>
+				</a>
+				<p><a href="https://lolmaus.github.io/ember-element-query/api/">https://lolmaus.github.io/ember-element-query/api/</a></p>
+				<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
+					<h2>Roadmap</h2>
+				</a>
+				<p>This addon is in active development.</p>
+				<ul>
+					<li><input checked="" disabled="" type="checkbox"> <code>{{element-query}}</code> modifier<ul>
+							<li><input checked="" disabled="" type="checkbox"> Exists</li>
+							<li><input checked="" disabled="" type="checkbox"> Sets up a <code>ResizeObserver</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Calls the <code>onResize</code> callback with params</li>
+							<li><input checked="" disabled="" type="checkbox"> Applies attributes to elements</li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>sizes</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>prefix</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>dimension</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Updates on arugments change</li>
+							<li><input checked="" disabled="" type="checkbox"> Add fool-proof exceptions</li>
+							<li><input checked="" disabled="" type="checkbox"> Disabling</li>
+							<li><input checked="" disabled="" type="checkbox"> Applying a general <code>[eq]</code> attribute </li>
+						</ul>
+					</li>
+					<li><input checked="" disabled="" type="checkbox"> <code>&lt;ElementQuery&gt;</code> component<ul>
+							<li><input checked="" disabled="" type="checkbox"> Exists</li>
+							<li><input checked="" disabled="" type="checkbox"> Applies attributes to itself</li>
+							<li><input checked="" disabled="" type="checkbox"> Calls the <code>onResize</code> callback with params</li>
+							<li><input checked="" disabled="" type="checkbox"> Yields block params</li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>sizes</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>prefix</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>dimension</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Accepts <code>tagName</code></li>
+							<li><input checked="" disabled="" type="checkbox"> Disabling</li>
+						</ul>
+					</li>
+					<li><input checked="" disabled="" type="checkbox"> Expose types</li>
+					<li><input checked="" disabled="" type="checkbox"> CI</li>
+					<li><input checked="" disabled="" type="checkbox"> npm package</li>
+					<li><input disabled="" type="checkbox"> Documentation<ul>
+							<li><input checked="" disabled="" type="checkbox"> Concept</li>
+							<li><input checked="" disabled="" type="checkbox"> Feature description</li>
+							<li><input checked="" disabled="" type="checkbox"> Usage</li>
+							<li><input checked="" disabled="" type="checkbox"> Browser support</li>
+							<li><input checked="" disabled="" type="checkbox"> Comparison with alternatives</li>
+							<li><input disabled="" type="checkbox"> TypeDoc API documentation<ul>
+									<li><input disabled="" type="checkbox"> Document</li>
+									<li><input disabled="" type="checkbox"> Set up auto deployment</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li><input disabled="" type="checkbox"> Demo app</li>
+				</ul>
+				<a href="#rationale" id="rationale" style="color: inherit; text-decoration: none;">
+					<h2>Rationale</h2>
+				</a>
+				<p>CSS media queries have a few disadvantages:</p>
+				<ul>
+					<li>They account for scrollbar width. On OSes with a scrollbar such as Windows and Linux, available document width is some 15px smaller than the one detected by a media query. Resulting styles are slightly inconsistent across OSes.</li>
+					<li>They are designed for creating responsive layouts, whereas making responsive <em>components</em> is unreasonably hard:<ul>
+							<li>If your responsive component appears in different contexts, you have to define media queries separately for each context and make sure they don&#39;t overlap.</li>
+							<li>If you want to make your responsive component reusable, you can&#39;t apply responsive styles directly to it because you don&#39;t know all the contexts it might be used in. Instead, you have to offer the styles as preprocessor mixins or CSS snippets, for the consuming app developer to apply them by hand in every context.</li>
+							<li>Responsive components put into dynamic contexts (such as collapsible sidebars, grids, other responsive components, etc) require <em>lots</em> of media queries, which involve unreasonably complicated math. Check out <a href="https://lolmaus.github.io/ember-element-query/">the demo</a>.</li>
+						</ul>
+					</li>
+				</ul>
+				<p>All those problems wouldn&#39;t exist if we were able to apply styles conditionally based on element&#39;s own width:</p>
+				<pre><code class="language-css"><span style="color: #008000">/* Hypothetical sample. I wish these were possible, but alas! */</span>
+
+<span style="color: #008000">/* When .my-menu is &lt;= 499px, apply margin-bottom to .my-menu--item */</span>
+<span style="color: #800000">.my-menu</span><span style="color: #000000">:max-width(499px) </span><span style="color: #800000">.my-menu--item</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">margin-bottom</span><span style="color: #000000">: </span><span style="color: #098658">10px</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">/* When .my-menu is &gt;= 500px, apply flex to it */</span>
+<span style="color: #800000">.my-menu</span><span style="color: #000000">:min-width(500px) {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">display</span><span style="color: #000000">: </span><span style="color: #0451A5">flex</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">/* When .my-menu is &gt;= 500px, apply margin-right to .my-menu--item */</span>
+<span style="color: #800000">.my-menu</span><span style="color: #000000">:min-width(500px) </span><span style="color: #800000">.my-menu--item</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">margin-right</span><span style="color: #000000">: </span><span style="color: #098658">10px</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>Unfortunately, CSS is not aware of element&#39;s current width, so pseudoselectors like <code>:min-width(500px)</code> are impossible... unless you use a tool like <code>ember-element-query</code>.</p>
+				<a href="#concept-of-sizes" id="concept-of-sizes" style="color: inherit; text-decoration: none;">
+					<h2>Concept of sizes</h2>
+				</a>
+				<p><code>ember-element-query</code> operates with <em>sizes</em>. &quot;Sizes&quot; are like T-shirt sizes, except they indicate element width.</p>
+				<p>The default sizes scale is:</p>
+				<pre><code><span style="color: #000000">Breakpoints:  </span><span style="color: #098658">0</span><span style="color: #000000">       200</span><span style="color: #001080">px</span><span style="color: #000000">     400</span><span style="color: #001080">px</span><span style="color: #000000">     600</span><span style="color: #001080">px</span><span style="color: #000000">     800</span><span style="color: #001080">px</span><span style="color: #000000">     1000</span><span style="color: #001080">px</span><span style="color: #000000">    1200</span><span style="color: #001080">px</span><span style="color: #000000">    1400</span><span style="color: #001080">px</span><span style="color: #000000">  </span>
+<span style="color: #000000">              ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────&gt;</span>
+<span style="color: #000000">Sizes:        ·   </span><span style="color: #001080">xxs</span><span style="color: #000000">   ·    </span><span style="color: #001080">xs</span><span style="color: #000000">   ·    </span><span style="color: #001080">s</span><span style="color: #000000">    ·    </span><span style="color: #001080">m</span><span style="color: #000000">    ·    </span><span style="color: #001080">l</span><span style="color: #000000">    ·    </span><span style="color: #001080">xl</span><span style="color: #000000">   ·   </span><span style="color: #001080">xxl</span><span style="color: #000000">   ·   </span><span style="color: #001080">xxxl</span><span style="color: #000000">   </span>
+</code></pre>
+				<p>The left limit of each size range is inclusive, the right limit is non-inclusive.</p>
+				<p>For example, an element is considered to be of size <code>m</code> when its width is <code>&gt;= 600px</code> and <code>&lt; 800px</code>.</p>
+				<p>Here&#39;s an explicit sizes chart:</p>
+				<pre><code><span style="color: #000000">Breakpoints:  </span><span style="color: #098658">0</span><span style="color: #000000">       200</span><span style="color: #001080">px</span><span style="color: #000000">     400</span><span style="color: #001080">px</span><span style="color: #000000">     600</span><span style="color: #001080">px</span><span style="color: #000000">     800</span><span style="color: #001080">px</span><span style="color: #000000">     1000</span><span style="color: #001080">px</span><span style="color: #000000">    1200</span><span style="color: #001080">px</span><span style="color: #000000">    1400</span><span style="color: #001080">px</span><span style="color: #000000">  </span>
+<span style="color: #000000">              ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────&gt;</span>
+<span style="color: #000000">Sizes:        ·   </span><span style="color: #001080">xxs</span><span style="color: #000000">   ·    </span><span style="color: #001080">xs</span><span style="color: #000000">   ·    </span><span style="color: #001080">s</span><span style="color: #000000">    ·    </span><span style="color: #001080">m</span><span style="color: #000000">    ·    </span><span style="color: #001080">l</span><span style="color: #000000">    ·    </span><span style="color: #001080">xl</span><span style="color: #000000">   ·   </span><span style="color: #001080">xxl</span><span style="color: #000000">   ·   </span><span style="color: #001080">xxxl</span><span style="color: #000000">   </span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">xxs</span><span style="color: #000000">       │         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">0</span><span style="color: #000000">—</span><span style="color: #098658">199</span><span style="color: #000000">     ├────────┤·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">xs</span><span style="color: #000000">        ├─────────┤         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">200</span><span style="color: #000000">—</span><span style="color: #098658">399</span><span style="color: #000000">   ├──────────────────┤·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">s</span><span style="color: #000000">         ├───────────────────┤         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">400</span><span style="color: #000000">—</span><span style="color: #098658">599</span><span style="color: #000000">   ├────────────────────────────┤·         ·         ·         ·         ·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">m</span><span style="color: #000000">         ├─────────────────────────────┤         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">600</span><span style="color: #000000">—</span><span style="color: #098658">799</span><span style="color: #000000">   ├──────────────────────────────────────┤·         ·         ·         ·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">l</span><span style="color: #000000">         ├───────────────────────────────────────┤         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">800</span><span style="color: #000000">—</span><span style="color: #098658">999</span><span style="color: #000000">   ├────────────────────────────────────────────────┤·         ·         ·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">xl</span><span style="color: #000000">        ├─────────────────────────────────────────────────┤         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">1000</span><span style="color: #000000">—</span><span style="color: #098658">1199</span><span style="color: #000000"> ├──────────────────────────────────────────────────────────┤·         ·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">xxl</span><span style="color: #000000">       ├───────────────────────────────────────────────────────────┤         ·</span>
+<span style="color: #000000">    </span><span style="color: #098658">1200</span><span style="color: #000000">—</span><span style="color: #098658">1399</span><span style="color: #000000"> ├────────────────────────────────────────────────────────────────────┤·</span>
+<span style="color: #000000">              ·         ·         ·         ·         ·         ·         ·         ·</span>
+<span style="color: #000000">    </span><span style="color: #001080">xxxl</span><span style="color: #000000">      ├─────────────────────────────────────────────────────────────────────┤</span>
+<span style="color: #000000">    </span><span style="color: #098658">1400</span><span style="color: #000000">+     ├──────────────────────────────────────────────────────────────────────────&gt;</span>
+</code></pre>
+				<a href="#how-ember-element-query-works" id="how-ember-element-query-works" style="color: inherit; text-decoration: none;">
+					<h2>How ember-element-query works</h2>
+				</a>
+				<p><code>ember-element-query</code> applies HTML attributes to an element indicating its current size.</p>
+				<p>There are three types of attributes, all of them are applied at once:</p>
+				<ul>
+					<li><p><code>at-&lt;size&gt;</code> is applied with elements current size.</p>
+						<p>  For example, an element with width of <code>764px</code> will receive attribute <code>at-m</code>.</p>
+					</li>
+					<li><p><code>from-&lt;size&gt;</code> are applied with element&#39;s current size and all smaller sizes.</p>
+						<p>  For example, an element with width of <code>764px</code> will receive attributes <code>from-xxs</code>, <code>from-xs</code>, <code>from-s</code> and <code>from-m</code>.</p>
+					</li>
+					<li><p><code>to-&lt;size&gt;</code> are applied with element&#39;s current size and all larger sizes.</p>
+						<p>  For example, an element with width of <code>764px</code> will receive attributes <code>to-m</code>, <code>to-l</code>, <code>to-xxl</code> and <code>to-xxxl</code>.</p>
+					</li>
+				</ul>
+				<a href="#using-attributes-in-css" id="using-attributes-in-css" style="color: inherit; text-decoration: none;">
+					<h3>Using attributes in CSS</h3>
+				</a>
+				<p>They can be used in CSS like this:</p>
+				<pre><code class="language-css"><span style="color: #800000">.foo</span><span style="color: #000000">[</span><span style="color: #FF0000">at-xxs</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/* These styles when be applied when the element has exactly the size of `xxs`, namely 0—199 px. */</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.foo</span><span style="color: #000000">[</span><span style="color: #FF0000">from-xs</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/* These styles when be applied when the element has the size of `xxs` or larger, namely 200+ px. */</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.foo</span><span style="color: #000000">[</span><span style="color: #FF0000">to-xl</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/* These styles when be applied when the element has the size of `xl` or smaller, namely 0—1199 px. */</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.foo</span><span style="color: #000000">[</span><span style="color: #FF0000">from-s</span><span style="color: #000000">][</span><span style="color: #FF0000">to-l</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/* These styles when be applied when the element has the size between `s` and `l` inclusively, namely 400—999 px. */</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#edge-cases" id="edge-cases" style="color: inherit; text-decoration: none;">
+					<h3>Edge cases</h3>
+				</a>
+				<p>Note that some attribute usages don&#39;t make much sense:</p>
+				<ul>
+					<li>The smallest <code>from-</code> and the largest <code>to-</code> attribute are applied at all times, thus <code>.foo[from-xxs]</code> and <code>.foo[to-xxxl]</code> selectors are both equivalent to simply <code>.foo</code>.</li>
+					<li><code>.foo[to-xxs]</code> is equivalent to <code>.foo[at-xxs]</code>, and <code>.foo[from-xxxl]</code> is equivalent to <code>.foo[at-xxxl]</code>.</li>
+					<li><code>.foo[from-m][to-m]</code> is equivalent to <code>.foo[at-m]</code>.</li>
+				</ul>
+				<a href="#⚠-use-in-compound-selectors-only" id="⚠-use-in-compound-selectors-only" style="color: inherit; text-decoration: none;">
+					<h3>⚠ Use in compound selectors only!</h3>
+				</a>
+				<p>Attribute selectors in CSS should <strong>only</strong> be used in conjunction with semantic selectors.</p>
+				<p>The following usage will mess up you website/app:</p>
+				<pre><code class="language-css"><span style="color: #008000">/* Never do this! */</span>
+<span style="color: #000000">[</span><span style="color: #FF0000">at-m</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">float</span><span style="color: #000000">: </span><span style="color: #0451A5">left</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">/* Still quite bad */</span>
+<span style="color: #800000">aside</span><span style="color: #000000">[</span><span style="color: #FF0000">at-m</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">float</span><span style="color: #000000">: </span><span style="color: #0451A5">left</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">/* OK */</span>
+<span style="color: #800000">.my-side-block</span><span style="color: #000000">[</span><span style="color: #FF0000">at-m</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">float</span><span style="color: #000000">: </span><span style="color: #0451A5">left</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h2>Installation</h2>
+				</a>
+				<p>Use <code>ember-cli</code> to install the addon as usual:</p>
+				<pre><code><span style="color: #001080">ember</span><span style="color: #000000"> </span><span style="color: #001080">i</span><span style="color: #000000"> </span><span style="color: #001080">ember</span><span style="color: #000000">-</span><span style="color: #001080">element</span><span style="color: #000000">-</span><span style="color: #001080">query</span>
+</code></pre>
+				<p>This addon does not do anything on install, so it can alternatively be installed with npm:</p>
+				<pre><code><span style="color: #001080">npm</span><span style="color: #000000"> </span><span style="color: #001080">i</span><span style="color: #000000"> -</span><span style="color: #0070C1">D</span><span style="color: #000000"> </span><span style="color: #001080">ember</span><span style="color: #000000">-</span><span style="color: #001080">element</span><span style="color: #000000">-</span><span style="color: #001080">query</span>
+</code></pre>
+				<p>...or Yarn:</p>
+				<pre><code><span style="color: #001080">yarn</span><span style="color: #000000"> </span><span style="color: #001080">add</span><span style="color: #000000"> -</span><span style="color: #0070C1">D</span><span style="color: #000000"> </span><span style="color: #001080">ember</span><span style="color: #000000">-</span><span style="color: #001080">element</span><span style="color: #000000"> </span><span style="color: #001080">query</span>
+</code></pre>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<a href="#as-a-modifier" id="as-a-modifier" style="color: inherit; text-decoration: none;">
+					<h3>As a modifier</h3>
+				</a>
+				<p>Using the modifier is preferred if you only do <strong>CSS transformations</strong>, which is recommended according to the Responsiv Web Design doctrine.</p>
+				<p>Simply apply the <code>{{element-query}}</code> modifier to any element or angle bracket component like this:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query}}</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>As a result, element query attributes will be applied to the element. The result could look like this:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">at-m</span><span style="color: #000000"> </span><span style="color: #FF0000">from-xxs</span><span style="color: #000000"> </span><span style="color: #FF0000">from-xs</span><span style="color: #000000"> </span><span style="color: #FF0000">from-s</span><span style="color: #000000"> </span><span style="color: #FF0000">from-m</span><span style="color: #000000"> </span><span style="color: #FF0000">to-m</span><span style="color: #000000"> </span><span style="color: #FF0000">to-l</span><span style="color: #000000"> </span><span style="color: #FF0000">to-xl</span><span style="color: #000000"> </span><span style="color: #FF0000">to-xxl</span><span style="color: #000000"> </span><span style="color: #FF0000">to-xxxl</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<a href="#as-a-component" id="as-a-component" style="color: inherit; text-decoration: none;">
+					<h3>As a component</h3>
+				</a>
+				<p>The component is useful when you need to do <strong>template transformations</strong>.</p>
+				<p>If you want to render chunks of template conditionally, use this syntax:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #000000"> </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|EQ|</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if EQ.at-m}}</span>
+<span style="color: #000000">    {{! This will only be rendered when the `</span><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span><span style="color: #000000">` component is of size `m`. }}</span>
+<span style="color: #000000">  {{/if}}</span>
+
+<span style="color: #000000">  {{#if EQ.from-m}}</span>
+<span style="color: #000000">    {{! This will only be rendered when the `</span><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span><span style="color: #000000">` component is of size `m` or larger. }}</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;/EQ.from-m&gt;</span>
+
+<span style="color: #000000">  {{#if EQ.to-m}}</span>
+<span style="color: #000000">    {{! This will only be rendered when the `</span><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span><span style="color: #000000">` component is of size `m` or smaller. }}</span>
+<span style="color: #000000">  {{/EQ.to-m}}</span>
+
+<span style="color: #000000">  {{#if (and EQ.from-s EQ.to-l)}}</span>
+<span style="color: #000000">    {{! This will only be rendered when the `</span><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span><span style="color: #000000">` component is of size `s`, `m` or `l`. }}</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>The first yield argument <code>EQ</code> is an object with current element query attributes. Keys are attribute names and values are <code>true</code>. Non-matching attributes are undefined. Thus,  <code>{{#if EQ.from-m}}</code> renders only when the element is of size <code>m</code> or larger.</p>
+				<p>The second argument <code>EQInfo</code> is the same object that is passed to the <a href="#onresize-callback">onResize callback</a> described below.</p>
+				<a href="#advanced-usage" id="advanced-usage" style="color: inherit; text-decoration: none;">
+					<h2>Advanced usage</h2>
+				</a>
+				<a href="#onresize-callback" id="onresize-callback" style="color: inherit; text-decoration: none;">
+					<h3>onResize callback</h3>
+				</a>
+				<p>You can pass a callback to the <code>onResize</code> argument and it will be called whenever the element resizes:</p>
+				<pre><code class="language-js"><span style="color: #000000">@</span><span style="color: #001080">action</span>
+<span style="color: #795E26">reportResize</span><span style="color: #000000">(</span><span style="color: #001080">eqInfo</span><span style="color: #000000">) {</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">element</span><span style="color: #000000">          </span><span style="color: #008000">// =&gt; current element</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">width</span><span style="color: #000000">            </span><span style="color: #008000">// =&gt; current element&#039;s width in px (number)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">height</span><span style="color: #000000">           </span><span style="color: #008000">// =&gt; current element&#039;s height in px (number)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">ratio</span><span style="color: #000000">            </span><span style="color: #008000">// =&gt; current element&#039;s aspect ratio (width/height, number)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">size</span><span style="color: #000000">             </span><span style="color: #008000">// =&gt; current element&#039;s width size (string or undefined)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">sizeHeight</span><span style="color: #000000">       </span><span style="color: #008000">// =&gt; current element&#039;s height size (string or undefined)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">dimension</span><span style="color: #000000">        </span><span style="color: #008000">// =&gt; current dimension (&#039;width&#039;, &#039;height&#039; or &#039;both&#039;)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">prefix</span><span style="color: #000000">           </span><span style="color: #008000">// =&gt; current prefix (string or undefined)</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">attributes</span><span style="color: #000000">       </span><span style="color: #008000">// =&gt; matching element query attributes in array form: [&#039;from-xxs&#039;, &#039;from-xs&#039;, ...]</span>
+<span style="color: #000000">  </span><span style="color: #001080">eqInfo</span><span style="color: #000000">.</span><span style="color: #001080">attributesRecord</span><span style="color: #000000"> </span><span style="color: #008000">// =&gt; matching element query attributes in object form: {&#039;from-xxs&#039;: true, &#039;from-xs&#039;: true, ...}</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">onResize</span><span style="color: #000000">=</span><span style="color: #0000FF">this.reportResize}}</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #000000"> </span><span style="color: #FF0000">@onResize</span><span style="color: #000000">=</span><span style="color: #0000FF">{{this.reportResize}}</span><span style="color: #800000">&gt;&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<a href="#custom-sizes" id="custom-sizes" style="color: inherit; text-decoration: none;">
+					<h3>Custom sizes</h3>
+				</a>
+				<p>Your tailored visual designs might require component switching layouts at breakpoints different from this addon&#39;s defaults.</p>
+				<p>You can override them with the <code>sizes</code> argument. It receives a plain object where keys are breakpoint names and arguments are numbers representing width.</p>
+				<p>⚠ One of the numbers <strong>must</strong> be 0, otherwise the addon will crash your app.</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span>
+<span style="color: #000000">      </span><span style="color: #FF0000">small</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span>
+<span style="color: #000000">      </span><span style="color: #FF0000">medium</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span>
+<span style="color: #000000">      </span><span style="color: #FF0000">large</span><span style="color: #000000">=</span><span style="color: #0000FF">700</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #800000">&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">small</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">medium</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">large</span><span style="color: #000000">=</span><span style="color: #0000FF">700</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>The above example defines sizes like this:</p>
+				<ul>
+					<li><code>small</code>: 0—349 px,</li>
+					<li><code>medium</code>: 350—699 px,</li>
+					<li><code>large</code>: 700+ px.</li>
+				</ul>
+				<p>When the element has the width of <code>421px</code>, it will receive attributes <code>at-medium</code>, <code>from-medium</code>, <code>to-medium</code>, <code>from-small</code> and <code>to-large</code>.</p>
+				<a href="#using-height-instead-of-width" id="using-height-instead-of-width" style="color: inherit; text-decoration: none;">
+					<h3>Using height instead of width</h3>
+				</a>
+				<p>Use the <code>dimension=&quot;height&quot;</code> argument to make attributes get applied based on element height:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span><span style="color: #FF0000">}}</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #000000"> </span><span style="color: #FF0000">@dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span><span style="color: #800000">&gt;&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>Attributes representing height sizes will be postifed with <code>-height</code>: <code>xxs-height</code>, <code>xl-height</code>, etc.</p>
+				<p>You can customize height sizes into <code>@sizesHeight</code>. Make sure that height size names are different from width sizes!</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;div</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">sizesHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-height</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-height</span><span style="color: #000000">=</span><span style="color: #0000FF">200</span><span style="color: #000000"> </span><span style="color: #FF0000">large-height</span><span style="color: #000000">=</span><span style="color: #0000FF">400)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #800000">&lt;/div&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizesHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-height</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-height</span><span style="color: #000000">=</span><span style="color: #0000FF">200</span><span style="color: #000000"> </span><span style="color: #FF0000">large-height</span><span style="color: #000000">=</span><span style="color: #0000FF">400}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|EQ|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if (and EQ.to-small-width EQ.from-large-height)}}</span>
+<span style="color: #000000">    I am thin and tall.</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>Specifying <code>heightSizes</code> has no effect unless <code>dimension</code> is either <code>&quot;height&quot;</code> or <code>&quot;both&quot;</code>.</p>
+				<a href="#using-both-width-and-height" id="using-both-width-and-height" style="color: inherit; text-decoration: none;">
+					<h3>Using both width and height</h3>
+				</a>
+				<p>Use the <code>dimension=&quot;both&quot;</code> argument:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;both&quot;</span><span style="color: #FF0000">}}</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #000000"> </span><span style="color: #FF0000">@dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;both&quot;</span><span style="color: #800000">&gt;&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>This will cause two sets of attributes get applied. Attributes representing width sizes will be the same as <a href="#concept-of-sizes">usual</a>. Attributes representing height sizes will be postifed with <code>-height</code>: <code>xxs-height</code>, <code>xl-height</code>, etc.</p>
+				<p>This lets you apply CSS like this:</p>
+				<pre><code class="language-css"><span style="color: #800000">.foo</span><span style="color: #000000">[</span><span style="color: #FF0000">to-s</span><span style="color: #000000">][</span><span style="color: #FF0000">from-xl-height</span><span style="color: #000000">] {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/* I am thin and tall */</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>You can customize height sizes into <code>@sizesHeight</code>. Make sure that height size names are different from width sizes!</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;div</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">@dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;both&quot;</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-width</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-width</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">large-width</span><span style="color: #000000">=</span><span style="color: #0000FF">700)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">sizesHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-height</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-height</span><span style="color: #000000">=</span><span style="color: #0000FF">200</span><span style="color: #000000"> </span><span style="color: #FF0000">large-height</span><span style="color: #000000">=</span><span style="color: #0000FF">400)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #800000">&lt;/div&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span><span style="color: #000000"> </span><span style="color: #FF0000">smallWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">mediumWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">largeWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">700}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizesHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-height</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-height</span><span style="color: #000000">=</span><span style="color: #0000FF">200</span><span style="color: #000000"> </span><span style="color: #FF0000">large-height</span><span style="color: #000000">=</span><span style="color: #0000FF">400}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|EQ|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if (and EQ.to-small-width EQ.from-large-height)}}</span>
+<span style="color: #000000">    I am thin and tall.</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<a href="#customizing-attribute-prefix" id="customizing-attribute-prefix" style="color: inherit; text-decoration: none;">
+					<h3>Customizing attribute prefix</h3>
+				</a>
+				<p>Use the <code>prefix</code> argument to adjust attribute prefix:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">prefix</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;data-foo-&quot;</span><span style="color: #FF0000">}}</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #000000"> </span><span style="color: #FF0000">@prefix</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;data-foo-&quot;</span><span style="color: #800000">&gt;&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>This will result in attributes like <code>data-foo-at-xl</code>, <code>data-foo-from-m</code>, etc.</p>
+				<a href="#using-multiple-modifiers-on-the-same-element" id="using-multiple-modifiers-on-the-same-element" style="color: inherit; text-decoration: none;">
+					<h3>Using multiple modifiers on the same element</h3>
+				</a>
+				<p>One use case for this is to apply new styles based on new breakpoints without breaking (and refactoring) existing styles.</p>
+				<p>You can use both width and height element queries on the same element like this:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;foo&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">(new-small</span><span style="color: #CD3131">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">new-large</span><span style="color: #000000">=</span><span style="color: #0000FF">700)}}</span>
+<span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>or</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;foo&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">prefix</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;new-&quot;</span><span style="color: #FF0000">}}</span>
+<span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>⚠ The <code>{{element-query}}</code> modifier adds and removes attributes aggressively and will interfere with other modifiers/libraries manipulating same attributes. It is your duty to ensure there is no conflict in attribute names. Adjust <code>sizes</code>, <code>sizesHeight</code> and <code>prefix</code> arguments to avoid conflicts.</p>
+				<a href="#disabling" id="disabling" style="color: inherit; text-decoration: none;">
+					<h3>Disabling</h3>
+				</a>
+				<p>Pass a truthy value into <code>isDisabled</code> to disable element query functionality:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;img</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-query</span><span style="color: #000000"> </span><span style="color: #FF0000">@isDisabled</span><span style="color: #000000">=</span><span style="color: #0000FF">true}}</span>
+<span style="color: #800000">&gt;</span>
+</code></pre>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@isDisabled</span><span style="color: #000000">=</span><span style="color: #0000FF">{{true}}</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+				<p>⚠ This property is intended for debugging purposes or disabling element queries entirely. If you change <code>isDisabled</code> to <code>true</code> dynamically, element query attributes will freeze in their current state, there is no cleanup.</p>
+				<a href="#customizing-component-element" id="customizing-component-element" style="color: inherit; text-decoration: none;">
+					<h3>Customizing component element</h3>
+				</a>
+				<p>The <code>&lt;ElementQuery&gt;</code> component accepts a <code>@tagName</code> argument that allows tweaking the component&#39;s root tag:</p>
+				<pre><code class="language-hbs">&lt;ElementQuery @tagName=&quot;aside&quot;&gt;
+  The sidebar
+&lt;/ElementQuery&gt;
+</code></pre>
+				<p>This wouuld result in the followingg HTML rendered (element query tags not shown):</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;aside&gt;</span>
+<span style="color: #000000">  The sidebar</span>
+<span style="color: #800000">&lt;/aside&gt;</span>
+</code></pre>
+				<a href="#css-fallback" id="css-fallback" style="color: inherit; text-decoration: none;">
+					<h3>CSS fallback</h3>
+				</a>
+				<p>⚠ When navigating between routes, there may be a flash of unstyled content: a very short moment when the component is rendered, but its element queries are not applied yet. This happens because  <code>ember-element-query</code> addon needs the component to be rendered in order to measure its size.</p>
+				<p>Consider this SCSS. Here we have two layouts: horizontal and vertical.</p>
+				<pre><code class="language-scss"><span style="color: #800000">.MyComponent</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #800000">&amp;</span><span style="color: #000000">[</span><span style="color: #FF0000">to-m</span><span style="color: #000000">] {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Vertical layout. Children should have margins between them.</span>
+<span style="color: #000000">    &gt; </span><span style="color: #800000">*:not</span><span style="color: #000000">(</span><span style="color: #800000">:last-child</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #FF0000">margin-bottom</span><span style="color: #000000">: </span><span style="color: #098658">20px</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #800000">&amp;</span><span style="color: #000000">[</span><span style="color: #FF0000">from-l</span><span style="color: #000000">] {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Horizontal layout. Children should be positioned in a row.</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">margin-bottom</span><span style="color: #000000">: </span><span style="color: #098658">20px</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>During the flash of unstyled content, neither layout is applied because <code>ember-element-query</code> hasn&#39;t yet applied its attributes.</p>
+				<p>This is suboptimal. Instead, you want one of the layouts to be the default one: applied when element query attributes are unavailable.</p>
+				<p>For this use case, <code>ember-element-query</code> applies the <code>eq</code> attribute to an element at all times. Thus, the <code>:not([eq])</code> selector matches the element does not have element queries applied.</p>
+				<p>In order to make one of the layouts default, add <code>:not([eq])</code> to it&#39;s selectors:</p>
+				<pre><code class="language-scss"><span style="color: #800000">.MyComponent</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #800000">&amp;:not</span><span style="color: #000000">([</span><span style="color: #FF0000">eq</span><span style="color: #000000">]), </span><span style="color: #800000">&amp;</span><span style="color: #000000">[</span><span style="color: #FF0000">to-m</span><span style="color: #000000">] {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Vertical layout. Children should have margins between them.</span>
+<span style="color: #000000">    &gt; </span><span style="color: #800000">*:not</span><span style="color: #000000">(</span><span style="color: #800000">:last-child</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #FF0000">margin-bottom</span><span style="color: #000000">: </span><span style="color: #098658">20px</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #800000">&amp;</span><span style="color: #000000">[</span><span style="color: #FF0000">from-l</span><span style="color: #000000">] {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Horizontal layout. Children should be positioned in a row.</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">margin-bottom</span><span style="color: #000000">: </span><span style="color: #098658">20px</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<p>This would remove the flash of unstyled content at least for some screen sizes.</p>
+				<a href="#fastboot-fallback" id="fastboot-fallback" style="color: inherit; text-decoration: none;">
+					<h3>FastBoot fallback</h3>
+				</a>
+				<p>Unfortunately, FastBoot does not have information about user&#39;s screen size. When a user vistis a FastBoot-driven website, they initially see a page without any <code>ember-element-query</code> attributes. When FastBoot rehydrates, element queries kick in. As a result, page layout may suddenly change after the user has already started reading and scrolling, causing frustration.</p>
+				<p>One workaround is to use <a href="https://github.com/willviles/ember-useragent">ember-useragent</a>. Its <code>isMobile</code>, <code>isTablet</code> and <code>isDesktop</code> boolean properties let you apply defaults. The result is very crude but better than nothing.</p>
+				<p>Since reusable components can be used in different contexts, it is recommended that you apply the fallback on parent level.</p>
+				<p>Responsive component:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;div</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;my-component&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">{{element-querysizes</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">large</span><span style="color: #000000">=</span><span style="color: #0000FF">700)}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">...attributes</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #800000">&lt;/div&gt;</span>
+</code></pre>
+				<pre><code class="language-css"><span style="color: #800000">.my-component</span><span style="color: #000000"> { </span><span style="color: #008000">/*  */</span><span style="color: #000000">}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">from-medium</span><span style="color: #000000">] { </span><span style="color: #008000">/*  */</span><span style="color: #000000"> }</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">from-large</span><span style="color: #000000">] { </span><span style="color: #008000">/*  */</span><span style="color: #000000"> }</span>
+</code></pre>
+				<p>Parent:</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">MyComponent</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">from-medium</span><span style="color: #000000">=</span><span style="color: #0000FF">{{and</span><span style="color: #000000"> </span><span style="color: #FF0000">this.fastboot.isFastBoot</span><span style="color: #000000"> </span><span style="color: #FF0000">(or</span><span style="color: #000000"> </span><span style="color: #FF0000">this.userAgent.device.isTablet</span><span style="color: #000000"> </span><span style="color: #FF0000">this.userAgent.device.isDesktop)}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">from-large-</span><span style="color: #000000">=</span><span style="color: #0000FF">{{and</span><span style="color: #000000"> </span><span style="color: #FF0000">this.fastboot.isFastBoot</span><span style="color: #000000"> </span><span style="color: #FF0000">this.userAgent.device.isDeskto)}}</span>
+<span style="color: #800000">/&gt;</span>
+</code></pre>
+				<p>Unfortunately, this requires the parent to know which attributes are used in component&#39;s CSS, since providing all possible attributes would be quite tedious, especially for default sizes, which are numerous.</p>
+				<a href="#browser-support" id="browser-support" style="color: inherit; text-decoration: none;">
+					<h2>Browser support</h2>
+				</a>
+				<p><strong>IE is not supported</strong> because <code>ember-element-query</code> uses modern ECMAScript APIs.</p>
+				<p><code>ember-element-query</code> is based on <a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">ResizeObserver</a> which is also not supported by IE.</p>
+				<p>As of 2020-06, <code>ResizeObserver</code> supports the following major browsers:</p>
+				<ul>
+					<li>Chrome: 64+ (since 2018-01-23),</li>
+					<li>Firefox: 69+ (since 2019-09-02, desktop only),</li>
+					<li>Safari: 13.1+ desktop, 13.4+ iOS (since 2020-03-24).</li>
+				</ul>
+				<p>See <a href="https://caniuse.com/#feat=resizeobserver">caniuse.com</a> for detailed stats.</p>
+				<p>⚠ Note that old iOS devices do not have <code>ResizeObserver</code> support, so you might want to use a polyfill. iOS Safari is the new IE. 😬</p>
+				<a href="#alternatives" id="alternatives" style="color: inherit; text-decoration: none;">
+					<h2>Alternatives</h2>
+				</a>
+				<p>There are a few other Ember addons implementing element queries, such as:</p>
+				<ul>
+					<li><a href="https://github.com/chadian/ember-fill-up/">https://github.com/chadian/ember-fill-up/</a></li>
+					<li><a href="https://github.com/ijlee2/ember-container-query">https://github.com/ijlee2/ember-container-query</a></li>
+				</ul>
+				<p><code>ember-element-query</code> was implemented to offer a simpler API at the cost of being opinionated.</p>
+				<p>Other addons are full-fledged element query addons that aren&#39;t as much opinionated. Their approach is defining rules on element query components. For example, if you want your component to respond to <code>max-width: 349px</code>, <code>min-width: 350px</code>, <code>min-width: 350px and max-width: 699px</code> and <code>min-width: 700px</code> — you will need to define four rules on the component. An unexpected challenge is to come up with meaningful names for each range.</p>
+				<p>Every time you need another rule, you need to add it on the component before you&#39;re able to use it in CSS.</p>
+				<p>With <code>ember-element-query</code>, you only need to define <em>breakpoints</em>. The example above uses only two breakpoints: <code>350px</code> and <code>700px</code> — and all combinations of rules become available automatically via attributes.</p>
+				<p>💡 <code>ember-fill-up</code> and <code>ember-container-query</code> and <code>ember-element-query</code> are all full-featured element query addons. <code>ember-element-query</code>&#39;s goal is to provide a simpler API, making it more convenient to use. It encourages using pure CSS transformations, accoridng to the Responsive Web Design paradigm, though template transformations are also possible and convenient.**</p>
+				<a href="#comparison" id="comparison" style="color: inherit; text-decoration: none;">
+					<h3>Comparison</h3>
+				</a>
+				<a href="#defining-custom-rules-rules-using-template-and-css-transformations" id="defining-custom-rules-rules-using-template-and-css-transformations" style="color: inherit; text-decoration: none;">
+					<h4>Defining custom rules rules, using template and CSS transformations</h4>
+				</a>
+				<p>Given breakpoints 350, 700 and 1050:</p>
+				<ul>
+					<li><p><code>ember-fill-up</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">FillUp</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;my-component&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@breakpoints</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">small</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-lt</span><span style="color: #000000"> </span><span style="color: #FF0000">350)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">medium</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-between</span><span style="color: #000000"> </span><span style="color: #FF0000">350</span><span style="color: #000000"> </span><span style="color: #FF0000">700)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">large</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-between</span><span style="color: #000000"> </span><span style="color: #FF0000">700</span><span style="color: #000000"> </span><span style="color: #FF0000">1050)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">extraLarge</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-gte</span><span style="color: #000000"> </span><span style="color: #FF0000">1050)</span>
+
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumAndBigger</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-gte</span><span style="color: #000000"> </span><span style="color: #FF0000">350)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeAndBigger</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-gte</span><span style="color: #000000"> </span><span style="color: #FF0000">700)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumAndSmaller</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-lt</span><span style="color: #000000"> </span><span style="color: #FF0000">700)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeAndSmaller</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-lt</span><span style="color: #000000"> </span><span style="color: #FF0000">1050)</span>
+<span style="color: #000000">    </span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumToLarge</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-between</span><span style="color: #000000"> </span><span style="color: #FF0000">350</span><span style="color: #000000"> </span><span style="color: #FF0000">1050)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|F|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if F.breakpoints.small}}...{{/if}}</span>
+<span style="color: #000000">  {{#if F.breakpoints.medium}}...{{/if}}</span>
+<span style="color: #000000">  {{#if F.breakpoints.large}}...{{/if}}</span>
+<span style="color: #000000">  {{#if F.breakpoints.extraLarge}}...{{/if}}</span>
+
+<span style="color: #000000">  {{#if F.breakpoints.mediumAndBigger}}...{{/if}}</span>
+<span style="color: #000000">  {{#if F.breakpoints.largeAndBigger}}...{{/if}}</span>
+<span style="color: #000000">  {{#if F.breakpoints.mediumAndSmaller}}...{{/if}}</span>
+<span style="color: #000000">  {{#if F.breakpoints.largeAndSmaller}}...{{/if}}</span>
+
+<span style="color: #000000">  {{#if F.breakpoints.mediumToLarge}}...{{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">FillUp</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<pre><code class="language-css"><span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-small</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-medium</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-large</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-extraLarge</span><span style="color: #000000">] {}</span>
+
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-mediumToLarge</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-largeAndBigger</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-mediumAndSmaller</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-largeAndSmaller</span><span style="color: #000000">] {}</span>
+
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-mediumToLarge</span><span style="color: #000000">] {}</span>
+</code></pre>
+						<p>  👆 Note how you need to repeat same breakpoints several times in rule definitions. In order to avoid multiple sources of truth, you could wrap component invocation with <code>{{let}}</code>, but that increases the boilerplate.</p>
+					</li>
+					<li><p><code>ember-container-query</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ContainerQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;my-component&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@features</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">small</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">349)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">medium</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">699)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">large</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">700</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">1049)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">extraLarge</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">1050)</span>
+
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumAndBigger</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">350)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeAndBigger</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">700)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumAndSmaller</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">699)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeAndSmaller</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">1049)</span>
+<span style="color: #000000">    </span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumToLarge</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">1049)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|CQ|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if CQ.features.small}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.medium}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.large}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.extraLarge}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.mediumAndBigger}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.largeAndBigger}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.mediumAndSmaller}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.largeAndSmaller}}...{{/if}}</span>
+<span style="color: #000000">  {{#if CQ.features.mediumToLarge}}...{{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ContainerQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<pre><code class="language-css"><span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-small</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-medium</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-large</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-extraLarge</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-mediumToLarge</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-largeAndBigger</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-mediumAndSmaller</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-largeAndSmaller</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">data-container-query-mediumToLarge</span><span style="color: #000000">] {}</span>
+</code></pre>
+						<p>  👆 Note how you need to manually account for ±1 error in rule definitions.</p>
+					</li>
+					<li><p><code>ember-element-query</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;my-component&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">large</span><span style="color: #000000">=</span><span style="color: #0000FF">700</span><span style="color: #000000"> </span><span style="color: #FF0000">extraLarge</span><span style="color: #000000">=</span><span style="color: #0000FF">1050)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|EQ|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if EQ.at-small}}...{{/if}}</span>
+<span style="color: #000000">  {{#if EQ.at-medium}}...{{/if}}</span>
+<span style="color: #000000">  {{#if EQ.at-large}}...{{/if}}</span>
+<span style="color: #000000">  {{#if EQ.at-extraLarge}}...{{/if}}</span>
+
+<span style="color: #000000">  {{#if EQ.from-medium}}...{{/if}}</span>
+<span style="color: #000000">  {{#if EQ.from-large}}...{{/if}}</span>
+<span style="color: #000000">  {{#if EQ.to-medium}}...{{/if}}</span>
+<span style="color: #000000">  {{#if EQ.to-large}}...{{/if}}</span>
+
+<span style="color: #000000">  {{#if (and EQ.from-medium EQ.to-large)}}...{{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<pre><code class="language-css"><span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">at-small</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">at-medium</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">at-large</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">at-extraLarge</span><span style="color: #000000">] {}</span>
+
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">from-medium</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">from-large</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">to-medium</span><span style="color: #000000">] {}</span>
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">to-large</span><span style="color: #000000">] {}</span>
+
+<span style="color: #800000">.my-component</span><span style="color: #000000">[</span><span style="color: #FF0000">from-medium</span><span style="color: #000000">][</span><span style="color: #FF0000">to-large</span><span style="color: #000000">] {}</span>
+</code></pre>
+						<p>👆 Note how much shorter the usage is, both in rule definitions and rule applications.</p>
+					</li>
+				</ul>
+				<a href="#using-default-rule-definitions" id="using-default-rule-definitions" style="color: inherit; text-decoration: none;">
+					<h4>Using default rule definitions</h4>
+				</a>
+				<ul>
+					<li><p><code>ember-fill-up</code>:</p>
+						<p>  Does not provide any defaults.</p>
+					</li>
+					<li><p><code>ember-container-query</code>:</p>
+						<p>  Does not provide any defaults.</p>
+					</li>
+					<li><p><code>ember-element-query</code>:</p>
+						<p>  Provides <a href="#concept-of-sizes">reasonable defaults</a>.</p>
+						<p>  <strong>Those defaults can be used as a common design language, and all components in your app can be using them, reducing the boilerplate to:</strong></p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<p>  or</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;div</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query}}</span><span style="color: #800000">&gt;&lt;/div&gt;</span>
+</code></pre>
+					</li>
+				</ul>
+				<a href="#customizing-element-tag-while-doing-template-transformations" id="customizing-element-tag-while-doing-template-transformations" style="color: inherit; text-decoration: none;">
+					<h4>Customizing element tag while doing template transformations</h4>
+				</a>
+				<ul>
+					<li><p><code>ember-fill-up</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+					</li>
+					<li><p><code>ember-container-query</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+					</li>
+					<li><p><code>ember-element-query</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+					</li>
+				</ul>
+				<a href="#customizing-element-tag-while-doing-pure-css-transformations" id="customizing-element-tag-while-doing-pure-css-transformations" style="color: inherit; text-decoration: none;">
+					<h4>Customizing element tag while doing pure CSS transformations</h4>
+				</a>
+				<ul>
+					<li><p><code>ember-fill-up</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+					</li>
+					<li><p><code>ember-container-query</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+					</li>
+					<li><p><code>ember-element-query</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;article</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query}}</span><span style="color: #800000">&gt;</span>
+<span style="color: #800000">&lt;/article&gt;</span>
+</code></pre>
+					</li>
+				</ul>
+				<a href="#using-directly-on-images-and-other-void-elements" id="using-directly-on-images-and-other-void-elements" style="color: inherit; text-decoration: none;">
+					<h4>Using directly on images and other void elements</h4>
+				</a>
+				<ul>
+					<li><p><code>ember-fill-up</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+						<p>  Workaround with two wrapper elements:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">FillUp</span><span style="color: #000000"> </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;wrapper1&quot;</span><span style="color: #000000"> </span><span style="color: #FF0000">breakpoints</span><span style="color: #000000">=</span><span style="color: #0000FF">this.rules</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;div</span><span style="color: #000000"> </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">wrapper2</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">    </span><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;image&quot;</span><span style="color: #000000"> </span><span style="color: #FF0000">src</span><span style="color: #000000"> </span><span style="color: #FF0000">alt</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  </span><span style="color: #800000">&lt;/div&gt;</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">FillUp</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<pre><code class="language-css"><span style="color: #800000">.wrapper1</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-small</span><span style="color: #000000">]  {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">opacity</span><span style="color: #000000">: </span><span style="color: #098658">0.5</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+<span style="color: #800000">.wrapper1</span><span style="color: #000000">[</span><span style="color: #FF0000">fill-up-large</span><span style="color: #000000">]  {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">transform</span><span style="color: #000000">: </span><span style="color: #795E26">rotate</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.wrapper2</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">position</span><span style="color: #000000">: </span><span style="color: #0451A5">relative</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">padding-top</span><span style="color: #000000">: </span><span style="color: #098658">56.25%</span><span style="color: #000000">; </span><span style="color: #008000">/* The ratio of the image must be known. Alternatively, the image can be cropped with `object-fit: cover` to arbitrary aspect ratio.*/</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.wrapper2</span><span style="color: #000000"> </span><span style="color: #800000">.image</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">position</span><span style="color: #000000">: </span><span style="color: #0451A5">absolute</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">top</span><span style="color: #000000">: </span><span style="color: #098658">0</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">left</span><span style="color: #000000">: </span><span style="color: #098658">0</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">width</span><span style="color: #000000">: </span><span style="color: #098658">100%</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">height</span><span style="color: #000000">: </span><span style="color: #098658">100%</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+					</li>
+					<li><p><code>ember-container-query</code>:</p>
+						<p>  Impossible until <a href="https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md">RFC 389</a> is implemented (<a href="https://github.com/emberjs/rfc-tracking/issues/42">tracking</a>).</p>
+						<p>  Workaround with two wrapper elements: same as in <code>ember-fill-up</code>.</p>
+					</li>
+				</ul>
+				<ul>
+					<li><p><code>ember-element-query</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;img</span><span style="color: #000000"> </span><span style="color: #FF0000">{{element-query}}</span><span style="color: #000000"> </span><span style="color: #FF0000">src</span><span style="color: #000000"> </span><span style="color: #FF0000">alt</span><span style="color: #000000"> </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;image&quot;</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<pre><code class="language-css"><span style="color: #800000">.image</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">width</span><span style="color: #000000">: </span><span style="color: #098658">100%</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">height</span><span style="color: #000000">: </span><span style="color: #0451A5">auto</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.image</span><span style="color: #000000">[</span><span style="color: #FF0000">at-small</span><span style="color: #000000">]  {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">opacity</span><span style="color: #000000">: </span><span style="color: #098658">0.5</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #800000">.image</span><span style="color: #000000">[</span><span style="color: #FF0000">from-large</span><span style="color: #000000">]  {</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">transform</span><span style="color: #000000">: </span><span style="color: #795E26">rotate</span><span style="color: #000000">(</span><span style="color: #098658">5</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+</code></pre>
+					</li>
+				</ul>
+				<a href="#using-both-width-and-height-in-a-rule-for-template-transformation" id="using-both-width-and-height-in-a-rule-for-template-transformation" style="color: inherit; text-decoration: none;">
+					<h4>Using both width and height in a rule for template transformation</h4>
+				</a>
+				<ul>
+					<li><p><code>ember-fill-up</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">FillUp</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;my-component&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@breakpoints</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">smallWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-lt</span><span style="color: #000000"> </span><span style="color: #FF0000">350)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-between</span><span style="color: #000000"> </span><span style="color: #FF0000">350</span><span style="color: #000000"> </span><span style="color: #FF0000">700)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-gte</span><span style="color: #000000"> </span><span style="color: #FF0000">700)</span>
+
+<span style="color: #000000">    </span><span style="color: #FF0000">smallHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-lt</span><span style="color: #000000"> </span><span style="color: #FF0000">199</span><span style="color: #000000"> </span><span style="color: #FF0000">dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span><span style="color: #FF0000">)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-between</span><span style="color: #000000"> </span><span style="color: #FF0000">200</span><span style="color: #000000"> </span><span style="color: #FF0000">399</span><span style="color: #000000"> </span><span style="color: #FF0000">dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span><span style="color: #FF0000">)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(fill-up-gte</span><span style="color: #000000"> </span><span style="color: #FF0000">400</span><span style="color: #000000"> </span><span style="color: #FF0000">dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;height&quot;</span><span style="color: #FF0000">)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|F|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if (and F.breakpoints.smallWidth F.breakpoints.largeHeight)}}</span>
+<span style="color: #000000">    I am thin and tall.</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">FillUp</span><span style="color: #800000">&gt;</span>
+</code></pre>
+					</li>
+					<li><p><code>ember-container-query</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ContainerQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">class</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;my-component&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@features</span><span style="color: #000000">=</span><span style="color: #0000FF">{{hash</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">smallWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">349)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">699)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeWidth</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-width</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">700)</span>
+
+<span style="color: #000000">    </span><span style="color: #FF0000">smallHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-height</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">199)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">mediumHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-height</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">200</span><span style="color: #000000"> </span><span style="color: #FF0000">max</span><span style="color: #000000">=</span><span style="color: #0000FF">399)</span>
+<span style="color: #000000">    </span><span style="color: #FF0000">largeHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(cq-height</span><span style="color: #000000"> </span><span style="color: #FF0000">min</span><span style="color: #000000">=</span><span style="color: #0000FF">400)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">}}</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|CQ|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if (and CQ.features.smallWidth CQ.features.largeHeight)}}</span>
+<span style="color: #000000">    I am thin and tall.</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ContainerQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+					</li>
+					<li><p><code>ember-element-query</code>:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;both&quot;</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizes</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-width</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-width</span><span style="color: #000000">=</span><span style="color: #0000FF">350</span><span style="color: #000000"> </span><span style="color: #FF0000">large-width</span><span style="color: #000000">=</span><span style="color: #0000FF">700)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">@sizesHeight</span><span style="color: #000000">=</span><span style="color: #0000FF">(hash</span><span style="color: #000000"> </span><span style="color: #FF0000">small-height</span><span style="color: #000000">=</span><span style="color: #0000FF">0</span><span style="color: #000000"> </span><span style="color: #FF0000">medium-height</span><span style="color: #000000">=</span><span style="color: #0000FF">200</span><span style="color: #000000"> </span><span style="color: #FF0000">large-height</span><span style="color: #000000">=</span><span style="color: #0000FF">400)</span>
+<span style="color: #000000">  </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|EQ|</span>
+<span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if (and EQ.to-small-width EQ.from-large-height)}}</span>
+<span style="color: #000000">    I am thin and tall.</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+						<p>  When usign default sizes, this gets even shorter:</p>
+						<pre><code class="language-html"><span style="color: #800000">&lt;</span><span style="color: #CD3131">ElementQuery</span><span style="color: #000000"> </span><span style="color: #FF0000">@dimension</span><span style="color: #000000">=</span><span style="color: #0000FF">&quot;both&quot;</span><span style="color: #000000"> </span><span style="color: #FF0000">as</span><span style="color: #000000"> </span><span style="color: #FF0000">|EQ|</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000">  {{#if (and EQ.to-s EQ.from-l-height)}}</span>
+<span style="color: #000000">    I am thin and tall.</span>
+<span style="color: #000000">  {{/if}}</span>
+<span style="color: #800000">&lt;/</span><span style="color: #CD3131">ElementQuery</span><span style="color: #800000">&gt;</span>
+</code></pre>
+					</li>
+				</ul>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<a href="#tools" id="tools" style="color: inherit; text-decoration: none;">
+					<h3>Tools</h3>
+				</a>
+				<p>Use <a href="https://volta.sh/">Volta</a> and <a href="https://yarnpkg.com/">Yarn</a>.</p>
+				<a href="#installation-1" id="installation-1" style="color: inherit; text-decoration: none;">
+					<h3>Installation</h3>
+				</a>
+				<ul>
+					<li><code>git clone &lt;repository-url&gt;</code></li>
+					<li><code>cd ember-element-query</code></li>
+					<li><code>yarn</code></li>
+				</ul>
+				<a href="#linting" id="linting" style="color: inherit; text-decoration: none;">
+					<h3>Linting</h3>
+				</a>
+				<ul>
+					<li><code>yarn lint:hbs</code> — only templates</li>
+					<li><code>yarn lint:ts</code> — only TypeScript compiler (tsc)</li>
+					<li><code>yarn lint:eslint</code> — only ESLint (including Prettier and <code>typescript-eslint</code>)</li>
+					<li><code>yarn lint</code> — everything</li>
+				</ul>
+				<a href="#running-tests" id="running-tests" style="color: inherit; text-decoration: none;">
+					<h3>Running tests</h3>
+				</a>
+				<ul>
+					<li><code>ember test</code> – Runs the test suite on the current Ember version</li>
+					<li><code>ember test --server</code> – Runs the test suite in &quot;watch mode&quot;</li>
+					<li><code>ember try:each</code> – Runs the test suite against multiple Ember versions</li>
+				</ul>
+				<a href="#running-the-dummy-application" id="running-the-dummy-application" style="color: inherit; text-decoration: none;">
+					<h3>Running the dummy application</h3>
+				</a>
+				<ul>
+					<li><code>ember serve</code></li>
+					<li>Visit the dummy application at <a href="http://localhost:4200">http://localhost:4200</a>.</li>
+				</ul>
+				<p>For more information on using ember-cli, visit <a href="https://ember-cli.com/">https://ember-cli.com/</a>.</p>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h2>License</h2>
+				</a>
+				<p>This project is licensed under the <a href="LICENSE.md">MIT License</a>.</p>
+				<a href="#credit" id="credit" style="color: inherit; text-decoration: none;">
+					<h2>Credit</h2>
+				</a>
+				<p>Initially implemented by Andrey Mikhaylov (<a href="https://github.com/lolmaus">lolmaus</a>) and <a href="https://github.com/lolmaus/ember-element-query/graphs/contributors">contributors</a>.</p>
+				<p>Thanks to Chad Carbert (<a href="https://github.com/chadian">@chadian</a>) and Isaac Lee (<a href="https://github.com/ijlee2">@ijlee2</a>) for feedback, ideas, brainstorming and criticism.</p>
+				<p>Sponsored by <a href="https://github.com/kaliber5">@kaliber5</a>, <a href="https://kaliber5.de">https://kaliber5.de</a>.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/Args.html" class="tsd-kind-icon">Args</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/EQInfo.html" class="tsd-kind-icon">EQInfo</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ModifierArgs.html" class="tsd-kind-icon">Modifier<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#Dimension" class="tsd-kind-icon">Dimension</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#Sizes" class="tsd-kind-icon">Sizes</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SIZES_DEFAULT" class="tsd-kind-icon">SIZES_<wbr>DEFAULT</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#SIZES_HEIGHT_DEFAULT" class="tsd-kind-icon">SIZES_<wbr>HEIGHT_<wbr>DEFAULT</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
