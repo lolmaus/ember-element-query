@@ -1,8 +1,8 @@
 <!-- omit in toc -->
 ember-element-query
 ![npm version](https://img.shields.io/npm/v/ember-element-query)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/lolmaus/ember-element-query/CI)
-==============================================================================
+[![CI](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml/badge.svg)](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml)
+===================
 
 * Use element queries effortlessly on any element or component.
 * Use it in the form of the `{{element-query}}` modifier or the `<ElementQuery as |EQ|>` component.
@@ -74,8 +74,16 @@ See [detailed comparison](#comparison) with code samples.
 
 
 
+API Docs
+--------
+
+https://lolmaus.github.io/ember-element-query/api/
+
+
+
+
 Roadmap
-------------------------------------------------------------------------------
+-------
 
 This addon is in active development.
 
@@ -117,7 +125,7 @@ This addon is in active development.
 
 
 Rationale
-------------------------------------------------------------------------------
+---------
 
 CSS media queries have a few disadvantages:
 
@@ -153,7 +161,7 @@ Unfortunately, CSS is not aware of element's current width, so pseudoselectors l
 
 
 Concept of sizes
-------------------------------------------------------------------------------
+----------------
 
 `ember-element-query` operates with *sizes*. "Sizes" are like T-shirt sizes, except they indicate element width.
 
@@ -200,7 +208,7 @@ Here's an explicit sizes chart:
 
 
 How ember-element-query works
-------------------------------------------------------------------------------
+-----------------------------
 
 `ember-element-query` applies HTML attributes to an element indicating its current size.
 
@@ -280,7 +288,7 @@ aside[at-m] {
 
 
 Installation
-------------------------------------------------------------------------------
+------------
 
 Use `ember-cli` to install the addon as usual:
 
@@ -297,7 +305,7 @@ This addon does not do anything on install, so it can alternatively be installed
 
 
 Usage
-------------------------------------------------------------------------------
+-----
 
 ### As a modifier
 
@@ -350,7 +358,7 @@ The second argument `EQInfo` is the same object that is passed to the [onResize 
 
 
 Advanced usage
-------------------------------------------------------------------------------
+--------------
 
 ### onResize callback
 
@@ -688,7 +696,7 @@ Unfortunately, this requires the parent to know which attributes are used in com
 
 
 Browser support
-------------------------------------------------------------------------------
+---------------
 
 **IE is not supported** because `ember-element-query` uses modern ECMAScript APIs.
 
@@ -707,7 +715,7 @@ See [caniuse.com](https://caniuse.com/#feat=resizeobserver) for detailed stats.
 
 
 Alternatives
-------------------------------------------------------------------------------
+------------
 
 There are a few other Ember addons implementing element queries, such as:
 
@@ -1073,7 +1081,7 @@ Given breakpoints 350, 700 and 1050:
 
 
 Contributing
-------------------------------------------------------------------------------
+------------
 
 ### Tools
 
@@ -1116,14 +1124,14 @@ For more information on using ember-cli, visit [https://ember-cli.com/](https://
 
 
 License
-------------------------------------------------------------------------------
+-------
 
 This project is licensed under the [MIT License](LICENSE.md).
 
 
 
 Credit
-------------------------------------------------------------------------------
+------
 
 Initially implemented by Andrey Mikhaylov ([lolmaus](https://github.com/lolmaus)) and [contributors](https://github.com/lolmaus/ember-element-query/graphs/contributors).
 

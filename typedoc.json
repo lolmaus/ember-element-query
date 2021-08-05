@@ -1,0 +1,5 @@
+{
+  "entryPoints": ["addon/index.ts"],
+  "out": "api-docs",
+  "excludeInternal": true
+}

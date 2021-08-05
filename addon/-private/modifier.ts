@@ -24,6 +24,7 @@ export interface SizeObject {
 
 export type RangeDirection = 'at' | 'from' | 'to';
 
+/** @internal */
 export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
   // Properties

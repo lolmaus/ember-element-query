@@ -1,9 +1,10 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { ComponentArgs, EQInfo } from 'ember-element-query';
+import { Args, EQInfo } from 'ember-element-query';
 
-export default class ElementQuery extends Component<ComponentArgs> {
+/** @internal */
+export default class ElementQuery extends Component<Args> {
   @tracked
   eqInfo?: EQInfo;
 

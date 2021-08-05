@@ -1,0 +1,58 @@
+name: Deployment to GitHub Pages
+
+on:
+  push:
+    branches:
+      - gen-4
+  pull_request:
+
+env:
+  NODE_VERSION: 14
+
+jobs:
+  docs-app-deploy:
+    name: Deploy API docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    # Only run on pushes to gen-0 branch that aren't from the cron workflow
+    if: github.event_name == 'push' && github.ref == 'refs/heads/gen-0' && contains(github.ref, 'cron') != true
+
+    steps:
+      - name: Check out a copy of the repo
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # - name: Get Yarn cache path
+      #   id: yarn-cache-dir-path
+      #   run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      # - name: Cache Yarn cache and node_modules
+      #   id: cache-dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #       node_modules
+      #     key: ${{ runner.os }}-${{ env.NODE_VERSION }}-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: ${{ runner.os }}-${{ env.NODE_VERSION }}-
+
+      - name: Log yarn version
+        run: yarn --version
+
+      - name: Install dependencies
+        run: yarn install
+        # if: steps.cache-dependencies.outputs.cache-hit != 'true'
+
+      - name: Build
+        run: yarn typedoc
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./api-docs
+          destination_dir: api

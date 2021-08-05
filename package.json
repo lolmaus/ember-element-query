@@ -31,7 +31,8 @@
     "test:ember-compatibility": "ember try:each",
     "prepublishOnly": "ember ts:precompile",
     "postpublish": "ember ts:clean",
-    "release": "release-it"
+    "release": "release-it",
+    "typedoc": "typedoc"
   },
   "husky": {
     "hooks": {
@@ -104,6 +105,7 @@
     "release-it": "^14.10.0",
     "release-it-lerna-changelog": "^3.1.0",
     "sinon": "^11.1.1",
+    "typedoc": "^0.21.5",
     "typescript": "^4.3.4"
   },
   "engines": {
