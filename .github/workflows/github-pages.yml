@@ -10,12 +10,12 @@ env:
   NODE_VERSION: 14
 
 jobs:
-  docs-app-deploy:
+  api-docs-deploy:
     name: Deploy API docs
     runs-on: ubuntu-latest
     timeout-minutes: 7
-    # Only run on pushes to gen-0 branch that aren't from the cron workflow
-    if: github.event_name == 'push' && github.ref == 'refs/heads/gen-0' && contains(github.ref, 'cron') != true
+    # Only run on pushes to gen-4 branch that aren't from the cron workflow
+    if: github.event_name == 'push' && github.ref == 'refs/heads/gen-4' && contains(github.ref, 'cron') != true
 
     steps:
       - name: Check out a copy of the repo
