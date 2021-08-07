@@ -1,6 +1,6 @@
 {
   "entryPoints": ["addon/index.ts"],
   "excludeInternal": true,
-  "out": "api-docs",
+  "out": "./dist/api",
   "theme": "./typedoc-theme"
 }

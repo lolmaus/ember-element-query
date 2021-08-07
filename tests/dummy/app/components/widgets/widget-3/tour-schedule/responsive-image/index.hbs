@@ -1,0 +1,22 @@
+{{#if @images}}
+  <div
+    {{element-query
+      sizes=null
+      onResize=this.setImageSource
+    }}
+  >
+    <div
+      local-class="image-container"
+    >
+      {{#if this.src}}
+        <img
+          alt=""
+          data-test-image="Concert"
+          local-class="image"
+          role="presentation"
+          src={{this.src}}
+        />
+      {{/if}}
+    </div>
+  </div>
+{{/if}}

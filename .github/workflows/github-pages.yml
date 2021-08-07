@@ -10,7 +10,7 @@ env:
   NODE_VERSION: 14
 
 jobs:
-  api-docs-deploy:
+  deploy:
     name: Deploy API docs
     runs-on: ubuntu-latest
     timeout-minutes: 7
@@ -47,12 +47,14 @@ jobs:
         run: yarn install
         # if: steps.cache-dependencies.outputs.cache-hit != 'true'
 
-      - name: Build
+      - name: Build demo
+        run: yarn build
+
+      - name: Build API docs
         run: yarn typedoc
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./api-docs
-          destination_dir: api
+          publish_dir: ./dist

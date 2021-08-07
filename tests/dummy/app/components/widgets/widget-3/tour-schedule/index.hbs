@@ -1,0 +1,39 @@
+<div
+  {{element-query
+    sizes=(hash
+      small=0
+      wide=400
+    )
+  }}
+  local-class="container"
+>
+  <div local-class="splash">
+    <div local-class="splash-image-container">
+      {{#if @concert.images}}
+        <Widgets::Widget-3::TourSchedule::ResponsiveImage
+          @images={{@concert.images}}
+        />
+
+      {{else}}
+        <div
+          data-test-placeholder-image
+          local-class="placeholder-image"
+        >
+        </div>
+
+      {{/if}}
+    </div>
+
+    <div local-class="concert-date-container">
+      <time local-class="concert-date">
+        {{@concert.date}}
+      </time>
+    </div>
+
+    <div local-class="venue-name-container">
+      <a href="#" local-class="concert-link">
+        <div local-class="venue-name">{{@concert.name}}</div>
+      </a>
+    </div>
+  </div>
+</div>

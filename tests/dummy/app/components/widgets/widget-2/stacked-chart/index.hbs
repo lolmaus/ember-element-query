@@ -1,0 +1,12 @@
+<div
+  local-class="svg-container"
+  {{did-insert this.refreshChart}}
+  {{did-update this.drawChart this.data}}
+  {{element-query
+    sizes=null
+    onResize=this.refreshChart
+  }}
+>
+  <svg local-class="svg">
+  </svg>
+</div>

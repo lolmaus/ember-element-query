@@ -1,0 +1,22 @@
+<ElementQuery
+  local-class="tracks"
+  @sizes={{hash narrow=0 medium=480 wide=640}}
+  @sizesHeight={{hash short=0 tall=320}}
+  @dimension="both"
+  as |EQ|
+>
+  {{#if (and EQ.from-wide EQ.from-tall)}}
+    <Tracks::Table
+      @tracks={{@tracks}}
+    />
+  {{else}}
+    <Tracks::List
+      @numColumns={{or
+        (and EQ.to-narrow 1)
+        (and EQ.to-medium 2)
+        3
+      }}
+      @tracks={{@tracks}}
+    />
+  {{/if}}
+</ElementQuery>

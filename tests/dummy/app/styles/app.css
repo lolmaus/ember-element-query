@@ -1,110 +1,81 @@
+html {
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  background-color: #020e1c;
+  color: rgba(247, 252, 251, 0.9);
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  height: 100%;
+  letter-spacing: 0.03125rem;
+  margin: 0;
+}
+
 * {
-  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-#eq-test {
-  border: 10px solid;
-  height: 100px;
-  resize: horizontal;
-  overflow: hidden;
+h1 {
+  font-size: 2.25em;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
 }
 
-#eq-test[at-xxs]:before {
-  content: 'xxs';
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
-#eq-test[at-xs]:before {
-  content: 'xs';
+h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
 }
 
-#eq-test[at-s]:before {
-  content: 's';
+a {
+  color: rgba(245, 255, 250, 0.88);
 }
 
-#eq-test[at-m]:before {
-  content: 'm';
+button {
+  background: transparent;
+  border: 0.0625rem solid rgba(247, 252, 251, 0.5);
+  border-radius: 0.15rem;
+  color: rgba(247, 252, 251, 0.9);
+  font-family: "Raleway", sans-serif;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
 }
 
-#eq-test[at-l]:before {
-  content: 'l';
+button:hover {
+  background-color: rgba(255, 255, 255, 0.225);
+  cursor: pointer;
+  transition: background-color 0.17s;
 }
 
-#eq-test[at-xl]:before {
-  content: 'xl';
+p {
+  margin-bottom: 0.75rem;
 }
 
-#eq-test[at-xxl]:before {
-  content: 'xxl';
+table {
+  border-collapse: collapse;
+  width: 100%;
 }
 
-#eq-test[at-xxxl]:before {
-  content: 'xxxl';
+th, td {
+  border: 0.0625rem solid rgba(112, 128, 144, 1);
+  padding: 0.25rem 0.5rem;
 }
 
-
-
-#eq-test[from-xxs] {
-  background-color: #B0E0E6;
+ul {
+  list-style-type: none;
 }
 
-#eq-test[from-xs] {
-  background-color: #BBDAE1;
-}
-
-#eq-test[from-s] {
-  background-color: #C7D4DB;
-}
-
-#eq-test[from-m] {
-  background-color: #D2CED6;
-}
-
-#eq-test[from-l] {
-  background-color: #DDC8D1;
-}
-
-#eq-test[from-xl] {
-  background-color: #E8C2CC;
-}
-
-#eq-test[from-xxl] {
-  background-color: #F4BCC6;
-}
-
-#eq-test[from-xxxl] {
-  background-color: #FFB6C1;
-}
-
-
-
-#eq-test[to-xxxl] {
-  border-color: #FFA07A;
-}
-
-#eq-test[to-xxl] {
-  border-color: #F0AD7E;
-}
-
-#eq-test[to-xl] {
-  border-color: #E2BA83;
-}
-
-#eq-test[to-l] {
-  border-color: #D3C787;
-}
-
-#eq-test[to-m] {
-  border-color: #C4D48B;
-}
-
-#eq-test[to-s] {
-  border-color: #B5E18F;
-}
-
-#eq-test[to-xs] {
-  border-color: #A7EE94;
-}
-
-#eq-test[to-xxs] {
-  border-color: #98FB98;
+:global(#ember-testing-container) {
+  background-color: #020e1c !important;
+  border: 0.0625rem solid rgba(211, 211, 211, 0.15) !important;
+  overflow: visible !important;
 }

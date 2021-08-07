@@ -1,12 +1,30 @@
-{{page-title "Dummy"}}
-
-<h2 id="title">Welcome to Ember</h2>
+{{page-title "Ember Container Query"}}
 
 <div
-  id="eq-test"
-  {{element-query}}
+  local-class="application no-focus-outline"
+  {{did-insert this.allowFocusOutlineOnTab}}
 >
+  <header local-class="header">
+    <NavigationMenu
+      @name="Main Navigation"
+      @menuItems={{array
+        (hash route="index" label="Home")
+        (hash route="album" label="Album")
+        (hash route="dashboard" label="Dashboard")
+      }}
+    />
+  </header>
 
+  <main local-class="main">
+    <div local-class="center" tabindex="0">
+      {{outlet}}
+    </div>
+  </main>
+
+  <footer local-class="footer">
+    <span local-class="copyright">
+      ember-element-query is created by <a local-class="link" href="https:/github.com/lolmaus/">Andrey Mikhaylov (@lolmaus)</a>
+      This demo is created by <a local-class="link" href="https://www.linkedin.com/in/ijlee2/" target="_blank" rel="noopener noreferrer">Isaac J. Lee</a> © 2020
+    </span>
+  </footer>
 </div>
-
-{{outlet}}

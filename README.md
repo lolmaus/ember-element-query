@@ -83,7 +83,7 @@ https://lolmaus.github.io/ember-element-query/api/
 Roadmap
 -------
 
-This addon is in active development.
+This addon is ~~in active development~~ complete! 🎉
 
 * [x] `{{element-query}}` modifier
   * [x] Exists
@@ -118,10 +118,10 @@ This addon is in active development.
   * [x] Usage
   * [x] Browser support
   * [x] Comparison with alternatives
-  * [ ] TypeDoc API documentation
-    * [ ] Document
-    * [ ] Set up auto deployment
-* [ ] Demo app
+  * [x] TypeDoc API documentation
+    * [x] Document
+    * [x] Set up auto deployment
+* [x] Demo app
 
 
 Rationale
@@ -1250,4 +1250,6 @@ Implemented by Andrey Mikhaylov ([lolmaus](https://github.com/lolmaus)) and [con
 
 Thanks to Chad Carbert ([@chadian](https://github.com/chadian)) and Isaac Lee ([@ijlee2](https://github.com/ijlee2)) for feedback, ideas, brainstorming and criticism.
 
-Sponsored by [@kaliber5](https://github.com/kaliber5), https://kaliber5.de.
+This addon's demo is borrowed from [ember-container-query](https://github.com/ijlee2/ember-element-query) per [@ijlee2](https://www.linkedin.com/in/ijlee2/)'s generous permission.
+
+Sponsored in part by [@kaliber5](https://github.com/kaliber5), https://kaliber5.de.

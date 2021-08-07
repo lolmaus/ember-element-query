@@ -21,3 +21,7 @@
 # IDE
 /.idea/
 /.history/
+
+# Vendor assets
+/tests/dummy/
+/typedoc-theme/

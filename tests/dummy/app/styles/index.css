@@ -1,0 +1,8 @@
+.container {
+  padding: 1.5rem 1rem;
+}
+
+.list {
+  list-style: disc outside;
+  padding-left: 2em;
+}

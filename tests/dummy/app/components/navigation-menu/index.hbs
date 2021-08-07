@@ -1,0 +1,40 @@
+<nav
+  data-test-nav={{@name}}
+  aria-label={{@name}}
+  local-class="menu"
+>
+  <ul local-class="list">
+    {{#each @menuItems as |menuItem|}}
+      <li local-class="item {{if (eq menuItem.route this.rootRoute) "active-route"}}">
+        <LinkTo
+          data-test-link={{menuItem.label}}
+          local-class="link"
+          @route={{menuItem.route}}
+        >
+          {{menuItem.label}}
+        </LinkTo>
+      </li>
+    {{/each}}
+  </ul>
+
+  <ul local-class="list">
+      <li local-class="item">
+        <a
+          local-class="link"
+          href="https://github.com/lolmaus/ember-element-query/"
+        >
+          GitHub and Guide
+        </a>
+      </li>
+
+      <li local-class="item">
+
+        <a
+          local-class="link"
+          href="https://lolmaus.github.io/ember-element-query/api/"
+        >
+          API docs
+        </a>
+      </li>
+  </ul>
+</nav>

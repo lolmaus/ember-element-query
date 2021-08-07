@@ -1,0 +1,23 @@
+<article
+  {{element-query
+    sizes=(hash narrow=0 wide=200)
+    sizesHeight=(hash short=0 tall=200)
+  }}
+  class="memo"
+  local-class="container"
+>
+  <div local-class="header-container">
+    <Widgets::Widget-4::Memo::Header
+    />
+  </div>
+
+  <div local-class="body-container">
+    <Widgets::Widget-4::Memo::Body
+    />
+  </div>
+
+  <div local-class="actions-container">
+    <Widgets::Widget-4::Memo::Actions
+    />
+  </div>
+</article>

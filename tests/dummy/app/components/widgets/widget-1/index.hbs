@@ -1,0 +1,31 @@
+<section
+  {{element-query
+    sizes=false
+    sizesRatio=(hash tall=0 square=0.8 wide=1.25)
+  }}
+  local-class="container"
+>
+  <header local-class="header">
+    <h2 local-class="text">Widget 1</h2>
+  </header>
+
+  <div local-class="items">
+    <div local-class="item-1">
+      <Widgets::Widget-1::Item
+        @label="Item 1"
+      />
+    </div>
+
+    <div local-class="item-2">
+      <Widgets::Widget-1::Item
+        @label="Item 2"
+      />
+    </div>
+
+    <div local-class="item-3">
+      <Widgets::Widget-1::Item
+        @label="Item 3"
+      />
+    </div>
+  </div>
+</section>

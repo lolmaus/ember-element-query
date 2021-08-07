@@ -13,5 +13,5 @@ module.exports = {
   '**/*.{js,ts}': ['yarn lint:eslint --fix'],
 
   // Template lint
-  '**/*.hbs': ['yarn ember-template-lint'],
+  '**/*.hbs': ['yarn lint:hbs:fix'],
 };
