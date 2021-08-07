@@ -143,7 +143,7 @@ CSS media queries have a few disadvantages:
 * They are designed for creating responsive layouts, whereas making responsive *components* is unreasonably hard:
   * If your responsive component appears in different contexts, you have to define media queries separately for each context and make sure they don't overlap.
   * If you want to make your responsive component reusable, you can't apply responsive styles directly to it because you don't know all the contexts it might be used in. Instead, you have to offer the styles as preprocessor mixins or CSS snippets, for the consuming app developer to apply them by hand in every context.
-  * Responsive components put into dynamic contexts (such as collapsible sidebars, grids, other responsive components, etc) require *lots* of media queries, which involve unreasonably complicated math. Check out [the demo](https://lolmaus.github.io/ember-element-query/).
+  * Responsive components put into dynamic contexts (such as collapsible sidebars, grids, other responsive components, etc) require *lots* of media queries, which involve unreasonably complicated math. Check out [this old demo](https://lolmaus.github.io/a-tale-of-media-queries/) for a rationale.
 
 All those problems wouldn't exist if we were able to apply styles conditionally based on element's own width:
 
