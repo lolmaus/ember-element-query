@@ -27,6 +27,7 @@ See [detailed comparison](#comparison) with code samples.
 
 ***
 
+- [Demo](#demo)
 - [API Docs](#api-docs)
 - [Roadmap](#roadmap)
 - [Rationale](#rationale)
@@ -72,6 +73,15 @@ See [detailed comparison](#comparison) with code samples.
 
 
 
+Demo
+--------
+
+https://lolmaus.github.io/ember-element-query/
+
+This addon's demo is borrowed from [ember-container-query](https://github.com/ijlee2/ember-element-query) per [@ijlee2](https://www.linkedin.com/in/ijlee2/)'s generous permission.
+
+
+
 API Docs
 --------
 
@@ -112,7 +122,7 @@ This addon is ~~in active development~~ complete! 🎉
 * [x] Expose types
 * [x] CI
 * [x] npm package
-* [ ] Documentation
+* [x] Documentation
   * [x] Concept
   * [x] Feature description
   * [x] Usage
