@@ -37,8 +37,8 @@ export interface EQInfo {
   /** Name of the current vertical [[Sizes | size]] of the element. */
   sizeHeight?: string;
 
-  /** Name of the current [[dimension]] (horizontal/vertical/both). */
-  dimension: Dimension;
+  /** Name of the current ratio [[Sizes | size]] of the element. */
+  sizeRatio?: string;
 
   /** Prefix used for HTML attributes. */
   prefix?: string;
@@ -66,24 +66,27 @@ export interface Args extends Record<string, unknown> {
   /** Callback that will be called when the size of the element changes. It is not throttled. Accepts [[EQInfo]] as the first argument. */
   onResize?: (eqInfo: EQInfo) => void;
 
-  /** A definition of horizontal [Sizes]. Defaults to [[SIZES_DEFAULT]]. */
-  sizes?: Sizes;
+  /** A definition of horizontal [[Sizes]]. When `true`, [[SIZES_DEFAULT]] is used (default). */
+  sizes?: Sizes | boolean | null;
 
-  /** A definition of vertical [Sizes]. Defaults to [[SIZES_HEIGHT_DEFAULT]]. */
-  sizesHeight?: Sizes;
+  /** A definition of vertical [[Sizes]]. When `true`, [[SIZES_HEIGHT_DEFAULT]] is used. Defaults to `false`. */
+  sizesHeight?: Sizes | boolean;
+
+  /** A definition of ratio [[Sizes]]. When `true`, [RATIOS_DEFAULT]] is used. Defaults to `false`. */
+  sizesRatio?: Sizes | boolean;
 
   /** Prefix to be used for HTML attributes. Defautls to `""`. */
   prefix?: string;
 
-  /** Direction of measuring the element. */
-  dimension?: Dimension;
-
   /** Use this to shut down the element query functionality for this element. */
   isDisabled?: boolean;
+
+  /** Debounce period */
+  debounce?: number;
 }
 
 /**
- * Default value of horizontal [[Sizes]].
+ * Default values of horizontal [[Sizes]].
  */
 // prettier-ignore
 export const SIZES_DEFAULT: Sizes = {
@@ -98,7 +101,7 @@ export const SIZES_DEFAULT: Sizes = {
 };
 
 /**
- * Default value of vertical [[Sizes]].
+ * Default values of vertical [[Sizes]].
  */
 // prettier-ignore
 export const SIZES_HEIGHT_DEFAULT: Sizes = {
@@ -110,4 +113,16 @@ export const SIZES_HEIGHT_DEFAULT: Sizes = {
   'xl-height':   1000,
   'xxl-height':  1200,
   'xxxl-height': 1400,
+};
+
+/**
+ * Default value of ratios.
+ */
+// prettier-ignore
+export const SIZES_RATIO_DEFAULT: Sizes = {
+  'very-tall': 0,
+  'tall':      0.5,
+  'squarish':  0.8,
+  'wide':      1.2,
+  'very-wide': 1.5,
 };

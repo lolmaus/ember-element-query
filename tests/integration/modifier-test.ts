@@ -81,7 +81,7 @@ module('Integration | Modifier | element-query', function (hooks) {
         ratio: 3,
         size: 'xs',
         sizeHeight: undefined,
-        dimension: 'width',
+        sizeRatio: undefined,
         prefix: undefined,
         attributes: [
           'at-xs',
@@ -115,7 +115,7 @@ module('Integration | Modifier | element-query', function (hooks) {
         ratio: 4,
         size: 's',
         sizeHeight: undefined,
-        dimension: 'width',
+        sizeRatio: undefined,
         prefix: undefined,
         attributes: [
           'at-s',
@@ -201,7 +201,7 @@ module('Integration | Modifier | element-query', function (hooks) {
         ratio: 3,
         size: 'xs',
         sizeHeight: undefined,
-        dimension: 'width',
+        sizeRatio: undefined,
         prefix: undefined,
         attributes: [
           'at-xs',
@@ -276,7 +276,7 @@ module('Integration | Modifier | element-query', function (hooks) {
         id="test-subject"
         style="width: 500px; height: 100px;"
         {{element-query sizes=(hash w-small=0 w-medium=300 w-large=600)}}
-        {{element-query sizesHeight=(hash h-small=0 h-medium=300 h-large=600) dimension="height"}}
+        {{element-query sizesHeight=(hash h-small=0 h-medium=300 h-large=600) sizes=false}}
       >
       </div>
     `);
@@ -542,7 +542,7 @@ module('Integration | Modifier | element-query', function (hooks) {
               <div
                 id="test-subject"
                 style="width: 300px; height: {{this.actualHeight}}px;"
-                {{element-query prefix=this.prefix dimension="height"}}
+                {{element-query prefix=this.prefix sizesHeight=true sizes=false}}
               >
               </div>
             `);
@@ -624,7 +624,7 @@ module('Integration | Modifier | element-query', function (hooks) {
               <div
                 id="test-subject"
                 style="width: 300px; height: {{this.actualHeight}}px;"
-                {{element-query sizesHeight=this.sizesHeight prefix=this.prefix dimension="height"}}
+                {{element-query sizesHeight=this.sizesHeight prefix=this.prefix sizes=false}}
               >
               </div>
             `);
@@ -743,7 +743,7 @@ module('Integration | Modifier | element-query', function (hooks) {
               <div
                 id="test-subject"
                 style="width: {{this.actualWidth}}px; height: {{this.actualHeight}}px;"
-                {{element-query prefix=this.prefix dimension="both"}}
+                {{element-query prefix=this.prefix sizesHeight=true}}
               >
               </div>
             `);
@@ -825,7 +825,7 @@ module('Integration | Modifier | element-query', function (hooks) {
               <div
                 id="test-subject"
                 style="width: 300px; height: {{this.actualHeight}}px;"
-                {{element-query sizesHeight=this.sizesHeight prefix=this.prefix dimension="height"}}
+                {{element-query sizesHeight=this.sizesHeight prefix=this.prefix sizes=null}}
               >
               </div>
             `);

@@ -69,16 +69,15 @@ module('Integration | Component | element-query', function (hooks) {
     m = 'Callback called once';
     assert.ok(true, m);
 
-    sinon.assert.calledWithExactly(
-      this.callback.firstCall,
-      sinon.match({
+    assert.deepEqual(this.callback.firstCall.args, [
+      {
         element,
         width: 300,
         height: 100,
         ratio: 3,
         size: 'xs',
         sizeHeight: undefined,
-        dimension: 'width',
+        sizeRatio: undefined,
         prefix: undefined,
         attributes: [
           'at-xs',
@@ -92,8 +91,20 @@ module('Integration | Component | element-query', function (hooks) {
           'to-xxl',
           'to-xxxl',
         ],
-      })
-    );
+        attributesRecord: {
+          'at-xs': true,
+          'from-xxs': true,
+          'from-xs': true,
+          'to-xs': true,
+          'to-s': true,
+          'to-m': true,
+          'to-l': true,
+          'to-xl': true,
+          'to-xxl': true,
+          'to-xxxl': true,
+        },
+      },
+    ]);
 
     element.style.width = '400px';
 
@@ -102,9 +113,7 @@ module('Integration | Component | element-query', function (hooks) {
     m = 'Callback called twice';
     assert.ok(true, m);
 
-    // prettier-ignore
-    sinon.assert.calledWithMatch(
-      this.callback.secondCall,
+    assert.deepEqual(this.callback.secondCall.args, [
       {
         element,
         width: 400,
@@ -112,7 +121,7 @@ module('Integration | Component | element-query', function (hooks) {
         ratio: 4,
         size: 's',
         sizeHeight: undefined,
-        dimension: 'width',
+        sizeRatio: undefined,
         prefix: undefined,
         attributes: [
           'at-s',
@@ -126,8 +135,20 @@ module('Integration | Component | element-query', function (hooks) {
           'to-xxl',
           'to-xxxl',
         ],
-      }
-    );
+        attributesRecord: {
+          'at-s': true,
+          'from-xxs': true,
+          'from-xs': true,
+          'from-s': true,
+          'to-s': true,
+          'to-m': true,
+          'to-l': true,
+          'to-xl': true,
+          'to-xxl': true,
+          'to-xxxl': true,
+        },
+      },
+    ]);
 
     assert.ok(true);
   });
@@ -189,16 +210,15 @@ module('Integration | Component | element-query', function (hooks) {
     m = 'Callback called once';
     assert.ok(true, m);
 
-    sinon.assert.calledWithExactly(
-      this.callback.firstCall,
-      sinon.match({
+    assert.deepEqual(this.callback.firstCall.args, [
+      {
         element,
         width: 300,
         height: 100,
         ratio: 3,
         size: 'xs',
         sizeHeight: undefined,
-        dimension: 'width',
+        sizeRatio: undefined,
         prefix: undefined,
         attributes: [
           'at-xs',
@@ -212,8 +232,20 @@ module('Integration | Component | element-query', function (hooks) {
           'to-xxl',
           'to-xxxl',
         ],
-      })
-    );
+        attributesRecord: {
+          'at-xs': true,
+          'from-xxs': true,
+          'from-xs': true,
+          'to-xs': true,
+          'to-s': true,
+          'to-m': true,
+          'to-l': true,
+          'to-xl': true,
+          'to-xxl': true,
+          'to-xxxl': true,
+        },
+      },
+    ]);
 
     this.set('isDisabled', true);
 
@@ -265,12 +297,13 @@ module('Integration | Component | element-query', function (hooks) {
   //
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  test('using both width and height on the same component with default sizes', async function (this: TestContextCustom, assert) {
+  test('using width, height and ratio on the same component with default sizes', async function (this: TestContextCustom, assert) {
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
       <ElementQuery
         style="width: 500px; height: 100px;"
-        @dimension="both"
+        @sizesHeight={{true}}
+        @sizesRatio={{true}}
       >
       </ElementQuery>
     `);
@@ -290,19 +323,24 @@ module('Integration | Component | element-query', function (hooks) {
 
     m = 'Height attribute is applied';
     assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-very-wide') != null);
+
+    m = 'Ratio attribute is applied';
+    assert.ok(true, m);
   });
 
   //
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  test('using both width and height on the same component with custom sizes', async function (this: TestContextCustom, assert) {
+  test('using both width, height and ratio on the same component with custom sizes', async function (this: TestContextCustom, assert) {
     await render(hbs`
       {{! template-lint-disable no-inline-styles }}
       <ElementQuery
         style="width: 500px; height: 100px;"
-        @dimension="both"
         @sizes={{hash w-small=0 w-medium=300 w-large=600}}
         @sizesHeight={{hash h-small=0 h-medium=300 h-large=600}}
+        @sizesRatio={{hash r-small=0 r-medium=0.2 r-large=4}}
       >
       </ElementQuery>
     `);
@@ -321,6 +359,11 @@ module('Integration | Component | element-query', function (hooks) {
     await waitUntil(() => element.getAttribute('at-h-small') != null);
 
     m = 'Height attribute is applied';
+    assert.ok(true, m);
+
+    await waitUntil(() => element.getAttribute('at-r-large') != null);
+
+    m = 'Ratio attribute is applied';
     assert.ok(true, m);
   });
 
@@ -567,7 +610,7 @@ module('Integration | Component | element-query', function (hooks) {
               <ElementQuery
                 style="width: 300px; height: {{this.actualHeight}}px;"
                 @prefix={{this.prefix}}
-                @dimension="height"
+                @sizesHeight={{true}}
               >
               </ElementQuery>
             `);
@@ -648,9 +691,9 @@ module('Integration | Component | element-query', function (hooks) {
               {{! template-lint-disable no-inline-styles style-concatenation }}
               <ElementQuery
                 style="width: 300px; height: {{this.actualHeight}}px;"
+                @sizes={{false}}
                 @sizesHeight={{this.sizesHeight}}
                 @prefix={{this.prefix}}
-                @dimension="height"
               >
               </ElementQuery>
             `);
@@ -769,7 +812,7 @@ module('Integration | Component | element-query', function (hooks) {
               <ElementQuery
                 style="width: {{this.actualWidth}}px; height: {{this.actualHeight}}px;"
                 @prefix={{this.prefix}}
-                @dimension="both"
+                @sizesHeight={{true}}
               >
               </ElementQuery>
             `);
@@ -803,20 +846,20 @@ module('Integration | Component | element-query', function (hooks) {
 
         // prettier-ignore
         const cases = [
-          { actualDimension: 299,                     expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
-          { actualDimension: 1,                       expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
-          { actualDimension: 150,                     expectedAttributes: ['at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
-          { actualDimension: 300,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
-          { actualDimension: 450,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
-          { actualDimension: 699,                     expectedAttributes: ['at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
-          { actualDimension: 700,                     expectedAttributes: ['at-large-height',  'from-small-height', 'from-medium-height', 'from-large-height', 'to-large-height']},
-          { actualDimension: 299, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualDimension: 1,   prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualDimension: 150, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualDimension: 300, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualDimension: 450, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualDimension: 699, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
-          { actualDimension: 700, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-large-height',  'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-from-large-height', 'data-eq-to-large-height']},
+          { actualDimension: 299,                     expectedAttributes: ['at-small',  'from-small', 'to-small',    'to-medium',  'to-large', 'at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
+          { actualDimension: 1,                       expectedAttributes: ['at-small',  'from-small', 'to-small',    'to-medium',  'to-large', 'at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
+          { actualDimension: 150,                     expectedAttributes: ['at-small',  'from-small', 'to-small',    'to-medium',  'to-large', 'at-small-height',  'from-small-height', 'to-small-height',    'to-medium-height',  'to-large-height']},
+          { actualDimension: 300,                     expectedAttributes: ['at-medium', 'from-small', 'from-medium', 'to-medium',  'to-large', 'at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
+          { actualDimension: 450,                     expectedAttributes: ['at-medium', 'from-small', 'from-medium', 'to-medium',  'to-large', 'at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
+          { actualDimension: 699,                     expectedAttributes: ['at-medium', 'from-small', 'from-medium', 'to-medium',  'to-large', 'at-medium-height', 'from-small-height', 'from-medium-height', 'to-medium-height',  'to-large-height']},
+          { actualDimension: 700,                     expectedAttributes: ['at-large',  'from-small', 'from-medium', 'from-large', 'to-large', 'at-large-height',  'from-small-height', 'from-medium-height', 'from-large-height', 'to-large-height']},
+          { actualDimension: 299, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small',  'data-eq-from-small', 'data-eq-to-small',    'data-eq-to-medium',  'data-eq-to-large', 'data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 1,   prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small',  'data-eq-from-small', 'data-eq-to-small',    'data-eq-to-medium',  'data-eq-to-large', 'data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 150, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-small',  'data-eq-from-small', 'data-eq-to-small',    'data-eq-to-medium',  'data-eq-to-large', 'data-eq-at-small-height',  'data-eq-from-small-height', 'data-eq-to-small-height',    'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 300, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium', 'data-eq-from-small', 'data-eq-from-medium', 'data-eq-to-medium',  'data-eq-to-large', 'data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 450, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium', 'data-eq-from-small', 'data-eq-from-medium', 'data-eq-to-medium',  'data-eq-to-large', 'data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 699, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-medium', 'data-eq-from-small', 'data-eq-from-medium', 'data-eq-to-medium',  'data-eq-to-large', 'data-eq-at-medium-height', 'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-to-medium-height',  'data-eq-to-large-height']},
+          { actualDimension: 700, prefix: 'data-eq-', expectedAttributes: ['data-eq-at-large',  'data-eq-from-small', 'data-eq-from-medium', 'data-eq-from-large', 'data-eq-to-large', 'data-eq-at-large-height',  'data-eq-from-small-height', 'data-eq-from-medium-height', 'data-eq-from-large-height', 'data-eq-to-large-height']},
         ];
 
         const allAttributes = [
@@ -865,7 +908,6 @@ module('Integration | Component | element-query', function (hooks) {
                 @sizes={{this.sizes}}
                 @sizesHeight={{this.sizesHeight}}
                 @prefix={{this.prefix}}
-                @dimension="height"
               >
               </ElementQuery>
             `);
@@ -877,6 +919,12 @@ module('Integration | Component | element-query', function (hooks) {
             assert.ok(true, m);
 
             for (const attr of expectedAttributes) {
+              assert.pushResult({
+                result: true,
+                message: `Attribute ${attr} should exist:`,
+                expected: undefined,
+                actual: undefined,
+              });
               await waitUntil(() => element.getAttribute(attr) != null);
 
               m = `Attribute ${attr} is expected to exist on the element`;
@@ -884,6 +932,12 @@ module('Integration | Component | element-query', function (hooks) {
             }
 
             for (const attr of missingAttributes) {
+              assert.pushResult({
+                result: true,
+                message: `Attribute ${attr} should not exist`,
+                expected: undefined,
+                actual: undefined,
+              });
               await waitUntil(() => element.getAttribute(attr) == null);
 
               m = `Attribute ${attr} is expected NOT to exist on the element`;
@@ -978,7 +1032,8 @@ module('Integration | Component | element-query', function (hooks) {
         {{! template-lint-disable no-inline-styles }}
         <ElementQuery
           style="width: 550px; height: 650px;"
-          @dimension="both"
+          @sizes={{true}}
+          @sizesHeight={{true}}
           as |EQ EQInfo|
         >
           {{#if EQ.to-xxs}}<span data-test-to-xxs></span>{{/if}}

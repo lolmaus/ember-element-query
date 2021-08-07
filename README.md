@@ -1,7 +1,4 @@
-<!-- omit in toc -->
-ember-element-query
-![npm version](https://img.shields.io/npm/v/ember-element-query)
-[![CI](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml/badge.svg)](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml)
+ember-element-query ![npm version](https://img.shields.io/npm/v/ember-element-query) [![CI](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml/badge.svg)](https://github.com/lolmaus/ember-element-query/actions/workflows/ci.yml) <!-- omit in toc -->
 ===================
 
 * Use element queries effortlessly on any element or component.
@@ -15,62 +12,63 @@ It lets you implement reusable responsive components — with encapsulated style
 
 For example, if you put a responsive component into a tight sidebar, it will align its content vertically. When the sidebar expands, the component will realign horizontally in order to efficiently use available space.
 
-Here's a biased comparison table with competing addons:
+Here's a biased comparison table with competing addons (as of 2021.08):
 
 |                                                    | ember-element-query | [ember-fill-up](https://github.com/chadian/ember-fill-up/) | [ember-container-query](https://github.com/ijlee2/ember-container-query/) |
 | -------------------------------------------------- | :-----------------: | :--------------------------------------------------------: | :-----------------------------------------------------------------------: |
 | Octane                                             | ✔                  | 🚫                                                         | ✔                                                                         |
-| [ResizeObserver](https://web.dev/resize-observer/) | ✔                  | ✔                                                          | 🚫                                                                        |
+| [ResizeObserver](https://web.dev/resize-observer/) | ✔                  | ✔                                                          | ✔                                                                        |
 | Offers a modifier                                  | ✔                  | 🚫                                                         | 🚫                                                                        |
 | Offers a component                                 | ✔                  | ✔                                                         | ✔                                                                        |
+| Actively maintained                                | ✔                  | 🚫                                                         | ✔                                                                        |
 | API convenience                                    | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                                                | ⭐⭐⭐⭐                                                                        |
-| CSS transformations                                | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                                                | ⭐⭐⭐⭐                                                                        |
-| Template transformations                           | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                                                | ⭐⭐⭐⭐                                                                        |
 
 See [detailed comparison](#comparison) with code samples.
 
 ***
 
-- [!GitHub Workflow Status](#)
-  - [Roadmap](#roadmap)
-  - [Rationale](#rationale)
-  - [Concept of sizes](#concept-of-sizes)
-  - [How ember-element-query works](#how-ember-element-query-works)
-    - [Using attributes in CSS](#using-attributes-in-css)
-    - [Edge cases](#edge-cases)
-    - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [As a modifier](#as-a-modifier)
-    - [As a component](#as-a-component)
-  - [Advanced usage](#advanced-usage)
-    - [onResize callback](#onresize-callback)
-    - [Custom sizes](#custom-sizes)
-    - [Using height instead of width](#using-height-instead-of-width)
-    - [Using both width and height](#using-both-width-and-height)
-    - [Customizing attribute prefix](#customizing-attribute-prefix)
-    - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
-    - [Disabling](#disabling)
-    - [Customizing component element](#customizing-component-element)
-    - [CSS fallback](#css-fallback)
-    - [FastBoot fallback](#fastboot-fallback)
-  - [Browser support](#browser-support)
-  - [Alternatives](#alternatives)
-    - [Comparison](#comparison)
-      - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
-      - [Using default rule definitions](#using-default-rule-definitions)
-      - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
-      - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
-      - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
-      - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
-  - [Contributing](#contributing)
-    - [Tools](#tools)
-    - [Installation](#installation-1)
-    - [Linting](#linting)
-    - [Running tests](#running-tests)
-    - [Running the dummy application](#running-the-dummy-application)
-  - [License](#license)
-  - [Credit](#credit)
+- [API Docs](#api-docs)
+- [Roadmap](#roadmap)
+- [Rationale](#rationale)
+- [Concept of sizes](#concept-of-sizes)
+- [How ember-element-query works](#how-ember-element-query-works)
+  - [Using attributes in CSS](#using-attributes-in-css)
+  - [Edge cases](#edge-cases)
+  - [⚠ Use in compound selectors only!](#-use-in-compound-selectors-only)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [As a modifier](#as-a-modifier)
+  - [As a component](#as-a-component)
+- [Advanced usage](#advanced-usage)
+  - [onResize callback](#onresize-callback)
+  - [Custom sizes](#custom-sizes)
+  - [Using height](#using-height)
+  - [Using aspect ratio](#using-aspect-ratio)
+  - [Opting out of width attributes](#opting-out-of-width-attributes)
+  - [Customizing attribute prefix](#customizing-attribute-prefix)
+  - [Using multiple modifiers on the same element](#using-multiple-modifiers-on-the-same-element)
+  - [Disabling](#disabling)
+  - [Customizing component element](#customizing-component-element)
+  - [Debouncing](#debouncing)
+  - [CSS fallback](#css-fallback)
+  - [FastBoot fallback](#fastboot-fallback)
+- [Browser support](#browser-support)
+- [Alternatives](#alternatives)
+  - [Comparison](#comparison)
+    - [Defining custom rules rules, using template and CSS transformations](#defining-custom-rules-rules-using-template-and-css-transformations)
+    - [Using default rule definitions](#using-default-rule-definitions)
+    - [Customizing element tag while doing template transformations](#customizing-element-tag-while-doing-template-transformations)
+    - [Customizing element tag while doing pure CSS transformations](#customizing-element-tag-while-doing-pure-css-transformations)
+    - [Using directly on images and other void elements](#using-directly-on-images-and-other-void-elements)
+    - [Using both width and height in a rule for template transformation](#using-both-width-and-height-in-a-rule-for-template-transformation)
+- [Contributing](#contributing)
+  - [Tools](#tools)
+  - [Installation](#installation-1)
+  - [Linting](#linting)
+  - [Running tests](#running-tests)
+  - [Running the dummy application](#running-the-dummy-application)
+- [License](#license)
+- [Credit](#credit)
 
 
 
@@ -93,8 +91,9 @@ This addon is in active development.
   * [x] Calls the `onResize` callback with params
   * [x] Applies attributes to elements
   * [x] Accepts `sizes`
+  * [x] Accepts `sizesHeight`
+  * [x] Accepts `sizesRatio`
   * [x] Accepts `prefix`
-  * [x] Accepts `dimension`
   * [x] Updates on arugments change
   * [x] Add fool-proof exceptions
   * [x] Disabling
@@ -105,8 +104,9 @@ This addon is in active development.
   * [x] Calls the `onResize` callback with params
   * [x] Yields block params
   * [x] Accepts `sizes`
+  * [x] Accepts `sizesHeight`
+  * [x] Accepts `sizesRatio`
   * [x] Accepts `prefix`
-  * [x] Accepts `dimension`
   * [x] Accepts `tagName`
   * [x] Disabling
 * [x] Expose types
@@ -214,23 +214,29 @@ How ember-element-query works
 
 There are three types of attributes, all of them are applied at once:
 
-* `at-<size>` is applied with elements current size.
+* `at-<size>` attribute is applied with element's current size.
   
-    For example, an element with width of `764px` will receive attribute `at-m`.
+    For example, an element with width of `764px` will receive an  `at-m` attribute.
 
-* `from-<size>` are applied with element's current size and all smaller sizes.
+* `from-<size>` attributes are applied with element's current size and all smaller sizes.
   
     For example, an element with width of `764px` will receive attributes `from-xxs`, `from-xs`, `from-s` and `from-m`.
 
-* `to-<size>` are applied with element's current size and all larger sizes.
+* `to-<size>` attributes are applied with element's current size and all larger sizes.
   
     For example, an element with width of `764px` will receive attributes `to-m`, `to-l`, `to-xxl` and `to-xxxl`.
+
+Don't feel confused! This is very simple:
+
+* When you want say "when my element is of *size M*", use the `at-m` attribute.
+* When you want say "when my element is of *size M or larger*", use the `from-m` attribute.
+* When you want say "when my element is of *size M or small*", use the `to-m` attribute.
 
 
 
 ### Using attributes in CSS
 
-They can be used in CSS like this:
+In order to do responsive CSS transformations, use attributes like this:
 
 ```css
 .foo[at-xxs] {
@@ -249,6 +255,9 @@ They can be used in CSS like this:
   /* These styles when be applied when the element has the size between `s` and `l` inclusively, namely 400—999 px. */
 }
 ```
+
+Responsive template transformations are also possible, [see below](#as-a-component).
+
 
 
 
@@ -313,13 +322,13 @@ Using the modifier is preferred if you only do **CSS transformations**, which is
 
 Simply apply the `{{element-query}}` modifier to any element or angle bracket component like this:
 
-```html
+```hbs
 <img {{element-query}}>
 ```
 
 As a result, element query attributes will be applied to the element. The result could look like this:
 
-```html
+```hbs
 <img at-m from-xxs from-xs from-s from-m to-m to-l to-xl to-xxl to-xxxl>
 ```
 
@@ -331,7 +340,7 @@ The component is useful when you need to do **template transformations**.
 
 If you want to render chunks of template conditionally, use this syntax:
 
-```html
+```hbs
 <ElementQuery as |EQ|>
   {{#if EQ.at-m}}
     {{! This will only be rendered when the `<ElementQuery>` component is of size `m`. }}
@@ -371,20 +380,21 @@ reportResize(eqInfo) {
   eqInfo.width            // => current element's width in px (number)
   eqInfo.height           // => current element's height in px (number)
   eqInfo.ratio            // => current element's aspect ratio (width/height, number)
-  eqInfo.size             // => current element's width size (string or undefined)
-  eqInfo.sizeHeight       // => current element's height size (string or undefined)
-  eqInfo.dimension        // => current dimension ('width', 'height' or 'both')
+  eqInfo.size             // => current element's width size name (string or undefined)
+  eqInfo.sizeHeight       // => current element's height size name (string or undefined)
+  eqInfo.sizeRatio        // => current element's aspect ratio size name (string or undefined)
   eqInfo.prefix           // => current prefix (string or undefined)
   eqInfo.attributes       // => matching element query attributes in array form: ['from-xxs', 'from-xs', ...]
   eqInfo.attributesRecord // => matching element query attributes in object form: {'from-xxs': true, 'from-xs': true, ...}
+                          //    non-matching attributes are not defined on the object
 }
 ```
 
-```html
+```hbs
 <img {{element-query onResize=this.reportResize}}>
 ```
 
-```html
+```hbs
 <ElementQuery @onResize={{this.reportResize}}></ElementQuery>
 ```
 
@@ -392,13 +402,13 @@ reportResize(eqInfo) {
 
 ### Custom sizes
 
-Your tailored visual designs might require component switching layouts at breakpoints different from this addon's defaults.
+Your tailored visual designs might require component switching layouts at specific breakpoints, different from this addon's defaults.
 
-You can override them with the `sizes` argument. It receives a plain object where keys are breakpoint names and arguments are numbers representing width.
+You can override the defaults with the `sizes` argument. It receives a plain object where keys are breakpoint names and arguments are numbers representing width.
 
 ⚠ One of the numbers **must** be 0, otherwise the addon will crash your app.
 
-```html
+```hbs
 <img
   {{element-query
     sizes=(hash
@@ -410,7 +420,7 @@ You can override them with the `sizes` argument. It receives a plain object wher
 >
 ```
 
-```html
+```hbs
 <ElementQuery
   @sizes={{hash
     small=0
@@ -427,65 +437,25 @@ The above example defines sizes like this:
 * `medium`: 350—699 px,
 * `large`: 700+ px.
 
-When the element has the width of `421px`, it will receive attributes `at-medium`, `from-medium`, `to-medium`, `from-small` and `to-large`.
+When the element has the width of `421px`, it will receive attributes `at-medium`, `from-medium`, `to-medium`, `from-small` and `to-large`. (Confused? [See above](#how-ember-element-query-works).)
 
 
 
-### Using height instead of width
+### Using height
 
-Use the `dimension="height"` argument to make attributes get applied based on element height:
+By default, only attributes for horizontal sizes are applied to your element.
 
-```html
-<img {{element-query dimension="height"}}>
+If you want to use attributes for vertical sizes, set `sizesHeight` to `true`:
+
+```hbs
+<img {{element-query sizesHeight=true}}>
 ```
 
-```html
-<ElementQuery @dimension="height"></ElementQuery>
+```hbs
+<ElementQuery @sizesHeight={{true}}></ElementQuery>
 ```
 
-Attributes representing height sizes will be postifed with `-height`: `xxs-height`, `xl-height`, etc.
-
-You can customize height sizes into `@sizesHeight`. Make sure that height size names are different from width sizes!
-
-```html
-<div
-  {{element-query
-    dimension="height"
-    sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
-  }}
->
-</div>
-```
-
-```html
-<ElementQuery
-  @dimension="height"
-  @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
-  as |EQ|
->
-  {{#if (and EQ.to-small-width EQ.from-large-height)}}
-    I am thin and tall.
-  {{/if}}
-</ElementQuery>
-```
-
-Specifying `heightSizes` has no effect unless `dimension` is either `"height"` or `"both"`.
-
-
-
-### Using both width and height
-
-Use the `dimension="both"` argument:
-
-```html
-<img {{element-query dimension="both"}}>
-```
-
-```html
-<ElementQuery @dimension="both"></ElementQuery>
-```
-
-This will cause two sets of attributes get applied. Attributes representing width sizes will be the same as [usual](#concept-of-sizes). Attributes representing height sizes will be postifed with `-height`: `xxs-height`, `xl-height`, etc.
+Enabling `heightSizes` will cause two sets of attributes to be applied: width and height. Attributes representing width sizes will be the same as [usual](#concept-of-sizes). Attributes representing height sizes will be postfixed with `-height`: `xxs-height`, `xl-height`, etc.
 
 This lets you apply CSS like this:
 
@@ -495,22 +465,19 @@ This lets you apply CSS like this:
 }
 ```
 
-You can customize height sizes into `@sizesHeight`. Make sure that height size names are different from width sizes!
+You can customize height sizes by passing a hash to `@sizesHeight`. Make sure that height size names are different from width sizes!
 
-```html
+```hbs
 <div
   {{element-query
-    @dimension="both"
-    sizes=(hash small-width=0 medium-width=350 large-width=700)
     sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
   }}
 >
 </div>
 ```
 
-```html
+```hbs
 <ElementQuery
-  @sizes={{hash smallWidth=0 mediumWidth=350 largeWidth=700}}
   @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
   as |EQ|
 >
@@ -520,17 +487,108 @@ You can customize height sizes into `@sizesHeight`. Make sure that height size n
 </ElementQuery>
 ```
 
+Of course, you can customize both `sizes` and `sizesHeight` at the same time if you need.
+
+
+
+### Using aspect ratio
+
+By default, only attributes for horizontal sizes are applied to your element.
+
+If you want to use attributes for aspect ratio sizes, set `sizesRatio` to `true`:
+
+```hbs
+<img {{element-query sizesRatio=true}}>
+```
+
+```hbs
+<ElementQuery @sizesRatio={{true}}></ElementQuery>
+```
+
+By default, the following definition of aspect ratio sizes is used:
+
+```js
+{
+  'very-tall': 0,
+  'tall':      0.5,
+  'squarish':  0.8,
+  'wide':      1.2,
+  'very-wide': 1.5,
+}
+```
+
+Note that while width and height use whole number of CSS pixels, ratios use fractions. For example, an element with the size of `1920×1080` will have an aspect ratio of `1.777...`, which correpsonds to the `very-wide` ratio size.
+
+You can customize ratio sizes by passing a hash to `@sizesRatio`. Make sure that aspect ratio size names are different from width and height sizes!
+
+```hbs
+<div
+  {{element-query
+    sizesRatio=(hash horizontal=0 square=1 vertical=1.0001)
+  }}
+>
+</div>
+```
+
+```hbs
+<ElementQuery
+  @sizesRatio={{hash horizontal=0 square=1 vertical=1.0001}}
+  as |EQ|
+>
+  {{#if (EQ.at-square)}}
+    I am precisely* square.
+  {{/if}}
+</ElementQuery>
+```
+
+\* Mind that comparison of fractional numbers is not absolutely accurate in JavaScript. Aspect ratio sizes are supposed to represent ranges of aspect ratios, not individual aspect ratios. Aiming at a specicific aspect ratio (like in example above) may be inconsistent.
+
+
+
+
+### Opting out of width attributes
+
+By default, default width attributes are applied to your element unless the `sizes` is overridden.
+
+If you want no width attributes to be applied, pass a falsy value into `sizes`.
+
+Using height without width:
+
+```hbs
+<img {{element-query sizes=false sizesHeight=true}}>
+```
+
+```hbs
+<ElementQuery @sizes=null @sizesHeight=true></ElementQuery>
+```
+
+Using no attributes at all:
+
+```hbs
+<img {{element-query sizes=null}}>
+```
+
+```hbs
+<ElementQuery @sizes=false></ElementQuery>
+```
+
+The above will make it impossible to apply CSS or HTML transformations based on sizes. But the following features will still work:
+
+* The `onResize` callback will be called with an object containing current width, height and aspect ratio of the element.
+* The `<ElementQuery>` component will yield an object containing current width, height and aspect ratio of the element.
+* The `eq` attribute will still be applied to the element. This hapens when the element query triggers for the first time.
+
 
 
 ### Customizing attribute prefix
 
 Use the `prefix` argument to adjust attribute prefix:
 
-```html
+```hbs
 <img {{element-query prefix="data-foo-"}}>
 ```
 
-```html
+```hbs
 <ElementQuery @prefix="data-foo-"></ElementQuery>
 ```
 
@@ -544,7 +602,7 @@ One use case for this is to apply new styles based on new breakpoints without br
 
 You can use both width and height element queries on the same element like this:
 
-```html
+```hbs
 <img
   class="foo"
   {{element-query}}
@@ -554,7 +612,7 @@ You can use both width and height element queries on the same element like this:
 
 or
 
-```html
+```hbs
 <img
   class="foo"
   {{element-query}}
@@ -570,20 +628,20 @@ or
 
 Pass a truthy value into `isDisabled` to disable element query functionality:
 
-```html
+```hbs
 <img
-  {{element-query @isDisabled=true}}
+  {{element-query isDisabled=true}}
 >
 ```
 
-```html
+```hbs
 <ElementQuery
   @isDisabled={{true}}
 >
 </ElementQuery>
 ```
 
-⚠ This property is intended for debugging purposes or disabling element queries entirely. If you change `isDisabled` to `true` dynamically, element query attributes will freeze in their current state, there is no cleanup.
+⚠ This property is intended for debugging purposes or disabling element queries entirely. If you change `isDisabled` to `true` dynamically, element query attributes will freeze in their current state. There is no cleanup.
 
 
 
@@ -592,29 +650,72 @@ Pass a truthy value into `isDisabled` to disable element query functionality:
 The `<ElementQuery>` component accepts a `@tagName` argument that allows tweaking the component's root tag:
 
 ```hbs
-<ElementQuery @tagName="aside">
-  The sidebar
-</ElementQuery>
+<ElementQuery @tagName="img" src="https://i.imgur.com/iP9xl86.gif" alt="A handsome person"/>
 ```
 
 This wouuld result in the followingg HTML rendered (element query tags not shown):
 
-```html
-<aside>
-  The sidebar
-</aside>
+```hbs
+<img src="https://i.imgur.com/iP9xl86.gif" alt="A handsome person">
 ```
+
+
+
+### Debouncing
+
+Use the `debounce` argument to set a limit to how frequently attributes recalculate and the `onResize` callback is called while the window is being continuously resized.
+
+It accepts a number of milliseconds and defaults to `100`. This means that the refresh will be happening at a rate of 10 times per second (1000 / 100 = 10).
+
+This example with refresh once per second:
+
+```hbs
+<img
+  {{element-query debounce=1000}}
+>
+```
+
+```hbs
+<ElementQuery
+  @debounce={{1000}}
+>
+</ElementQuery>
+```
+
+This addon uses [window.requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame). Even if you set `debounce` to `0`, the refresh rate will still be limited to either 60 or to the refresh rate of the screen.
+
+It is not recommended to use a low refresh rate due to possible perormance issues. For example, if you do this:
+
+```hbs
+<img
+  {{element-query
+    @debounce=0
+    @onResize=this.updateSrc
+  }}
+>
+```
+
+```js
+@service cdn;
+
+@action updateSrc({element, width, height}) {
+  element.src = this.cdn.getImageSrcForSize({width, height});
+}
+```
+
+...then playing with window size for several seconds will cause hundreds or thousands of `src` updates to be queued, which would cause the image to flicker.
 
 
 
 ### CSS fallback
 
-⚠ When navigating between routes, there may be a flash of unstyled content: a very short moment when the component is rendered, but its element queries are not applied yet. This happens because  `ember-element-query` addon needs the component to be rendered in order to measure its size.
+⚠ When navigating between routes, there may be a flash of unstyled content: a very short moment when the component is rendered, but its element queries are not applied yet. This happens because  `ember-element-query` addon needs the component to be rendered in order to measure its size, before responsive styles can be applied.
 
 Consider this SCSS. Here we have two layouts: horizontal and vertical.
 
 ```scss
 .MyComponent {
+  // This layout will be applied when the element is known to be small.
   &[to-m] {
     // Vertical layout. Children should have margins between them.
     > *:not(:last-child) {
@@ -622,6 +723,7 @@ Consider this SCSS. Here we have two layouts: horizontal and vertical.
     }
   }
 
+  // This layout is applied when the element is known to be large.
   &[from-l] {
     // Horizontal layout. Children should be positioned in a row.
     margin-bottom: 20px;
@@ -633,12 +735,13 @@ During the flash of unstyled content, neither layout is applied because `ember-e
 
 This is suboptimal. Instead, you want one of the layouts to be the default one: applied when element query attributes are unavailable.
 
-For this use case, `ember-element-query` applies the `eq` attribute to an element at all times. Thus, the `:not([eq])` selector matches the element does not have element queries applied.
+For this use case, when the element's size is first measured, `ember-element-query` applies the `eq` attribute to the element and keeps it forever. Thus, the `:not([eq])` selector matches the element only while element queries have not yet being applied.
 
-In order to make one of the layouts default, add `:not([eq])` to it's selectors:
+In order to make one of the layouts a default, add `:not([eq])` to its selectors:
 
 ```scss
 .MyComponent {
+  // This layout will be applied when the element is known to be small or when its size is unknown.
   &:not([eq]), &[to-m] {
     // Vertical layout. Children should have margins between them.
     > *:not(:last-child) {
@@ -646,6 +749,7 @@ In order to make one of the layouts default, add `:not([eq])` to it's selectors:
     }
   }
 
+  // This layout is applied when the element is known to be large.
   &[from-l] {
     // Horizontal layout. Children should be positioned in a row.
     margin-bottom: 20px;
@@ -661,13 +765,13 @@ This would remove the flash of unstyled content at least for some screen sizes.
 
 Unfortunately, FastBoot does not have information about user's screen size. When a user vistis a FastBoot-driven website, they initially see a page without any `ember-element-query` attributes. When FastBoot rehydrates, element queries kick in. As a result, page layout may suddenly change after the user has already started reading and scrolling, causing frustration.
 
-One workaround is to use [ember-useragent](https://github.com/willviles/ember-useragent). Its `isMobile`, `isTablet` and `isDesktop` boolean properties let you apply defaults. The result is very crude but better than nothing.
+One workaround is to use [ember-useragent](https://github.com/willviles/ember-useragent). Its `isMobile`, `isTablet` and `isDesktop` boolean properties let you apply some defaults. The result is very crude, heuristical — but that's better than nothing.
 
 Since reusable components can be used in different contexts, it is recommended that you apply the fallback on parent level.
 
 Responsive component:
 
-```html
+```hbs
 <div
   class="my-component"
   {{element-querysizes=(hash small=0 medium=350 large=700)}}
@@ -684,7 +788,7 @@ Responsive component:
 
 Parent:
 
-```html
+```hbs
 <MyComponent
   from-medium={{and this.fastboot.isFastBoot (or this.userAgent.device.isTablet this.userAgent.device.isDesktop)}}
   from-large-={{and this.fastboot.isFastBoot this.userAgent.device.isDeskto)}}
@@ -700,7 +804,7 @@ Browser support
 
 **IE is not supported** because `ember-element-query` uses modern ECMAScript APIs.
 
-`ember-element-query` is based on [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) which is also not supported by IE.
+`ember-element-query` is based on the [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) which is also not supported by IE.
 
 As of 2020-06, `ResizeObserver` supports the following major browsers:
 
@@ -710,7 +814,7 @@ As of 2020-06, `ResizeObserver` supports the following major browsers:
 
 See [caniuse.com](https://caniuse.com/#feat=resizeobserver) for detailed stats.
 
-⚠ Note that old iOS devices do not have `ResizeObserver` support, so you might want to use a polyfill. iOS Safari is the new IE. 😬
+⚠ Note that old iOS devices do not have `ResizeObserver` support, so you might want to use a polyfill. *iOS Safari is the new IE. 😬*
 
 
 
@@ -724,17 +828,19 @@ There are a few other Ember addons implementing element queries, such as:
 
 `ember-element-query` was implemented to offer a simpler API at the cost of being opinionated.
 
-Other addons are full-fledged element query addons that aren't as much opinionated. Their approach is defining rules on element query components. For example, if you want your component to respond to `max-width: 349px`, `min-width: 350px`, `min-width: 350px and max-width: 699px` and `min-width: 700px` — you will need to define four rules on the component. An unexpected challenge is to come up with meaningful names for each range.
+Other addons are full-fledged element query addons that aren't as much opinionated. Their approach is defining rules on element query components. For example, if you want your component to respond to `0—350px`, `350px+`, `350px—699px` and `700px+` — you will need to define four rules on the component. An unexpected challenge is to come up with meaningful names for each range.
 
 Every time you need another rule, you need to add it on the component before you're able to use it in CSS.
 
-With `ember-element-query`, you only need to define *breakpoints*. The example above uses only two breakpoints: `350px` and `700px` — and all combinations of rules become available automatically via attributes.
+With `ember-element-query`, you only need to define *breakpoints*. The example above uses only two breakpoints: `350px` and `700px` — and all combinations of rules become available automatically via HTML attributes.
 
-💡 `ember-fill-up` and `ember-container-query` and `ember-element-query` are all full-featured element query addons. `ember-element-query`'s goal is to provide a simpler API, making it more convenient to use. It encourages using pure CSS transformations, accoridng to the Responsive Web Design paradigm, though template transformations are also possible and convenient.**
+💡 `ember-fill-up` and `ember-container-query` and `ember-element-query` are all full-featured element query addons. `ember-element-query`'s goal is to provide a simpler API, making it more convenient to use. It encourages using pure CSS transformations, accoridng to the Responsive Web Design paradigm, though template transformations are also possible and convenient.
 
 
 
 ### Comparison
+
+As of 2021.08.
 
 #### Defining custom rules rules, using template and CSS transformations
 
@@ -742,7 +848,7 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-fill-up`:
 
-    ```html
+    ```hbs
     <FillUp
       class="my-component"
       @breakpoints={{hash
@@ -792,7 +898,7 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-container-query`:
 
-    ```html
+    ```hbs
     <ContainerQuery
       class="my-component"
       @features={{hash
@@ -814,10 +920,12 @@ Given breakpoints 350, 700 and 1050:
       {{#if CQ.features.medium}}...{{/if}}
       {{#if CQ.features.large}}...{{/if}}
       {{#if CQ.features.extraLarge}}...{{/if}}
+
       {{#if CQ.features.mediumAndBigger}}...{{/if}}
       {{#if CQ.features.largeAndBigger}}...{{/if}}
       {{#if CQ.features.mediumAndSmaller}}...{{/if}}
       {{#if CQ.features.largeAndSmaller}}...{{/if}}
+
       {{#if CQ.features.mediumToLarge}}...{{/if}}
     </ContainerQuery>
     ```
@@ -827,10 +935,12 @@ Given breakpoints 350, 700 and 1050:
     .my-component[data-container-query-medium] {}
     .my-component[data-container-query-large] {}
     .my-component[data-container-query-extraLarge] {}
-    .my-component[data-container-query-mediumToLarge] {}
+
+    .my-component[data-container-query-mediumAndBigger] {}
     .my-component[data-container-query-largeAndBigger] {}
     .my-component[data-container-query-mediumAndSmaller] {}
     .my-component[data-container-query-largeAndSmaller] {}
+
     .my-component[data-container-query-mediumToLarge] {}
     ```
 
@@ -838,7 +948,7 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-element-query`:
 
-    ```html
+    ```hbs
     <ElementQuery
       class="my-component"
       @sizes=(hash small=0 medium=350 large=700 extraLarge=1050)
@@ -892,13 +1002,13 @@ Given breakpoints 350, 700 and 1050:
     
     **Those defaults can be used as a common design language, and all components in your app can be using them, reducing the boilerplate to:**
 
-    ```html
+    ```hbs
     <ElementQuery></ElementQuery>
     ```
 
     or
 
-    ```html
+    ```hbs
     <div {{element-query}}></div>
     ```
 
@@ -908,15 +1018,25 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-fill-up`:
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
+    Not supported. Responsive componetns are limited to `<div>`.
 
 * `ember-container-query`:
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
+    Uses [ember-element-helper](https://github.com/tildeio/ember-element-helper) as a polyfill for [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)):
+
+    ```hbs
+    <ContainerQuery @tagName="article">
+    </ContainerQuery>
+    ```
 
 * `ember-element-query`:
+  
+    Uses [ember-element-helper](https://github.com/tildeio/ember-element-helper) as a polyfill for [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)):
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
+    ```hbs
+    <ElementQuery @tagName="article">
+    </ElementQuery>
+    ```
 
 
 
@@ -924,15 +1044,22 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-fill-up`:
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
+    Not supported. Responsive componetns are limited to `<div>`.
 
 * `ember-container-query`:
+  
+    Uses [ember-element-helper](https://github.com/tildeio/ember-element-helper) as a polyfill for [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)):
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
+    ```hbs
+    <ContainerQuery @tagName="article">
+    </ContainerQuery>
+    ```
 
 * `ember-element-query`:
 
-    ```html
+  Naturally:
+
+    ```hbs
     <article {{element-query}}>
     </article>
     ```
@@ -943,11 +1070,11 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-fill-up`:
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
+    Not supported.
 
     Workaround with two wrapper elements:
 
-    ```html
+    ```hbs
     <FillUp class="wrapper1" breakpoints=this.rules>
       <div class=wrapper2>
         <img class="image" src alt>
@@ -978,40 +1105,26 @@ Given breakpoints 350, 700 and 1050:
     ```
 
 * `ember-container-query`:
+  
+    Uses [ember-element-helper](https://github.com/tildeio/ember-element-helper) as a polyfill for [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)):
 
-    Impossible until [RFC 389](https://github.com/emberjs/rfcs/blob/master/text/0389-dynamic-tag-names.md) is implemented ([tracking](https://github.com/emberjs/rfc-tracking/issues/42)).
-    
-    Workaround with two wrapper elements: same as in `ember-fill-up`.
+    ```hbs
+    <ContainerQuery @tagName="img" src alt/>
+    ```
 
 
 * `ember-element-query`:
 
-    ```html
-    <img {{element-query}} src alt class="image">
+    ```hbs
+    <img {{element-query}} src alt>
     ```
-
-    ```css
-    .image {
-      width: 100%;
-      height: auto;
-    }
-
-    .image[at-small]  {
-      opacity: 0.5;
-    }
-
-    .image[from-large]  {
-      transform: rotate(5);
-    }
-    ```
-
 
 
 #### Using both width and height in a rule for template transformation
 
 * `ember-fill-up`:
 
-    ```html
+    ```hbs
     <FillUp
       class="my-component"
       @breakpoints={{hash
@@ -1033,7 +1146,7 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-container-query`:
 
-    ```html
+    ```hbs
     <ContainerQuery
       class="my-component"
       @features={{hash
@@ -1055,7 +1168,7 @@ Given breakpoints 350, 700 and 1050:
 
 * `ember-element-query`:
 
-    ```html
+    ```hbs
     <ElementQuery
       @dimension="both"
       @sizes=(hash small-width=0 medium-width=350 large-width=700)
@@ -1070,7 +1183,7 @@ Given breakpoints 350, 700 and 1050:
 
     When usign default sizes, this gets even shorter:
 
-    ```html
+    ```hbs
     <ElementQuery @dimension="both" as |EQ|>
       {{#if (and EQ.to-s EQ.from-l-height)}}
         I am thin and tall.
@@ -1133,7 +1246,7 @@ This project is licensed under the [MIT License](LICENSE.md).
 Credit
 ------
 
-Initially implemented by Andrey Mikhaylov ([lolmaus](https://github.com/lolmaus)) and [contributors](https://github.com/lolmaus/ember-element-query/graphs/contributors).
+Implemented by Andrey Mikhaylov ([lolmaus](https://github.com/lolmaus)) and [contributors](https://github.com/lolmaus/ember-element-query/graphs/contributors).
 
 Thanks to Chad Carbert ([@chadian](https://github.com/chadian)) and Isaac Lee ([@ijlee2](https://github.com/ijlee2)) for feedback, ideas, brainstorming and criticism.
 

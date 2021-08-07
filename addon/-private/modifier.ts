@@ -2,9 +2,11 @@ import Modifier from 'ember-modifier';
 import { observeResize } from 'ember-resize-observer-modifier/modifiers/observe-resize';
 import { action } from '@ember/object';
 import window from 'ember-window-mock';
+import { debounceTask } from 'ember-lifeline';
 import {
   EQInfo,
   ModifierArgs,
+  SIZES_RATIO_DEFAULT,
   Sizes,
   SIZES_DEFAULT,
   SIZES_HEIGHT_DEFAULT,
@@ -14,13 +16,6 @@ export interface SizeObject {
   value: number;
   index: number;
 }
-
-// export interface ElementStub {
-//   clientWidth?: number;
-//   clientHeight?: number;
-//   setAttribute?: (qualifiedName: string, value: string) => void;
-//   removeAttribute?: (qualifiedName: string) => void;
-// }
 
 export type RangeDirection = 'at' | 'from' | 'to';
 
@@ -32,6 +27,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
 
   sizesDefault: Sizes = SIZES_DEFAULT;
   sizesHeightDefault: Sizes = SIZES_HEIGHT_DEFAULT;
+  sizesRatioDefault: Sizes = SIZES_RATIO_DEFAULT;
 
   _element?: HTMLElement; // For some reason, this.element is not always available
   teardownResizeObserver?: () => void;
@@ -50,136 +46,395 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
     return this._element.clientHeight;
   }
 
+  get debounce(): number {
+    const { debounce } = this.args.named;
+
+    return debounce == null ? 100 : debounce;
+  }
+
   get ratio(): number {
     return this.width / this.height;
   }
 
-  get sizes(): Sizes {
-    return this.args.named.sizes || this.sizesDefault;
+  get sizes(): Sizes | undefined {
+    const { sizes } = this.args.named;
+
+    // Explicitly opt into default sizes
+    if (sizes === true) {
+      return this.sizesDefault;
+    }
+
+    // Provide own sizes
+    else if (sizes) {
+      return sizes;
+    }
+
+    // Explicitly opt out of sizes
+    else if (!sizes && sizes !== undefined) {
+      return undefined;
+    }
+
+    // Default
+    else {
+      return this.sizesDefault;
+    }
   }
 
-  get isDimensionWidth(): boolean {
+  get sizesHeight(): Sizes | undefined {
+    const { sizesHeight } = this.args.named;
+
+    // Explicitly opt into default sizes
+    if (sizesHeight === true) {
+      return this.sizesHeightDefault;
+    }
+
+    // Provide own sizes
+    else if (sizesHeight) {
+      return sizesHeight;
+    }
+
+    // Default value
+    else {
+      return undefined;
+    }
+  }
+
+  get sizesRatio(): Sizes | undefined {
+    const { sizesRatio } = this.args.named;
+
+    // Explicitly opt into default sizes
+    if (sizesRatio === true) {
+      return this.sizesRatioDefault;
+    }
+
+    // Provide own sizes
+    else if (sizesRatio) {
+      return sizesRatio;
+    }
+
+    // Default value
+    else {
+      return undefined;
+    }
+  }
+
+  get sizeObjectsWidthSortedAsc(): SizeObject[] | undefined {
+    return this.sizes && this.buildSizeObjectsSortedAsc(this.sizes);
+  }
+
+  get sizeObjectsHeightSortedAsc(): SizeObject[] | undefined {
+    return this.sizesHeight && this.buildSizeObjectsSortedAsc(this.sizesHeight);
+  }
+
+  get sizeObjectsRatioSortedAsc(): SizeObject[] | undefined {
+    return this.sizesRatio && this.buildSizeObjectsSortedAsc(this.sizesRatio);
+  }
+
+  get sizeObjectWidthAt(): SizeObject | undefined {
     return (
-      !this.args.named.dimension ||
-      this.args.named.dimension === 'width' ||
-      this.args.named.dimension === 'both'
+      this.sizeObjectsWidthSortedAsc &&
+      this.findSizeObjectAt(this.sizeObjectsWidthSortedAsc, this.width)
     );
   }
 
-  get isDimensionHeight(): boolean {
-    return this.args.named.dimension === 'height' || this.args.named.dimension === 'both';
+  get sizeObjectHeightAt(): SizeObject | undefined {
+    return (
+      this.sizeObjectsHeightSortedAsc &&
+      this.findSizeObjectAt(this.sizeObjectsHeightSortedAsc, this.height)
+    );
   }
 
-  get sizesHeight(): Sizes {
-    return this.args.named.sizesHeight || this.sizesHeightDefault;
+  get sizeObjectRatioAt(): SizeObject | undefined {
+    if (!this.width && !this.height) {
+      return;
+    }
+
+    return (
+      this.sizeObjectsRatioSortedAsc &&
+      this.findSizeObjectAt(this.sizeObjectsRatioSortedAsc, this.ratio)
+    );
   }
 
-  get sizeObjectsWidthSortedAsc(): SizeObject[] {
-    return this.buildSizeObjectsSortedAsc(this.sizes);
-  }
+  get sizeObjectsWidthFrom(): SizeObject[] | undefined {
+    if (!this.sizeObjectsWidthSortedAsc || !this.sizeObjectWidthAt) {
+      return;
+    }
 
-  get sizeObjectsHeightSortedAsc(): SizeObject[] {
-    return this.buildSizeObjectsSortedAsc(this.sizesHeight);
-  }
-
-  get sizeObjectWidthAt(): SizeObject {
-    return this.findSizeObjectAt(this.sizeObjectsWidthSortedAsc, this.width);
-  }
-
-  get sizeObjectHeightAt(): SizeObject {
-    return this.findSizeObjectAt(this.sizeObjectsHeightSortedAsc, this.height);
-  }
-
-  get sizeObjectsWidthFrom(): SizeObject[] {
     const nextIndex = this.sizeObjectWidthAt.index + 1;
     return this.sizeObjectsWidthSortedAsc.slice(0, nextIndex);
   }
 
-  get sizeObjectsHeightFrom(): SizeObject[] {
+  get sizeObjectsHeightFrom(): SizeObject[] | undefined {
+    if (!this.sizeObjectHeightAt || !this.sizeObjectsHeightSortedAsc) {
+      return;
+    }
+
     const nextIndex = this.sizeObjectHeightAt.index + 1;
     return this.sizeObjectsHeightSortedAsc.slice(0, nextIndex);
   }
 
-  get sizeObjectsWidthTo(): SizeObject[] {
+  get sizeObjectsRatioFrom(): SizeObject[] | undefined {
+    if (!this.sizeObjectRatioAt || !this.sizeObjectsRatioSortedAsc) {
+      return;
+    }
+
+    const nextIndex = this.sizeObjectRatioAt.index + 1;
+    return this.sizeObjectsRatioSortedAsc.slice(0, nextIndex);
+  }
+
+  get sizeObjectsWidthTo(): SizeObject[] | undefined {
+    if (!this.sizeObjectWidthAt || !this.sizeObjectsWidthSortedAsc) {
+      return;
+    }
+
     const index = this.sizeObjectWidthAt.index;
     return this.sizeObjectsWidthSortedAsc.slice(index);
   }
 
-  get sizeObjectsHeightTo(): SizeObject[] {
+  get sizeObjectsHeightTo(): SizeObject[] | undefined {
+    if (!this.sizeObjectHeightAt || !this.sizeObjectsHeightSortedAsc) {
+      return;
+    }
+
     const index = this.sizeObjectHeightAt.index;
     return this.sizeObjectsHeightSortedAsc.slice(index);
   }
 
+  get sizeObjectsRatioTo(): SizeObject[] | undefined {
+    if (!this.sizeObjectRatioAt || !this.sizeObjectsRatioSortedAsc) {
+      return;
+    }
+
+    const index = this.sizeObjectRatioAt.index;
+    return this.sizeObjectsRatioSortedAsc.slice(index);
+  }
+
+  get attributesWidthAt(): string[] {
+    if (!this.sizeObjectWidthAt) {
+      return [];
+    }
+
+    return [this.convertSizeToAttribute(this.sizeObjectWidthAt.name, 'at')];
+  }
+
+  get attributesWidthFrom(): string[] {
+    if (!this.sizeObjectsWidthFrom) {
+      return [];
+    }
+
+    return this.sizeObjectsWidthFrom.map((toSizeObject) => {
+      return this.convertSizeToAttribute(toSizeObject.name, 'from');
+    });
+  }
+
+  get attributesWidthTo(): string[] {
+    if (!this.sizeObjectsWidthTo) {
+      return [];
+    }
+
+    return this.sizeObjectsWidthTo.map((fromSizeObject) => {
+      return this.convertSizeToAttribute(fromSizeObject.name, 'to');
+    });
+  }
+
+  get attributesWidth(): string[] {
+    return [...this.attributesWidthAt, ...this.attributesWidthFrom, ...this.attributesWidthTo];
+  }
+
+  get attributesHeightAt(): string[] {
+    if (!this.sizeObjectHeightAt) {
+      return [];
+    }
+
+    return [this.convertSizeToAttribute(this.sizeObjectHeightAt.name, 'at')];
+  }
+
+  get attributesHeightFrom(): string[] {
+    if (!this.sizeObjectsHeightFrom) {
+      return [];
+    }
+
+    return this.sizeObjectsHeightFrom.map((fromSizeObject) => {
+      return this.convertSizeToAttribute(fromSizeObject.name, 'from');
+    });
+  }
+
+  get attributesHeightTo(): string[] {
+    if (!this.sizeObjectsHeightTo) {
+      return [];
+    }
+
+    return this.sizeObjectsHeightTo.map((toSizeObject) => {
+      return this.convertSizeToAttribute(toSizeObject.name, 'to');
+    });
+  }
+
+  get attributesHeight(): string[] {
+    return [...this.attributesHeightAt, ...this.attributesHeightFrom, ...this.attributesHeightTo];
+  }
+
+  get attributesRatioAt(): string[] {
+    if (!this.sizeObjectRatioAt) {
+      return [];
+    }
+
+    return [this.convertSizeToAttribute(this.sizeObjectRatioAt.name, 'at')];
+  }
+
+  get attributesRatioFrom(): string[] {
+    if (!this.sizeObjectsRatioFrom) {
+      return [];
+    }
+
+    return this.sizeObjectsRatioFrom.map((fromSizeObject) => {
+      return this.convertSizeToAttribute(fromSizeObject.name, 'from');
+    });
+  }
+
+  get attributesRatioTo(): string[] {
+    if (!this.sizeObjectsRatioTo) {
+      return [];
+    }
+
+    return this.sizeObjectsRatioTo.map((toSizeObject) => {
+      return this.convertSizeToAttribute(toSizeObject.name, 'to');
+    });
+  }
+
+  get attributesRatio(): string[] {
+    return [...this.attributesRatioAt, ...this.attributesRatioFrom, ...this.attributesRatioTo];
+  }
+
+  get attributes(): string[] {
+    return [...this.attributesWidth, ...this.attributesHeight, ...this.attributesRatio];
+  }
+
   get attributesRecord(): Record<string, true> {
-    return [...this.attributesWidth, ...this.attributesHeight].reduce((result, attr) => {
+    return this.attributes.reduce((result, attr) => {
       result[attr] = true;
       return result;
     }, {} as Record<string, true>);
   }
 
-  get attributesWidth(): string[] {
+  get attributesWidthAtRetired(): string[] {
+    if (!this.sizeObjectsWidthSortedAsc || !this.sizeObjectWidthAt) {
+      return [];
+    }
+
+    return this.sizeObjectsWidthSortedAsc
+      .filter((sizeObject) => sizeObject.name !== this.sizeObjectWidthAt!.name)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'at'));
+  }
+
+  get attributesWidthFromRetired(): string[] {
+    if (!this.sizeObjectsWidthTo) {
+      return [];
+    }
+
+    return this.sizeObjectsWidthTo
+      .slice(1)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'from'));
+  }
+
+  get attributesWidthToRetired(): string[] {
+    if (!this.sizeObjectsWidthFrom) {
+      return [];
+    }
+
+    return this.sizeObjectsWidthFrom
+      .slice(0, -1)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'to'));
+  }
+
+  get attributesWidthRetired(): string[] {
     return [
-      this.convertSizeToAttribute(this.sizeObjectWidthAt.name, 'at'),
-      ...this.sizeObjectsWidthFrom.map((fromSizeObject) =>
-        this.convertSizeToAttribute(fromSizeObject.name, 'from')
-      ),
-      ...this.sizeObjectsWidthTo.map((toSizeObject) =>
-        this.convertSizeToAttribute(toSizeObject.name, 'to')
-      ),
+      ...this.attributesWidthAtRetired,
+      ...this.attributesWidthFromRetired,
+      ...this.attributesWidthToRetired,
     ];
   }
 
-  get attributesHeight(): string[] {
+  get attributesHeightAtRetired(): string[] {
+    if (!this.sizeObjectsHeightSortedAsc || !this.sizeObjectHeightAt) {
+      return [];
+    }
+
+    return this.sizeObjectsHeightSortedAsc
+      .filter((sizeObject) => sizeObject.name !== this.sizeObjectHeightAt!.name)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'at'));
+  }
+
+  get attributesHeightFromRetired(): string[] {
+    if (!this.sizeObjectsHeightTo) {
+      return [];
+    }
+
+    return this.sizeObjectsHeightTo
+      .slice(1)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'from'));
+  }
+
+  get attributesHeightToRetired(): string[] {
+    if (!this.sizeObjectsHeightFrom) {
+      return [];
+    }
+
+    return this.sizeObjectsHeightFrom
+      .slice(0, -1)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'to'));
+  }
+
+  get attributesHeightRetired(): string[] {
     return [
-      this.convertSizeToAttribute(this.sizeObjectHeightAt.name, 'at'),
-      ...this.sizeObjectsHeightFrom.map((fromSizeObject) =>
-        this.convertSizeToAttribute(fromSizeObject.name, 'from')
-      ),
-      ...this.sizeObjectsHeightTo.map((toSizeObject) =>
-        this.convertSizeToAttribute(toSizeObject.name, 'to')
-      ),
+      ...this.attributesHeightAtRetired,
+      ...this.attributesHeightFromRetired,
+      ...this.attributesHeightToRetired,
     ];
   }
 
-  get attributesWidthToRemove(): string[] {
+  get attributesRatioAtRetired(): string[] {
+    if (!this.sizeObjectsRatioSortedAsc || !this.sizeObjectRatioAt) {
+      return [];
+    }
+
+    return this.sizeObjectsRatioSortedAsc
+      .filter((sizeObject) => sizeObject.name !== this.sizeObjectRatioAt!.name)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'at'));
+  }
+
+  get attributesRatioFromRetired(): string[] {
+    if (!this.sizeObjectsRatioTo) {
+      return [];
+    }
+
+    return this.sizeObjectsRatioTo
+      .slice(1)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'from'));
+  }
+
+  get attributesRatioToRetired(): string[] {
+    if (!this.sizeObjectsRatioFrom) {
+      return [];
+    }
+
+    return this.sizeObjectsRatioFrom
+      .slice(0, -1)
+      .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'to'));
+  }
+
+  get attributesRatioRetired(): string[] {
     return [
-      ...this.sizeObjectsWidthSortedAsc
-        .filter((sizeObject) => sizeObject.name !== this.sizeObjectWidthAt.name)
-        .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'at')),
-      ...this.sizeObjectsWidthTo
-        .slice(1)
-        .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'from')),
-      ...this.sizeObjectsWidthFrom
-        .slice(0, -1)
-        .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'to')),
+      ...this.attributesRatioAtRetired,
+      ...this.attributesRatioFromRetired,
+      ...this.attributesRatioToRetired,
     ];
   }
 
-  get attributesHeightToRemove(): string[] {
+  get attributesRetired(): string[] {
     return [
-      ...this.sizeObjectsHeightSortedAsc
-        .filter((sizeObject) => sizeObject.name !== this.sizeObjectHeightAt.name)
-        .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'at')),
-      ...this.sizeObjectsHeightTo
-        .slice(1)
-        .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'from')),
-      ...this.sizeObjectsHeightFrom
-        .slice(0, -1)
-        .map((sizeObject) => this.convertSizeToAttribute(sizeObject.name, 'to')),
-    ];
-  }
-
-  get attributes(): string[] {
-    return [
-      ...(this.isDimensionWidth ? this.attributesWidth : []),
-      ...(this.isDimensionHeight ? this.attributesHeight : []),
-    ];
-  }
-
-  get attributesToRemove(): string[] {
-    return [
-      ...(this.isDimensionWidth ? this.attributesWidthToRemove : []),
-      ...(this.isDimensionHeight ? this.attributesHeightToRemove : []),
+      ...this.attributesWidthRetired,
+      ...this.attributesHeightRetired,
+      ...this.attributesRatioRetired,
     ];
   }
 
@@ -191,9 +446,9 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       width: this.width,
       height: this.height,
       ratio: this.ratio,
-      size: this.isDimensionWidth ? this.sizeObjectWidthAt.name : undefined,
-      sizeHeight: this.isDimensionHeight ? this.sizeObjectHeightAt.name : undefined,
-      dimension: this.args.named.dimension || 'width',
+      size: this.sizeObjectWidthAt?.name,
+      sizeHeight: this.sizeObjectHeightAt?.name,
+      sizeRatio: this.sizeObjectRatioAt?.name,
       prefix: this.args.named.prefix,
       attributes: this.attributes,
       attributesRecord: this.attributesRecord,
@@ -220,7 +475,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       this._element.setAttribute(attribute, '');
     });
 
-    this.attributesToRemove.forEach((attribute) => {
+    this.attributesRetired.forEach((attribute) => {
       if (!this._element) throw new Error('Expected this._element to be available');
       this._element.removeAttribute(attribute);
     });
@@ -276,17 +531,21 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       : sizeObjectsSortedAsc[sizeObjectsSortedAsc.length - 1];
   }
 
-  // -------------------
-  // Actions
-  // -------------------
-
-  @action didResizeHandler(): void {
+  _didResizeHandler(): void {
     window.requestAnimationFrame(() => {
       if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
         this.applyAttributesToElement();
         this.callOnResize();
       }
     });
+  }
+
+  // -------------------
+  // Actions
+  // -------------------
+
+  @action didResizeHandler(): void {
+    debounceTask(this, '_didResizeHandler', this.debounce);
   }
 
   // -------------------
