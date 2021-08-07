@@ -1,3 +1,13 @@
+## v4.0.1 (2021-08-07)
+
+#### :memo: Documentation
+* [#31](https://github.com/lolmaus/ember-element-query/pull/31) Filled out the changelog ([@lolmaus](https://github.com/lolmaus))
+* [#30](https://github.com/lolmaus/ember-element-query/pull/30) Fill out package.json ([@lolmaus](https://github.com/lolmaus))
+
+#### Committers: 1
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+
+
 ## v4.0.0 (2021-08-07)
 
 First full-featured version of the second rewrite.
