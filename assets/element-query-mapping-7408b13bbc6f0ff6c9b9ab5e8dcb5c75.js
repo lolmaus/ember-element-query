@@ -1,1 +1,0 @@
-define("ember-element-query-mapping",[],function(){return{default:{"xBlock-image-wrapper":{to:[499],from:[500]},xBlock:{to:[499],from:[500]},"route-index-xFoo":{from:[500]},"github-fork-ribbon":{from:[500]}}}})
