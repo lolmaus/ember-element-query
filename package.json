@@ -1,18 +1,45 @@
 {
   "name": "ember-element-query",
   "version": "4.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "Use element queries effortlessly on any element or component. Make responsive components with CSS transformations and/or template transfomrations.",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "element-query",
+    "element-queries",
+    "container-query",
+    "container-queries",
+    "eq",
+    "e-q",
+    "responsive-web-design",
+    "responsive",
+    "rwd",
+    "element query",
+    "element queries",
+    "container query",
+    "container queries",
+    "eq",
+    "responsive web design",
+    "ember",
+    "sass",
+    "scss",
+    "slice",
+    "slices",
+    "breakpoint-slicer",
+    "breakpoint slicer",
+    "media query",
+    "media-query",
+    "media queries",
+    "media-queries"
   ],
   "repository": {
     "type": "git",
     "url": "git@github.com:lolmaus/ember-element-query.git"
   },
   "license": "MIT",
-  "author": "",
+  "author": "Andrey Mikhaylov (lolmaus) <https://github.com/lolmaus/",
+  "homepage": "https://github.com/lolmaus/ember-element-query/",
+  "bugs": "https://github.com/lolmaus/ember-element-query/issues/",
   "directories": {
-    "doc": "doc",
     "test": "tests"
   },
   "scripts": {
@@ -127,7 +154,8 @@
     "edition": "octane"
   },
   "ember-addon": {
-    "configPath": "tests/dummy/config"
+    "configPath": "tests/dummy/config",
+    "demoURL": "https://lolmaus.github.io/ember-element-query/"
   },
   "release-it": {
     "plugins": {
