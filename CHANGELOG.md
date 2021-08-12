@@ -1,3 +1,14 @@
+## v4.0.2 (2021-08-12)
+
+#### :memo: Documentation
+* [#33](https://github.com/lolmaus/ember-element-query/pull/33) [docs] ember-container-query does not use ResizeObserver ([@lolmaus](https://github.com/lolmaus))
+
+#### :house: Internal
+* [#34](https://github.com/lolmaus/ember-element-query/pull/34) Switch to ember-on-resize-modifier ([@lolmaus](https://github.com/lolmaus))
+
+#### Committers: 1
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+
 ## v4.0.1 (2021-08-07)
 
 #### :memo: Documentation
