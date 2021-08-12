@@ -1,5 +1,4 @@
 import Modifier from 'ember-modifier';
-import { observeResize } from 'ember-resize-observer-modifier/modifiers/observe-resize';
 import { action } from '@ember/object';
 import window from 'ember-window-mock';
 import { debounceTask } from 'ember-lifeline';
@@ -11,6 +10,7 @@ import {
   SIZES_DEFAULT,
   SIZES_HEIGHT_DEFAULT,
 } from 'ember-element-query';
+import { inject as service } from '@ember/service';
 export interface SizeObject {
   name: string;
   value: number;
@@ -19,8 +19,19 @@ export interface SizeObject {
 
 export type RangeDirection = 'at' | 'from' | 'to';
 
+interface ResizeObserverService {
+  observe(element: HTMLElement, callback?: () => void): void;
+  unobserve(element: HTMLElement, callback?: () => void): void;
+}
+
 /** @internal */
 export default class ElementQueryModifier extends Modifier<ModifierArgs> {
+  // -------------------
+  // Services
+  // -------------------
+
+  @service resizeObserver!: ResizeObserverService;
+
   // -------------------
   // Properties
   // -------------------
@@ -30,7 +41,6 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   sizesRatioDefault: Sizes = SIZES_RATIO_DEFAULT;
 
   _element?: HTMLElement; // For some reason, this.element is not always available
-  teardownResizeObserver?: () => void;
 
   // -------------------
   // Computed properties
@@ -553,14 +563,11 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
 
   didInstall(): void {
-    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
-    if (!ResizeObserver) return;
-
     if (!this.element) throw new Error('Expected this.element to be available');
 
     this._element = this.element;
 
-    this.teardownResizeObserver = observeResize(this.element, [this.didResizeHandler]); // eslint-disable-line @typescript-eslint/unbound-method
+    this.resizeObserver.observe(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
   }
 
   didUpdateArguments(): void {
@@ -571,9 +578,8 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   willRemove(): void {
-    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
-    if (!ResizeObserver) return;
+    if (!this.element) throw new Error('Expected this.element to be available');
 
-    if (this.teardownResizeObserver) this.teardownResizeObserver();
+    this.resizeObserver.unobserve(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
   }
 }
