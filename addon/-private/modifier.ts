@@ -11,6 +11,7 @@ import {
   SIZES_HEIGHT_DEFAULT,
 } from 'ember-element-query';
 import { inject as service } from '@ember/service';
+import { waitFor } from '@ember/test-waiters';
 export interface SizeObject {
   name: string;
   value: number;
@@ -22,6 +23,7 @@ export type RangeDirection = 'at' | 'from' | 'to';
 interface ResizeObserverService {
   observe(element: HTMLElement, callback?: () => void): void;
   unobserve(element: HTMLElement, callback?: () => void): void;
+  isEnabled: boolean;
 }
 
 /** @internal */
@@ -41,6 +43,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   sizesRatioDefault: Sizes = SIZES_RATIO_DEFAULT;
 
   _element?: HTMLElement; // For some reason, this.element is not always available
+  _promiseResolveHasBeenInstalled?: (value?: unknown) => void;
 
   // -------------------
   // Computed properties
@@ -541,12 +544,20 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       : sizeObjectsSortedAsc[sizeObjectsSortedAsc.length - 1];
   }
 
+  _maybeRunPromiseResolveHasBeenInstalled(): void {
+    if (this._promiseResolveHasBeenInstalled) {
+      this._promiseResolveHasBeenInstalled();
+      this._promiseResolveHasBeenInstalled = undefined;
+    }
+  }
+
   _didResizeHandler(): void {
     window.requestAnimationFrame(() => {
       if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
         this.applyAttributesToElement();
         this.callOnResize();
       }
+      this._maybeRunPromiseResolveHasBeenInstalled?.();
     });
   }
 
@@ -561,18 +572,25 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
   // Lifecycle hooks
   // -------------------
-
-  didInstall(): void {
+  @waitFor
+  didInstall(): void | Promise<void> {
     if (!this.element) throw new Error('Expected this.element to be available');
 
     this._element = this.element;
 
     this.resizeObserver.observe(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
+
+    if (!this.args.named.isDisabled && this.resizeObserver.isEnabled) {
+      return new Promise((resolve) => {
+        this._promiseResolveHasBeenInstalled = resolve;
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 
   didUpdateArguments(): void {
-    // @ts-ignore https://github.com/Microsoft/TypeScript/issues/28502#issuecomment-609607344
-    if (!ResizeObserver) return;
+    if (!this.resizeObserver.isEnabled) return;
 
     this.didResizeHandler();
   }
