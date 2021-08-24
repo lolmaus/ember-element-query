@@ -1,3 +1,12 @@
+## v4.0.3 (2021-08-24)
+
+#### :bug: Bug Fix
+* [#36](https://github.com/lolmaus/ember-element-query/pull/36) Wait for initial element query attributes in tests, Closes [#35](https://github.com/lolmaus/ember-element-query/issues/35) ([@lolmaus](https://github.com/lolmaus))
+
+#### Committers: 1
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+
+
 ## v4.0.2 (2021-08-12)
 
 #### :memo: Documentation
