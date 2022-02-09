@@ -319,7 +319,7 @@ This addon does not do anything on install, so it can alternatively be installed
 
 ...or Yarn:
 
-    yarn add -D ember-element query
+    yarn add -D ember-element-query
 
 
 
