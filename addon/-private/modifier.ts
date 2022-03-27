@@ -42,6 +42,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   sizesRatioDefault: Sizes = SIZES_RATIO_DEFAULT;
 
   _element?: HTMLElement; // For some reason, this.element is not always available
+  _firstCall = true;
 
   // -------------------
   // Computed properties
@@ -542,16 +543,16 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       : sizeObjectsSortedAsc[sizeObjectsSortedAsc.length - 1];
   }
 
-  __didResizeHandler(): void {
-    this.applyAttributesToElement();
-    this.callOnResize();
+  _didResizeHandlerSync(): void {
+    if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
+      this.applyAttributesToElement();
+      this.callOnResize();
+    }
   }
 
-  _didResizeHandler(): void {
+  _didResizeHandlerRequestAnimationFrame(): void {
     window.requestAnimationFrame(() => {
-      if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
-        this.__didResizeHandler();
-      }
+      this._didResizeHandlerSync();
     });
   }
 
@@ -560,7 +561,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
 
   @action didResizeHandler(): void {
-    debounceTask(this, '_didResizeHandler', this.debounce);
+    debounceTask(this, '_didResizeHandlerRequestAnimationFrame', this.debounce);
   }
 
   // -------------------
@@ -573,7 +574,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
 
     this.resizeObserver.observe(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
 
-    this.__didResizeHandler(); // We want to run it as soon as possible to avoid a jump of unstyled content
+    this._didResizeHandlerSync(); // We want to run it as soon as possible to avoid a jump of unstyled content
   }
 
   didUpdateArguments(): void {

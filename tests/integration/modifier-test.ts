@@ -49,6 +49,7 @@ module('Integration | Modifier | element-query', function (hooks) {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('calls the onResize callback', async function (this: TestContextCustom, assert) {
     let callCount = 0;
+    let callCountOld = 0;
     this.callback = sinon.spy(() => callCount++);
 
     await render(hbs`
@@ -67,13 +68,13 @@ module('Integration | Modifier | element-query', function (hooks) {
     m = 'Element is rendered';
     assert.ok(true, m);
 
-    await waitUntil(() => callCount === 1);
+    await waitUntil(() => callCount > callCountOld);
 
     m = 'Callback called once';
     assert.ok(true, m);
 
     sinon.assert.calledWithExactly(
-      this.callback.firstCall,
+      this.callback.lastCall,
       sinon.match({
         element,
         width: 300,
@@ -98,16 +99,17 @@ module('Integration | Modifier | element-query', function (hooks) {
       })
     );
 
+    callCountOld = callCount;
     element.style.width = '400px';
 
-    await waitUntil(() => callCount === 2);
+    await waitUntil(() => callCount > callCountOld);
 
     m = 'Callback called twice';
     assert.ok(true, m);
 
     // prettier-ignore
     sinon.assert.calledWithMatch(
-      this.callback.secondCall,
+      this.callback.lastCall,
       {
         element,
         width: 400,
@@ -168,6 +170,7 @@ module('Integration | Modifier | element-query', function (hooks) {
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   test('stops calling the onResize callback after updating isDisabled after rendering', async function (this: TestContextCustom, assert) {
     let callCount = 0;
+    let callCountOld = 0;
     this.callback = sinon.spy(() => callCount++);
     this.set('isDisabled', false);
 
@@ -187,7 +190,7 @@ module('Integration | Modifier | element-query', function (hooks) {
     m = 'Element is rendered';
     assert.ok(true, m);
 
-    await waitUntil(() => callCount === 1);
+    await waitUntil(() => callCount > callCountOld);
 
     m = 'Callback called once';
     assert.ok(true, m);
@@ -220,12 +223,13 @@ module('Integration | Modifier | element-query', function (hooks) {
 
     this.set('isDisabled', true);
 
+    callCountOld = callCount;
     element.style.width = '400px';
 
     await pause(500);
 
     m = 'Call count';
-    assert.equal(callCount, 1, m);
+    assert.ok(callCount === callCountOld, m);
 
     m = 'Attr `at-s` presence';
     assert.equal(element.getAttribute('at-s'), null, m);
