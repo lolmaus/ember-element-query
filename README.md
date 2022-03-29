@@ -961,7 +961,7 @@ Given breakpoints 350, 700 and 1050:
     ```hbs
     <ElementQuery
       class="my-component"
-      @sizes=(hash small=0 medium=350 large=700 extraLarge=1050)
+      @sizes={{hash small=0 medium=350 large=700 extraLarge=1050}}
       as |EQ|
     >
       {{#if EQ.at-small}}...{{/if}}
@@ -1181,8 +1181,8 @@ Given breakpoints 350, 700 and 1050:
     ```hbs
     <ElementQuery
       @dimension="both"
-      @sizes=(hash small-width=0 medium-width=350 large-width=700)
-      @sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
+      @sizes={{hash small-width=0 medium-width=350 large-width=700}}
+      @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
       as |EQ|
     >
       {{#if (and EQ.to-small-width EQ.from-large-height)}}
