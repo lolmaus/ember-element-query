@@ -11,7 +11,6 @@ import {
   SIZES_HEIGHT_DEFAULT,
 } from 'ember-element-query';
 import { inject as service } from '@ember/service';
-import { waitFor } from '@ember/test-waiters';
 export interface SizeObject {
   name: string;
   value: number;
@@ -43,7 +42,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   sizesRatioDefault: Sizes = SIZES_RATIO_DEFAULT;
 
   _element?: HTMLElement; // For some reason, this.element is not always available
-  _promiseResolveHasBeenInstalled?: (value?: unknown) => void;
+  _firstCall = true;
 
   // -------------------
   // Computed properties
@@ -544,20 +543,16 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       : sizeObjectsSortedAsc[sizeObjectsSortedAsc.length - 1];
   }
 
-  _maybeRunPromiseResolveHasBeenInstalled(): void {
-    if (this._promiseResolveHasBeenInstalled) {
-      this._promiseResolveHasBeenInstalled();
-      this._promiseResolveHasBeenInstalled = undefined;
+  _didResizeHandlerSync(): void {
+    if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
+      this.applyAttributesToElement();
+      this.callOnResize();
     }
   }
 
-  _didResizeHandler(): void {
+  _didResizeHandlerRequestAnimationFrame(): void {
     window.requestAnimationFrame(() => {
-      if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
-        this.applyAttributesToElement();
-        this.callOnResize();
-      }
-      this._maybeRunPromiseResolveHasBeenInstalled?.();
+      this._didResizeHandlerSync();
     });
   }
 
@@ -566,27 +561,20 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
 
   @action didResizeHandler(): void {
-    debounceTask(this, '_didResizeHandler', this.debounce);
+    debounceTask(this, '_didResizeHandlerRequestAnimationFrame', this.debounce);
   }
 
   // -------------------
   // Lifecycle hooks
   // -------------------
-  @waitFor
-  didInstall(): void | Promise<void> {
+  didInstall(): void {
     if (!this.element) throw new Error('Expected this.element to be available');
 
     this._element = this.element;
 
     this.resizeObserver.observe(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
 
-    if (!this.args.named.isDisabled && this.resizeObserver.isEnabled) {
-      return new Promise((resolve) => {
-        this._promiseResolveHasBeenInstalled = resolve;
-      });
-    } else {
-      return Promise.resolve();
-    }
+    this._didResizeHandlerSync(); // We want to run it as soon as possible to avoid a jump of unstyled content
   }
 
   didUpdateArguments(): void {
