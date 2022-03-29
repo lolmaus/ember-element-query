@@ -1,3 +1,12 @@
+## v4.1.0 (2022-03-29)
+
+#### :bug: Bug Fix
+* [#45](https://github.com/lolmaus/ember-element-query/pull/45) Fix jumps of unstyled content and test freezes, credit to @simonihmig, Closes [#44](https://github.com/lolmaus/ember-element-query/issues/44) ([@lolmaus](https://github.com/lolmaus))
+
+#### Committers: 1
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+
+
 ## v4.0.3 (2021-08-24)
 
 #### :bug: Bug Fix

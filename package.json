@@ -1,6 +1,6 @@
 {
   "name": "ember-element-query",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "Use element queries effortlessly on any element or component. Make responsive components with CSS transformations and/or template transfomrations.",
   "keywords": [
     "ember-addon",
