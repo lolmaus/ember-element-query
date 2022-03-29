@@ -844,7 +844,7 @@
 					<li><p><code>ember-element-query</code>:</p>
 						<pre><code class="language-hbs">&lt;ElementQuery
   class=&quot;my-component&quot;
-  @sizes=(hash small=0 medium=350 large=700 extraLarge=1050)
+  @sizes={{hash small=0 medium=350 large=700 extraLarge=1050}}
   as |EQ|
 &gt;
   {{#if EQ.at-small}}...{{/if}}
@@ -1028,8 +1028,8 @@
 					<li><p><code>ember-element-query</code>:</p>
 						<pre><code class="language-hbs">&lt;ElementQuery
   @dimension=&quot;both&quot;
-  @sizes=(hash small-width=0 medium-width=350 large-width=700)
-  @sizesHeight=(hash small-height=0 medium-height=200 large-height=400)
+  @sizes={{hash small-width=0 medium-width=350 large-width=700}}
+  @sizesHeight={{hash small-height=0 medium-height=200 large-height=400}}
   as |EQ|
 &gt;
   {{#if (and EQ.to-small-width EQ.from-large-height)}}
