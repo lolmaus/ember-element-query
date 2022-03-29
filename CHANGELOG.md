@@ -1,3 +1,13 @@
+## v4.1.1 (2022-03-29)
+
+#### :bug: Bug Fix
+* [#48](https://github.com/lolmaus/ember-element-query/pull/48) Make ember-auto-import a dependency instead of devDependency ([@lolmaus](https://github.com/lolmaus))
+
+#### Committers: 2
+- Alberto Cantú Gómez ([@betocantu93](https://github.com/betocantu93))
+- Andrey Mikhaylov (lolmaus) ([@lolmaus](https://github.com/lolmaus))
+
+
 ## v4.1.0 (2022-03-29)
 
 #### :bug: Bug Fix
