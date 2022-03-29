@@ -99,7 +99,7 @@
     "d3-scale": "^4.0.0",
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.0.1",
-    "ember-auto-import": "^1.11.2",
+    "ember-auto-import": "^2.4.1",
     "ember-cli": "~3.26.1",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
