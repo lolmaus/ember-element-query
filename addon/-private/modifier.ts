@@ -575,8 +575,8 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       // eslint-disable-next-line @typescript-eslint/unbound-method
       this.resizeObserver.observe(element, this.didResizeHandler);
       this._didResizeHandlerSync();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      registerDestructor(this, this.cleanup);
+
+      registerDestructor(this, () => this.cleanup());
       this._firstCall = false;
     } else {
       if (this.resizeObserver.isEnabled) {
