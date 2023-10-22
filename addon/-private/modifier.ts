@@ -9,7 +9,9 @@ import {
   Sizes,
   SIZES_DEFAULT,
   SIZES_HEIGHT_DEFAULT,
+  Args,
 } from 'ember-element-query';
+import { registerDestructor } from '@ember/destroyable';
 import { inject as service } from '@ember/service';
 export interface SizeObject {
   name: string;
@@ -41,8 +43,10 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   sizesHeightDefault: Sizes = SIZES_HEIGHT_DEFAULT;
   sizesRatioDefault: Sizes = SIZES_RATIO_DEFAULT;
 
-  _element?: HTMLElement; // For some reason, this.element is not always available
+  _element?: HTMLElement; // For some reason, this._element is not always available
   _firstCall = true;
+
+  named: Args = {};
 
   // -------------------
   // Computed properties
@@ -59,7 +63,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   get debounce(): number {
-    const { debounce } = this.args.named;
+    const { debounce } = this.named;
 
     return debounce == null ? 100 : debounce;
   }
@@ -69,7 +73,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   get sizes(): Sizes | undefined {
-    const { sizes } = this.args.named;
+    const { sizes } = this.named;
 
     // Explicitly opt into default sizes
     if (sizes === true) {
@@ -93,7 +97,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   get sizesHeight(): Sizes | undefined {
-    const { sizesHeight } = this.args.named;
+    const { sizesHeight } = this.named;
 
     // Explicitly opt into default sizes
     if (sizesHeight === true) {
@@ -112,7 +116,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   get sizesRatio(): Sizes | undefined {
-    const { sizesRatio } = this.args.named;
+    const { sizesRatio } = this.named;
 
     // Explicitly opt into default sizes
     if (sizesRatio === true) {
@@ -461,7 +465,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
       size: this.sizeObjectWidthAt?.name,
       sizeHeight: this.sizeObjectHeightAt?.name,
       sizeRatio: this.sizeObjectRatioAt?.name,
-      prefix: this.args.named.prefix,
+      prefix: this.named.prefix,
       attributes: this.attributes,
       attributesRecord: this.attributesRecord,
     };
@@ -472,7 +476,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   // -------------------
 
   convertSizeToAttribute(size: string, rangeDirection: RangeDirection): string {
-    const prefix = this.args.named.prefix ?? '';
+    const prefix = this.named.prefix ?? '';
 
     if (typeof prefix !== 'string') {
       throw new Error(`element-query: expected prefix to be a string, was ${typeof prefix}`);
@@ -497,8 +501,8 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   callOnResize(): void {
-    if (this.args.named.onResize) {
-      this.args.named.onResize(this.yield);
+    if (this.named.onResize) {
+      this.named.onResize(this.yield);
     }
   }
 
@@ -544,7 +548,7 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
   }
 
   _didResizeHandlerSync(): void {
-    if (!this.args.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
+    if (!this.named.isDisabled && !this.isDestroying && !this.isDestroyed) {
       this.applyAttributesToElement();
       this.callOnResize();
     }
@@ -564,28 +568,26 @@ export default class ElementQueryModifier extends Modifier<ModifierArgs> {
     debounceTask(this, '_didResizeHandlerRequestAnimationFrame', this.debounce);
   }
 
-  // -------------------
-  // Lifecycle hooks
-  // -------------------
-  didInstall(): void {
-    if (!this.element) throw new Error('Expected this.element to be available');
+  modify(element: HTMLElement, _pos: unknown[], named: Args): void {
+    this._element = element;
+    this.named = named;
+    if (this._firstCall) {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      this.resizeObserver.observe(element, this.didResizeHandler);
+      this._didResizeHandlerSync();
 
-    this._element = this.element;
-
-    this.resizeObserver.observe(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
-
-    this._didResizeHandlerSync(); // We want to run it as soon as possible to avoid a jump of unstyled content
+      registerDestructor(this, () => this.cleanup());
+      this._firstCall = false;
+    } else {
+      if (this.resizeObserver.isEnabled) {
+        this.didResizeHandler();
+      }
+    }
   }
 
-  didUpdateArguments(): void {
-    if (!this.resizeObserver.isEnabled) return;
+  cleanup(): void {
+    if (!this._element) throw new Error('Expected this._element to be available');
 
-    this.didResizeHandler();
-  }
-
-  willRemove(): void {
-    if (!this.element) throw new Error('Expected this.element to be available');
-
-    this.resizeObserver.unobserve(this.element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
+    this.resizeObserver.unobserve(this._element, this.didResizeHandler); // eslint-disable-line @typescript-eslint/unbound-method
   }
 }
