@@ -71,9 +71,9 @@
     "ember-cli-babel": "^7.26.3",
     "ember-cli-htmlbars": "5.7.1",
     "ember-cli-typescript": "^4.2.1",
-    "ember-element-helper": "^0.5.5",
+    "ember-element-helper": "^0.8.5",
     "ember-lifeline": "^6.0.2",
-    "ember-modifier": "^2.1.2",
+    "ember-modifier": "^4.1.0",
     "ember-resize-observer-service": "^0.3.0",
     "ember-window-mock": "^0.7.2"
   },
